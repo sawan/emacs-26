@@ -737,7 +737,6 @@ Version 2015-02-07
 
 
 (elpy-enable)
-(setq elpy-rpc-backend "jedi")
 
 (defhydra hydra-breadcrumb ()
   "Breadcrumb"
