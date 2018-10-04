@@ -190,6 +190,8 @@
 (setq ivy-count-format "(%d/%d) ")
 (setq ivy-re-builders-alist
       '((t . ivy--regex-fuzzy)))
+(counsel-mode 1)
+(global-set-key "\C-s" 'swiper)
 
 ;;;; desktop
 ;; Auto save desktop as well during buffer auto-save
@@ -201,10 +203,8 @@
 (add-hook 'auto-save-hook (lambda () (desktop-save-in-desktop-dir)))
 
 ;; enable paren highliting for all files
-(add-hook 'find-file-hook (
-			    lambda()
-				  (show-paren-mode t)
-				  ))
+(add-hook 'find-file-hook (lambda()
+			    (show-paren-mode t)))
 
 ;; display path to file in frame title
 ;(setq-default mode-line-format
@@ -331,7 +331,7 @@ Continues until end of buffer.  Also display the count as a message."
   (let ((str (buffer-substring (region-beginning) (region-end))))
     (when commentfirst
       (comment-region (region-beginning) (region-end)))
-    (insert-string
+    (insert
      (concat (if (= 0 (forward-line 1)) "" "\n") str "\n"))
     (forward-line -1)))
 
@@ -407,70 +407,6 @@ point reaches the beginning or end of the buffer, stop there."
 
 (global-set-key (kbd "C-a") 'smarter-move-beginning-of-line)
 
-;; https://www.masteringemacs.org/article/searching-buffers-occur-mode
-(defun get-buffers-matching-mode (mode)
-  "Returns a list of buffers where their major-mode is equal to MODE"
-  (let ((buffer-mode-matches '()))
-   (dolist (buf (buffer-list))
-     (with-current-buffer buf
-       (if (eq mode major-mode)
-           (add-to-list 'buffer-mode-matches buf))))
-   buffer-mode-matches))
-
-(defun multi-occur-in-this-mode ()
-  "Show all lines matching REGEXP in buffers with this major mode."
-  (interactive)
-  (multi-occur
-   (get-buffers-matching-mode major-mode)
-   (car (occur-read-primary-args))))
-
-;; occur
-;; http://oremacs.com/2015/01/26/occur-dwim/
-(defun multi-occur-all-buffers (regexp &optional allbufs)
-  "Show all lines matching REGEXP in all buffers."
-  (interactive (occur-read-primary-args))
-  (multi-occur-in-matching-buffers ".*" regexp))
-
-(defun sane-occurs (occur-fn)
-  "Call various `occur' with a sane default."
-  (interactive)
-  (push (if (region-active-p)
-            (buffer-substring-no-properties
-             (region-beginning)
-             (region-end))
-          (let ((sym (thing-at-point 'symbol)))
-            (when (stringp sym)
-              (regexp-quote sym))))
-        regexp-history)
-  (call-interactively occur-fn))
-
-(defun occur-dwim ()
-  (interactive)
-  (sane-occurs 'occur))
-
-(defun multi-occur-dwim ()
-  (interactive)
-  (sane-occurs 'multi-occur))
-
-(defun multi-occur-in-mode-dwim ()
-  (interactive)
-  (sane-occurs 'multi-occur-in-this-mode))
-
-(defun multi-occur-all-dwim ()
-  (interactive)
-  (sane-occurs 'multi-occur-all-buffers))
-
-(add-hook 'occur-hook (lambda () (other-window 1)))
-
-;; Keeps focus on *Occur* window, even when when target is visited via RETURN key.
-;; See hydra-occur-dwim for more options.
-(defadvice occur-mode-goto-occurrence (after occur-mode-goto-occurrence-advice activate)
-  (other-window 1)
-  (next-error-follow-minor-mode t)
-  (hydra-occur-dwim/body))
-
-(defadvice occur-edit-mode-finish (after occur-cease-edit-advice activate)
-  (save-some-buffers))
 
 ;; http://emacsredux.com/blog/2013/06/15/open-line-above/
 (defun smart-open-line-above ()
@@ -749,12 +685,13 @@ Version 2015-02-07
 (defhydra hydra-avy ()
   "Avy"
   ("l" avy-goto-line "line" :color blue)
+  ("L" avy-copy-line "copy-line" :color blue)
 
   ("C" avy-goto-char   "char" :color blue)
   ("c" avy-goto-char-2 "char-2" :color blue)
 
-  ("r" avy-kill-ring-save-region  "copy-region" :color blue)
-  ("L" avy-copy-line "copy-line" :color blue)
+  ("r" avy-copy-region "copy-region" :color blue)
+  ("R" avy-kill-ring-save-region "copy->KR" :color blue)
 
   ("m" avy-move-line "move-line" :color blue)
   ("M" avy-move-region "move-region" :color blue)
@@ -772,6 +709,7 @@ Version 2015-02-07
   )
 
 (global-set-key (kbd "<f1>") 'hydra-avy/body)
+(global-set-key (kbd "s-w") 'avy-goto-word-or-subword-1)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -829,6 +767,7 @@ Version 2015-02-07
   ("J" delete-indentation "join-prev-line" :color red)
   ("h" highlight-duplicate-lines-in-region-or-buffer "dup-line" :color red)
   ("o" ov-clear "ov-clear")
+
   ("q" nil "quit")
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
@@ -848,12 +787,80 @@ Version 2015-02-07
 
 (global-set-key (kbd "<f3>") 'hydra-highlight-symbol/body)
 
+
+;; https://www.masteringemacs.org/article/searching-buffers-occur-mode
+(defun get-buffers-matching-mode (mode)
+  "Returns a list of buffers where their major-mode is equal to MODE"
+  (let ((buffer-mode-matches '()))
+   (dolist (buf (buffer-list))
+     (with-current-buffer buf
+       (if (eq mode major-mode)
+           (add-to-list 'buffer-mode-matches buf))))
+   buffer-mode-matches))
+
+(defun multi-occur-in-this-mode ()
+  "Show all lines matching REGEXP in buffers with this major mode."
+  (interactive)
+  (multi-occur
+   (get-buffers-matching-mode major-mode)
+   (car (occur-read-primary-args))))
+
+;; occur
+;; http://oremacs.com/2015/01/26/occur-dwim/
+(defun multi-occur-all-buffers (regexp &optional allbufs)
+  "Show all lines matching REGEXP in all buffers."
+  (interactive (occur-read-primary-args))
+  (multi-occur-in-matching-buffers ".*" regexp))
+
+(defun sane-occurs (occur-fn)
+  "Call various `occur' with a sane default."
+  (interactive)
+  (push (if (region-active-p)
+            (buffer-substring-no-properties
+             (region-beginning)
+             (region-end))
+          (let ((sym (thing-at-point 'symbol)))
+            (when (stringp sym)
+              (regexp-quote sym))))
+        regexp-history)
+  (call-interactively occur-fn))
+
+(defun occur-dwim ()
+  (interactive)
+  (sane-occurs 'occur))
+
+(defun multi-occur-dwim ()
+  (interactive)
+  (sane-occurs 'multi-occur))
+
+(defun multi-occur-in-mode-dwim ()
+  (interactive)
+  (sane-occurs 'multi-occur-in-this-mode))
+
+(defun multi-occur-all-dwim ()
+  (interactive)
+  (sane-occurs 'multi-occur-all-buffers))
+
+(add-hook 'occur-hook (lambda () (other-window 1)))
+
+;; Keeps focus on *Occur* window, even when when target is visited via RETURN key.
+;; See hydra-occur-dwim for more options.
+(defadvice occur-mode-goto-occurrence (after
+					occur-mode-goto-occurrence-advice
+					activate)
+  (other-window 1)
+  (next-error-follow-minor-mode t)
+  (hydra-occur-dwim/body))
+
+(defadvice occur-edit-mode-finish (after occur-cease-edit-advice activate)
+  (save-some-buffers))
+
 (defun reattach-occur ()
   (if (get-buffer "*Occur*")
     (switch-to-buffer-other-window "*Occur*")
     (hydra-occur-dwim/body) ))
 
-;; Used in conjunction with occur-mode-goto-occurrence-advice this helps keep
+;; Used in conjunction with advice occur-mode-goto-occurrence this helps keep
 ;; focus on the *Occur* window and hides upon request in case needed later.
 (defhydra hydra-occur-dwim ()
   "Occur mode"
