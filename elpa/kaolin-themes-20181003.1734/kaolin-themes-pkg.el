@@ -1,4 +1,4 @@
-(define-package "kaolin-themes" "20180920.1151" "A set of eye pleasing themes"
+(define-package "kaolin-themes" "20181003.1734" "A set of eye pleasing themes"
   '((emacs "25.1")
     (autothemer "0.2.2")
     (cl-lib "0.6"))

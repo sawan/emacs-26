@@ -1,4 +1,4 @@
-(define-package "bm" "20180703.1043" "Visible bookmarks in buffer." 'nil :keywords
+(define-package "bm" "20180926.2152" "Visible bookmarks in buffer." 'nil :keywords
   '("bookmark" "highlight" "faces" "persistent")
   :authors
   '(("Jo Odland <jo.odland(at)gmail.com>"))

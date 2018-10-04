@@ -40,6 +40,7 @@
    (const       orange3)
    (type        crimson3)
    (prep        capri3)
+   ;; TODO: change to type or str color
    (num         capri3)
    (bool        num)
 
@@ -116,8 +117,7 @@
 
    (org-level-3         (:foreground magenta3))
 
-   ;; TODO:
-   (highlight-quoted-quote   (:foreground builtin))
+   (highlight-quoted-quote   (:foreground functions))
    (highlight-quoted-symbol  (:foreground type))
 
    (org-document-title  (:foreground amber3 :bold bold))

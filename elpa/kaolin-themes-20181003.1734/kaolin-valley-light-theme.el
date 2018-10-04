@@ -4,6 +4,15 @@
 ;;; Code:
 (require 'kaolin-themes)
 
+(defgroup kaolin-valley-light nil
+  "Kaolin valley light theme options."
+  :group 'kaolin-themes)
+
+(defcustom kaolin-valley-light-alt-bg nil
+  "Use white background color."
+  :type 'boolean
+  :group 'kaolin-valley-light)
+
 (define-kaolin-theme valley-light  "Light variant of kaolin-valley-dark theme."
 
   ;; Palette modification
@@ -19,7 +28,7 @@
 
    (azure1     "#0070CC")
    (teal0      "#0D7A75")
-   (capri1     "#0D5D7A")
+   (capri1     "#0F79BF")
    (harlequin1 "#417E2A")
    (harlequin3 "#4CDE0D")
    (crimson3   "#EE4970")
@@ -30,10 +39,10 @@
    (lime2      "#5B7709")
 
    ;; Color vars
-   (bg1 "#FAF2E9")
-   (bg2 "#F3E7D3")
-   (bg3 "#F0DFCA")
-   (bg4 "#EBD7BE")
+   (bg1 (if kaolin-valley-light-alt-bg "#FBFBFB" "#FAF2E9"))
+   (bg2 (if kaolin-valley-light-alt-bg white0 "#F3E7D3"))
+   (bg3 (if kaolin-valley-light-alt-bg white1 "#F0DFCA"))
+   (bg4 (if kaolin-valley-light-alt-bg white2 "#EBD7BE"))
 
    ;; TODO
    (fg1 black4)
@@ -47,8 +56,7 @@
 
    (var         crimson0)
    (const       crimson0)
-   (functions   azure1)
-   ;; (functions   capri1)
+   (functions   capri1)
    (type        orange0)
 
    (comment     brown8)

@@ -58,7 +58,7 @@
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from kaolin-light-theme.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "kaolin-light-theme" '("light")))
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "kaolin-light-theme" '("light" "kaolin-light-alt-bg")))
 
 ;;;***
 
@@ -120,7 +120,7 @@ Enable kaolin-themes treemacs theme with all-the-icons package.
 ;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from kaolin-valley-light-theme.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "kaolin-valley-light-theme" '("valley-light")))
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "kaolin-valley-light-theme" '("valley-light" "kaolin-valley-light-alt-bg")))
 
 ;;;***
 
