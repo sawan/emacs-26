@@ -94,6 +94,7 @@
 (require 'kill-lines)
 (require 'multiple-cursors)
 (require 'moccur-edit)
+(require 'thing-edit)
 
 (require 'no-easy-keys)
 (no-easy-keys)
@@ -709,7 +710,7 @@ Version 2015-02-07
   )
 
 (global-set-key (kbd "<f1>") 'hydra-avy/body)
-(global-set-key (kbd "s-w") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "s-w") 'avy-goto-char-2)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
