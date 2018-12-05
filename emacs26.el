@@ -90,7 +90,7 @@
 
 (add-hook 'after-init-hook 'global-company-mode)
 
-(require 'magit)
+;;(require 'magit)
 (require 'kill-lines)
 (require 'multiple-cursors)
 (require 'moccur-edit)
@@ -190,7 +190,7 @@
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
 (setq ivy-re-builders-alist
-      '((t . ivy--regex-fuzzy)))
+      '((t . ivy--regex)))
 (counsel-mode 1)
 (global-set-key "\C-s" 'swiper)
 
@@ -709,7 +709,7 @@ Version 2015-02-07
   )
 
 (global-set-key (kbd "<f1>") 'hydra-avy/body)
-(global-set-key (kbd "s-w") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "s-w") 'avy-goto-char-2)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -1074,8 +1074,43 @@ Version 2015-02-07
     ("f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(package-selected-packages
    (quote
-    (smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
- '(paradox-github-token t))
+    (smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids
+	  undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov
+	  origami multiple-cursors move-text magit macrostep key-chord
+	  kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy
+	  csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+ '(paradox-github-token t)
+ '(origami-parser-alist
+   (quote
+    ((java-mode . origami-java-parser)
+     (c-mode . origami-c-parser)
+     (c++-mode . origami-c-style-parser)
+     (perl-mode . origami-c-style-parser)
+     (cperl-mode . origami-c-style-parser)
+     (js-mode . origami-c-style-parser)
+     (js2-mode . origami-c-style-parser)
+     (js3-mode . origami-c-style-parser)
+     (go-mode . origami-c-style-parser)
+     (php-mode . origami-c-style-parser)
+     (python-mode . origami-parser-imenu-flat)
+     (emacs-lisp-mode . origami-elisp-parser)
+     (lisp-interaction-mode . origami-elisp-parser)
+     (clojure-mode . origami-clj-parser)
+     (triple-braces closure
+		    ((regex . "\\(?:\\(?:{{{\\|}}}\\)\\)")
+		     (end-marker . "}}}")
+		     (start-marker . "{{{")
+		     t)
+		    (create)
+		    (function
+		     (lambda
+		       (content)
+		       (let
+			   ((positions
+			     (origami-get-positions content regex)))
+			 (origami-build-pair-tree create start-marker end-marker positions))))))))
+
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
