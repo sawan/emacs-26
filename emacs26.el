@@ -94,6 +94,7 @@
 (require 'kill-lines)
 (require 'multiple-cursors)
 (require 'moccur-edit)
+(require 'thing-edit)
 
 (require 'no-easy-keys)
 (no-easy-keys)
