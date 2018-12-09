@@ -354,6 +354,16 @@ instead of a char."
                          (re-search-forward regexp nil nil arg)
                          (point))))
 
+(defun replace-in-buffer ()
+"Replace text in whole buffer. Change OLD string to NEW string"
+  (interactive)
+  (save-excursion
+    (replace-string (read-string "OLD string:")
+                    (read-string "NEW string:")
+                    nil
+                    (point-min)
+                    (point-max))))
+
 ;; jump to matching parenthesis -- currently seems to support () and []
 (defun goto-match-paren (arg)
   "Go to the matching parenthesis if on parenthesis. Else go to the
@@ -1044,7 +1054,7 @@ Version 2015-12-08"
 
 (defhydra hydra-origami()
   "Origami"
-  ("i" helm-imenu)
+  ("i" counsel-imenu)
   ("o" origami-open-node)
   ("c" origami-close-node)
   ("t" origami-toggle-node)
@@ -1058,6 +1068,10 @@ Version 2015-12-08"
   ("q" nil :color blue)
   ("<ESC>" nil :color blue)
   )
+
+(defun hob()
+  (interactive)
+  (hydra-origami/body))
 
 
 (defhydra hydra-macro (:hint nil :color pink
