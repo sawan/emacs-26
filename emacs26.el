@@ -354,6 +354,16 @@ instead of a char."
                          (re-search-forward regexp nil nil arg)
                          (point))))
 
+(defun replace-in-buffer ()
+"Replace text in whole buffer. Change OLD string to NEW string"
+  (interactive)
+  (save-excursion
+    (replace-string (read-string "OLD string:")
+                    (read-string "NEW string:")
+                    nil
+                    (point-min)
+                    (point-max))))
+
 ;; jump to matching parenthesis -- currently seems to support () and []
 (defun goto-match-paren (arg)
   "Go to the matching parenthesis if on parenthesis. Else go to the
@@ -476,6 +486,36 @@ Version 2015-02-07
   (interactive)
   (end-of-line)
   (set-mark (line-beginning-position)))
+
+(defun xah-append-to-register-1 ()
+  "Append current line or text selection to register 1.
+When no selection, append current line with newline char.
+See also: `xah-paste-from-register-1', `copy-to-register'.
+
+URL `http://ergoemacs.org/emacs/elisp_copy-paste_register_1.html'
+Version 2015-12-08"
+  (interactive)
+  (let ($p1 $p2)
+    (if (region-active-p)
+        (progn (setq $p1 (region-beginning))
+               (setq $p2 (region-end)))
+      (progn (setq $p1 (line-beginning-position))
+             (setq $p2 (line-end-position))))
+    (append-to-register ?1 $p1 $p2)
+    (with-temp-buffer (insert "\n")
+                      (append-to-register ?1 (point-min) (point-max)))
+    (message "Appended to register 1: 「%s」." (buffer-substring-no-properties $p1 $p2))))
+
+(defun xah-clear-register-1 ()
+  "Clear register 1.
+See also: `xah-paste-from-register-1', `copy-to-register'.
+
+URL `http://ergoemacs.org/emacs/elisp_copy-paste_register_1.html'
+Version 2015-12-08"
+  (interactive)
+  (progn
+    (copy-to-register ?1 (point-min) (point-min))
+    (message "Cleared register 1.")))
 
 ;;;; emacros
 ;; Emacros http://thbecker.net/free_software_utilities/emacs_lisp/emacros/emacros.html
@@ -755,6 +795,7 @@ Version 2015-02-07
   ("g" goto-line "goto-line")
   ("m" set-mark-command "mark" :bind nil)
   ("s" xah-select-current-line "Select current" :color red)
+  ("a" xah-append-to-register-1 "Accumulate" :color red)
   ("r" copy-region-as-kill "copy-region" :color blue)
   ("R" join-region "join-region" :color blue)
   ("n" forward-line "forward")
@@ -946,9 +987,9 @@ Version 2015-02-07
 (defun hydra-move-keys()
   (interactive)
   (global-set-key (kbd "C-n") (lambda() (interactive)
-				(move-and-hydra #'next-line-and-avy)))
+				(move-and-hydra #'next-line)))
   (global-set-key (kbd "C-p") (lambda() (interactive)
-				(move-and-hydra #'previous-line-and-avy)))
+				(move-and-hydra #'previous-line)))
   (global-set-key (kbd "C-f") (lambda() (interactive)
 				(move-and-hydra #'forward-char)))
   (global-set-key (kbd "C-b") (lambda() (interactive)
@@ -1013,7 +1054,7 @@ Version 2015-02-07
 
 (defhydra hydra-origami()
   "Origami"
-  ("i" helm-imenu)
+  ("i" counsel-imenu)
   ("o" origami-open-node)
   ("c" origami-close-node)
   ("t" origami-toggle-node)
@@ -1027,6 +1068,10 @@ Version 2015-02-07
   ("q" nil :color blue)
   ("<ESC>" nil :color blue)
   )
+
+(defun hob()
+  (interactive)
+  (hydra-origami/body))
 
 
 (defhydra hydra-macro (:hint nil :color pink
@@ -1072,7 +1117,9 @@ Version 2015-02-07
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
+    ("f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3"
+     "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128"
+     "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(package-selected-packages
    (quote
     (smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids
@@ -1080,7 +1127,6 @@ Version 2015-02-07
 	  origami multiple-cursors move-text magit macrostep key-chord
 	  kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy
 	  csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
- '(paradox-github-token t)
  '(origami-parser-alist
    (quote
     ((java-mode . origami-java-parser)
@@ -1110,8 +1156,7 @@ Version 2015-02-07
 			   ((positions
 			     (origami-get-positions content regex)))
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
-
- )
+ '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
