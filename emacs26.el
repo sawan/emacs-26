@@ -1110,6 +1110,9 @@ Version 2015-12-08"
   ("," edit-kbd-macro)
   ("q" nil :color blue))
 
+
+(global-set-key (kbd "M-o") 'ace-window)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1117,16 +1120,7 @@ Version 2015-12-08"
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3"
-     "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128"
-     "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
- '(package-selected-packages
-   (quote
-    (smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids
-	  undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov
-	  origami multiple-cursors move-text magit macrostep key-chord
-	  kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy
-	  csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    ("f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(origami-parser-alist
    (quote
     ((java-mode . origami-java-parser)
@@ -1156,6 +1150,9 @@ Version 2015-12-08"
 			   ((positions
 			     (origami-get-positions content regex)))
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
+ '(package-selected-packages
+   (quote
+    (ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
