@@ -86,6 +86,7 @@
 
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
+(setq server-socket-dir "~/.emacs.d/server/")
 
 (add-hook 'after-init-hook 'global-company-mode)
 
@@ -905,7 +906,6 @@ Version 2015-12-08"
 ;; focus on the *Occur* window and hides upon request in case needed later.
 (defhydra hydra-occur-dwim ()
   "Occur mode"
-  ("s" swiper-all "swiper-all" :color blue)
   ("o" occur-dwim "occur-dwim" :color red)
   ("m" multi-occur-dwim "multi-occur-dwim" :color red)
   ("a" multi-occur-all-dwim "multi-occur-all-dwin" :color red)
@@ -918,62 +918,6 @@ Version 2015-12-08"
 
 (global-set-key (kbd "C-x o") 'hydra-occur-dwim/body)
 
-;; https://github.com/abo-abo/hydra/wiki/Switch-to-buffer
-(defun my/name-of-buffers (n)
-  "Return the names of the first N buffers from `buffer-list'."
-  (let ((bns
-         (delq nil
-               (mapcar
-                (lambda (b)
-                  (unless (string-match "^ " (setq b (buffer-name b)))
-                    b))
-                (buffer-list)))))
-    (subseq bns 1 (min (1+ n) (length bns)))))
-
-;; Given ("a", "b", "c"), return "1. a, 2. b, 3. c".
-(defun my/number-names (list)
-  "Enumerate and concatenate LIST."
-  (let ((i 0))
-    (mapconcat
-     (lambda (x)
-       (format "%d. %s" (cl-incf i) x))
-     list ", ")))
-
-(defvar my/last-buffers nil)
-
-(defun my/switch-to-buffer (arg)
-  (interactive "p")
-  (switch-to-buffer
-   (nth (1- arg) my/last-buffers)))
-
-(defun my/switch-to-buffer-other-window (arg)
-  (interactive "p")
-  (switch-to-buffer-other-window
-   (nth (1- arg) my/last-buffers)))
-
-
-(defhydra my/switch-to-buffer (:exit t
-			       :body-pre (setq my/last-buffers
-		               (my/name-of-buffers 5)))
-"
-Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-window
-"
-   ("o" (my/switch-to-buffer 0))
-   ("1" (my/switch-to-buffer 1))
-   ("2" (my/switch-to-buffer 2))
-   ("3" (my/switch-to-buffer 3))
-   ("4" (my/switch-to-buffer 4))
-   ("5" (my/switch-to-buffer 5))
-   ("i" (ivy-switch-buffer))
-   ("f" (counsel-find-file) "Find file")
-   ("b" (ibuffer) "IBuffer")
-   ("w" other-window "o-window")
-   ("d" delete-other-windows "d-o-window")
-   ("q" nil)
-   )
-
-(global-set-key (kbd "C-x b") 'my/switch-to-buffer/body)
-(global-set-key (kbd "C-x C-b") 'my/switch-to-buffer/body)
 
 ;;;; fastnav
 (require 'fastnav)
@@ -1176,7 +1120,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
+    ("f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(origami-parser-alist
    (quote
     ((java-mode . origami-java-parser)
