@@ -89,7 +89,7 @@
 
 (add-hook 'after-init-hook 'global-company-mode)
 
-;;(require 'magit)
+(require 'magit)
 (require 'kill-lines)
 (require 'multiple-cursors)
 (require 'moccur-edit)
@@ -190,7 +190,7 @@
 (setq ivy-use-virtual-buffers t)
 (setq ivy-count-format "(%d/%d) ")
 (setq ivy-re-builders-alist
-      '((t . ivy--regex)))
+      '((t . ivy--regex-fuzzy)))
 (counsel-mode 1)
 (global-set-key "\C-s" 'swiper)
 
