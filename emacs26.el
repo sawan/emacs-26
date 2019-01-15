@@ -749,7 +749,9 @@ Version 2015-12-08"
   )
 
 (global-set-key (kbd "<f1>") 'hydra-avy/body)
-(global-set-key (kbd "s-w") 'avy-goto-char-2)
+(global-set-key (kbd "s-c") 'avy-goto-char-2)
+(global-set-key (kbd "s-w") 'avy-goto-word-1)
+(global-set-key (kbd "s-e") 'avy-goto-word-0)
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -959,6 +961,8 @@ Version 2015-12-08"
 Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-window
 "
    ("o" (my/switch-to-buffer 0))
+   ("<return>" (my/switch-to-buffer 0))
+   ("<RETURN>" (my/switch-to-buffer 0))
    ("1" (my/switch-to-buffer 1))
    ("2" (my/switch-to-buffer 2))
    ("3" (my/switch-to-buffer 3))
