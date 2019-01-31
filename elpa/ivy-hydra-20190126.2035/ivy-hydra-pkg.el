@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "ivy-hydra" "20190126.2035" "Additional key bindings for Ivy" '((emacs "24.1") (ivy "0.11.0") (hydra "0.13.4")) :stars '(#("923" 0 3 (font-lock-face paradox-star-face))) :commit "100bd2130b6963bbdcb0bec346abee2d9e2d829e" :keywords '("convenience") :authors '(("Oleh Krehel" . "ohwoeowho@gmail.com")) :maintainer '("Oleh Krehel" . "ohwoeowho@gmail.com") :url "https://github.com/abo-abo/swiper")
