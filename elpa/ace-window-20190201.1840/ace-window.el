@@ -5,7 +5,7 @@
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; Maintainer: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/ace-window
-;; Package-Version: 20190130.1455
+;; Package-Version: 20190201.1840
 ;; Version: 0.9.0
 ;; Package-Requires: ((avy "0.2.0"))
 ;; Keywords: window, location
@@ -763,6 +763,8 @@ Modify `aw-fair-aspect-ratio' to tweak behavior."
        1)
       ((floatp h)
        (1+ (floor h)))
+      ((integerp h)
+       1)
       (t
        (error "unexpected: %s" h)))))
 
