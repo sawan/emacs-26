@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "rimero-theme" "20180901.1348" "Theme with a dark background suitable for UI and terminal usage." '((emacs "24")) :stars '(#("3" 0 1 (font-lock-face paradox-star-face))) :commit "a2e706c2b34f749019979a133f08a2d94a1104b3" :keywords '("faces" "theme" "dark" "light colors") :authors '(("Yves Zoundi" . "yveszoundi@users.sf.net")) :maintainer '("Yves Zoundi" . "yveszoundi@users.sf.net") :url "https://github.com/yveszoundi/emacs-rimero-theme")
