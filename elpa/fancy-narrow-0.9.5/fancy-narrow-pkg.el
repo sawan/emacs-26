@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "fancy-narrow" "0.9.5" "narrow-to-region with more eye candy." 'nil :stars '(#("98" 0 2 (font-lock-face paradox-star-face))) :commit "c0f70b4333d4764323b7154e37a378adb1610ab7" :keywords '("faces" "convenience") :authors '(("Artur Malabarba" . "bruce.connor.am@gmail.com")) :maintainer '("Artur Malabarba" . "bruce.connor.am@gmail.com") :url "http://github.com/Bruce-Connor/fancy-narrow")
