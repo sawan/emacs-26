@@ -503,7 +503,17 @@ Version 2015-12-08"
     (append-to-register ?1 $p1 $p2)
     (with-temp-buffer (insert "\n")
                       (append-to-register ?1 (point-min) (point-max)))
-    (message "Appended to register 1: 「%s」." (buffer-substring-no-properties $p1 $p2))))
+    (message "Appended to register 1: 「%s」." (buffer-substring-no-properties
+						$p1 $p2))))
+(defun xah-paste-from-register-1 ()
+  "Paste text from register 1.
+See also: `xah-copy-to-register-1', `insert-register'.
+URL `http://ergoemacs.org/emacs/elisp_copy-paste_register_1.html'
+Version 2015-12-08"
+  (interactive)
+  (when (use-region-p)
+    (delete-region (region-beginning) (region-end)))
+  (insert-register ?1 t))
 
 (defun xah-clear-register-1 ()
   "Clear register 1.
@@ -778,8 +788,7 @@ Version 2015-12-08"
   "Lines"
 
   ("c" avy-copy-line "copy-line" :color blue)
-  ("r" avy-copy-region "copy-region" :color blue)
-  ("R" avy-kill-ring-save-region "copy->KR" :color blue)
+  ("r" avy-kill-ring-save-region "copy->KR" :color blue)
   ("m" avy-move-line "move-line" :color blue)
   ("M" avy-move-region "move-region" :color blue)
   ("k" avy-kill-region "kill-region" :color blue)
@@ -792,8 +801,10 @@ Version 2015-12-08"
 
   ("g" goto-line "goto-line")
 
-  ("s" xah-select-current-line "Select current" :color red)
+  ("C" xah-clear-register-1 "cl-r-1" :color red)
+  ("s" xah-select-current-line "Select line" :color red)
   ("a" xah-append-to-register-1 "Accumulate" :color red)
+  ("i" xah-paste-from-register-1 "p-r-1" :color blue)
 
   ("n" forward-line "forward")
   ("p" previous-line "backwards")
