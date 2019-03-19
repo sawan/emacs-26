@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "overcast-theme" "20190318.1552" "A dark but vibrant color theme for Emacs" '((emacs "24")) :stars '(#("4" 0 1 (font-lock-face paradox-star-face))) :commit "cea9385a9f4263cc996dce4dc27f1a29985370d2" :keywords '("theme") :authors '(("Mohammed Ismail Ansari" . "team.terminal@gmail.com")) :maintainer '("Mohammed Ismail Ansari" . "team.terminal@gmail.com") :url "http://ismail.teamfluxion.com")

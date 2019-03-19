@@ -725,22 +725,11 @@ Version 2015-12-08"
 (defhydra hydra-avy ()
   "Avy"
   ("l" avy-goto-line "line" :color blue)
-  ("L" avy-copy-line "copy-line" :color blue)
-
-  ("C" avy-goto-char   "char" :color blue)
+  ("j" avy-goto-char-in-line :color blue)
+  ("k" avy-goto-char   "char" :color blue)
   ("c" avy-goto-char-2 "char-2" :color blue)
-
-  ("r" avy-copy-region "copy-region" :color blue)
-  ("R" avy-kill-ring-save-region "copy->KR" :color blue)
-
-  ("m" avy-move-line "move-line" :color blue)
-  ("M" avy-move-region "move-region" :color blue)
-
-  ("w" avy-goto-word-1 "word-1" :color blue)
-  ("W" avy-goto-word-0 "word-0" :color blue)
-
-  ("k" avy-kill-region "kill-region" :color blue)
-  ("K" avy-kill-whole-line "kill-line" :color blue)
+  ("W" avy-goto-word-1 "word-1" :color blue)
+  ("w" avy-goto-word-0 "word-0" :color blue)
 
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
@@ -748,10 +737,8 @@ Version 2015-12-08"
   ("q" nil "quit")
   )
 
-(global-set-key (kbd "<f1>") 'hydra-avy/body)
-(global-set-key (kbd "s-c") 'avy-goto-char-2)
-(global-set-key (kbd "s-w") 'avy-goto-word-1)
-(global-set-key (kbd "s-e") 'avy-goto-word-0)
+(global-set-key (kbd "C-j") 'hydra-avy/body)
+
 
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
@@ -789,25 +776,32 @@ Version 2015-12-08"
                            :pre (linum-mode 1)
                            :post (linum-mode -1))
   "Lines"
-  ("c" thing-copy-line "copy" :color blue)
+
+  ("c" avy-copy-line "copy-line" :color blue)
+  ("r" avy-copy-region "copy-region" :color blue)
+  ("R" avy-kill-ring-save-region "copy->KR" :color blue)
+  ("m" avy-move-line "move-line" :color blue)
+  ("M" avy-move-region "move-region" :color blue)
+  ("k" avy-kill-region "kill-region" :color blue)
+  ("K" avy-kill-whole-line "kill-line" :color blue)
+
   ("e" thing-copy-to-line-end "copy-end" :color blue)
   ("b" thing-copy-to-line-beginning "copy-begin" :color blue)
+
   ("D" djcb-duplicate-line "dup-line" :color red)
+
   ("g" goto-line "goto-line")
-  ("m" set-mark-command "mark" :bind nil)
+
   ("s" xah-select-current-line "Select current" :color red)
   ("a" xah-append-to-register-1 "Accumulate" :color red)
-  ("r" copy-region-as-kill "copy-region" :color blue)
-  ("R" join-region "join-region" :color blue)
+
   ("n" forward-line "forward")
   ("p" previous-line "backwards")
   ("u" move-text-up "move-up" :color red)
   ("d" move-text-down "move-down" :color red)
-  ("k" kill-lines "kill-lines" :color blue)
+
   ("l" linum-mode "linum" :color blue)
-  ("x" kill-line-remove-blanks "kill-line-rb" :color blue)
-  ("j" top-join-line "join-next-line" :color red)
-  ("J" delete-indentation "join-prev-line" :color red)
+
   ("h" highlight-duplicate-lines-in-region-or-buffer "dup-line" :color red)
   ("o" ov-clear "ov-clear")
 
@@ -1212,7 +1206,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
