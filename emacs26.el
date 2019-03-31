@@ -194,6 +194,7 @@
 (counsel-mode 1)
 (global-set-key "\C-s" 'swiper)
 
+
 ;;;; desktop
 ;; Auto save desktop as well during buffer auto-save
 (require 'desktop)
@@ -738,6 +739,7 @@ Version 2015-12-08"
   ("j" avy-goto-char-in-line :color blue)
   ("k" avy-goto-char   "char" :color blue)
   ("c" avy-goto-char-2 "char-2" :color blue)
+  ("s" swiper "swiper" :color blue)
   ("W" avy-goto-word-1 "word-1" :color blue)
   ("w" avy-goto-word-0 "word-0" :color blue)
 
@@ -835,6 +837,31 @@ Version 2015-12-08"
 
 (global-set-key (kbd "<f3>") 'hydra-highlight-symbol/body)
 
+;; https://www.reddit.com/r/emacs/comments/b1trp7/hydra_showcase_anyone/eiost6m?utm_source=share&utm_medium=web2x
+(defhydra hydra-symbol-overlay (:color pink :hint nil :timeout 5)
+      "
+  _p_   ^^   _b_  back         _h_  highlight  _i_  isearch
+_<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
+  _n_   ^^   _w_  save         ^^              _r_  rename
+"
+      ("<"      symbol-overlay-jump-first)
+      (">"      symbol-overlay-jump-last)
+      ("p"      symbol-overlay-jump-prev)
+      ("n"      symbol-overlay-jump-next)
+
+      ("d"      symbol-overlay-jump-to-definition)
+      ("b"      symbol-overlay-echo-mark)
+
+      ("h" symbol-overlay-put :color blue)
+      ("R" symbol-overlay-remove-all :color blue)
+
+      ("w" symbol-overlay-save-symbol :color blue)
+      ("t" symbol-overlay-toggle-in-scope)
+
+      ("i" symbol-overlay-isearch-literally :color blue)
+      ("Q" symbol-overlay-query-replace :color blue)
+      ("r" symbol-overlay-rename  :color blue)
+      ("q" nil))
 
 ;; https://www.masteringemacs.org/article/searching-buffers-occur-mode
 (defun get-buffers-matching-mode (mode)
@@ -1217,7 +1244,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
