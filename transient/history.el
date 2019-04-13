@@ -1,0 +1,6 @@
+((magit-commit nil)
+ (magit-dispatch nil)
+ (magit-fetch nil)
+ (magit-push nil)
+ (magit-reset nil)
+ (magit-run nil))
