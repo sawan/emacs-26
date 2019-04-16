@@ -82,7 +82,7 @@ error)."
   "Moves to the arg-th occurrence of char backward (forward if N
 is negative).  If there isn't room, go as far as possible (no
 error)."
-  (search-char-forward (- arg) char))  
+  (search-char-forward (- arg) char))
 
 (defun get-nth-chars (arg)
   "Computes and returns the positions of the ARG'th occurrence of
@@ -118,6 +118,10 @@ characters of the range 1 .. 255."
   "Highlights the ARG'th occurences of each character while
 querying one using message TEXT. Negative ARG means backward
 search of occurences."
+
+  ;; Patch required variable as per: https://github.com/lewang/jump-char/issues/26
+  (defvaralias 'lazy-highlight-face 'isearch-lazy-highlight)
+
   (if (not (minibufferp))
       (message text))
   (unwind-protect
@@ -219,7 +223,7 @@ interactively."
 				   'zap-up-to-char-forward
 				   'zap-up-to-char-backward)))
     (delete-region (point)
-		   (progn 
+		   (progn
 		     (apply 'search-char-forward args)
 		     (point)))))
 
@@ -231,7 +235,7 @@ queried interactively."
 					    'zap-up-to-char-forward
 					    'zap-up-to-char-backward)))
     (delete-region (point)
-		   (progn 
+		   (progn
 		     (apply 'search-char-backward args)
 		     (point)))))
 
