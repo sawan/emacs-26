@@ -748,6 +748,8 @@ Version 2015-12-08"
   ("k" avy-goto-char   "char" :color blue)
   ("c" avy-goto-char-2 "char-2" :color blue)
   ("s" swiper "swiper" :color blue)
+  ("p" sprint-forward "sprint-f" :color blue)
+  ("P" sprint-backward "sprint-b ":color blue)
   ("W" avy-goto-word-1 "word-1" :color blue)
   ("w" avy-goto-word-0 "word-0" :color blue)
 
