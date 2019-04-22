@@ -783,47 +783,49 @@ Version 2015-12-08"
 
 (defhydra hydra-text-commands ()
   "Text commands"
+
   ("c" copy-region-as-kill "copy-region" :color blue)
   ("w" thing-copy-word "copy-word" :color blue)
   ("l" thing-copy-line "copy-line"  :color blue)
   ("s" thing-copy-symbol "copy-symbol" :color blue)
+
   ("y" yank-n-times "multiple paste" :color blue )
   ("e" hydra-er/body "expand-region" :color blue)
+
+  ("M" avy-move-region "move-region" :color blue)
+  ("k" avy-kill-region "kill-region" :color blue)
+  ("u" move-text-up "move-up" :color red)
+  ("d" move-text-down "move-down" :color red)
+
+
   ("q" nil "quit"))
 
 (global-set-key (kbd "<f2>") 'hydra-text-commands/body)
 
 
-(defhydra hydra-lines (goto-map ""
-                           :pre (linum-mode 1)
-                           :post (linum-mode -1))
+(defhydra hydra-lines ()
   "Lines"
 
-  ("c" avy-copy-line "copy-line" :color blue)
-  ("r" avy-kill-ring-save-region "copy->KR" :color blue)
-  ("m" avy-move-line "move-line" :color blue)
-  ("M" avy-move-region "move-region" :color blue)
-  ("k" avy-kill-region "kill-region" :color blue)
-  ("K" avy-kill-whole-line "kill-line" :color blue)
+  ("c" avy-copy-line "copy" :color blue)
+  ("m" avy-move-line "move" :color blue)
+  ("k" avy-kill-whole-line "kill" :color blue)
 
-  ("e" thing-copy-to-line-end "copy-end" :color blue)
-  ("b" thing-copy-to-line-beginning "copy-begin" :color blue)
+  ("e" thing-copy-to-line-end "copy-e" :color blue)
+  ("b" thing-copy-to-line-beginning "copy-b" :color blue)
 
-  ("D" djcb-duplicate-line "dup-line" :color red)
+  ("d" djcb-duplicate-line "dup" :color red)
 
-  ("g" goto-line "goto-line")
+  ("g" avy-goto-line "goto" :color red)
 
-  ("C" xah-clear-register-1 "cl-r-1" :color red)
-  ("s" xah-select-current-line "Select line" :color red)
-  ("a" xah-append-to-register-1 "Accumulate" :color red)
-  ("i" xah-paste-from-register-1 "p-r-1" :color blue)
+  ("C" xah-clear-register-1 "clear-r-1" :color red)
+  ("s" xah-select-current-line "select" :color red)
+  ("a" xah-append-to-register-1 "accumulate" :color red)
+  ("i" xah-paste-from-register-1 "paste-r-1" :color blue)
 
   ("n" forward-line "forward")
   ("p" previous-line "backwards")
   ("u" move-text-up "move-up" :color red)
   ("d" move-text-down "move-down" :color red)
-
-  ("l" linum-mode "linum" :color blue)
 
   ("h" highlight-duplicate-lines-in-region-or-buffer "dup-line" :color red)
   ("o" ov-clear "ov-clear")
@@ -1222,7 +1224,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("bd0c3e37c53f6515b5f5532bdae38aa0432a032171b415159d5945a162bc5aaa" "97b8bf2dacc3ae8ffbd6f0a76c606a659a0dbca5243e55a750cbccdad7efb098" "e396098fd5bef4f0dd6cedd01ea48df1ecb0554d8be0d8a924fb1d926f02f90f" "acfac6b14461a344f97fad30e2362c26a3fe56a9f095653832d8fc029cb9d05c" "37c5cf50a60548aa7e01dbe36fd8bb643af7502d55d26f000070255a6b21c528" "8ba0a9fc75f2e3b4c254183e814b8b7b8bcb1ad6ca049fde50e338e1c61a12a0" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "2f524d307a2df470825718e27b8e3b81c0112dad112ad126805c043d7c1305c6" "5cdc1832748ae451c19a1546a4bc200750557a924f6124428272f114b6d28ac1" "a9ab62408cda1e1758d913734527a8fdbe6f22e1c06a104375456107063aff9c" "45a8b89e995faa5c69aa79920acff5d7cb14978fbf140cdd53621b09d782edcf" "fc65950aacea13c96940a2065ef9b8faefe7a4da44331adf22ea46f8c9b34cdd" "a0befffb88a6ef016010ee95e4799648f5aa6f0ab92cedb37868b97e45f85a13" "be327a6a477b07f76081480fb93a61fffaa8ddc2acc18030e725da75342b2c2e" "058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
+    ("571a762840562ec5b31b6a9d4b45cfb1156ce52339e188a8b66749ed9b3b22a2" "bd0c3e37c53f6515b5f5532bdae38aa0432a032171b415159d5945a162bc5aaa" "97b8bf2dacc3ae8ffbd6f0a76c606a659a0dbca5243e55a750cbccdad7efb098" "e396098fd5bef4f0dd6cedd01ea48df1ecb0554d8be0d8a924fb1d926f02f90f" "acfac6b14461a344f97fad30e2362c26a3fe56a9f095653832d8fc029cb9d05c" "37c5cf50a60548aa7e01dbe36fd8bb643af7502d55d26f000070255a6b21c528" "8ba0a9fc75f2e3b4c254183e814b8b7b8bcb1ad6ca049fde50e338e1c61a12a0" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "2f524d307a2df470825718e27b8e3b81c0112dad112ad126805c043d7c1305c6" "5cdc1832748ae451c19a1546a4bc200750557a924f6124428272f114b6d28ac1" "a9ab62408cda1e1758d913734527a8fdbe6f22e1c06a104375456107063aff9c" "45a8b89e995faa5c69aa79920acff5d7cb14978fbf140cdd53621b09d782edcf" "fc65950aacea13c96940a2065ef9b8faefe7a4da44331adf22ea46f8c9b34cdd" "a0befffb88a6ef016010ee95e4799648f5aa6f0ab92cedb37868b97e45f85a13" "be327a6a477b07f76081480fb93a61fffaa8ddc2acc18030e725da75342b2c2e" "058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(origami-parser-alist
    (quote
     ((java-mode . origami-java-parser)
