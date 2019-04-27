@@ -589,6 +589,24 @@ Version 2015-12-08"
 (key-chord-define emacs-lisp-mode-map "ed" 'eval-defun)
 (key-chord-define emacs-lisp-mode-map "er" 'eval-region)
 
+
+;; buffer-flip
+;; key to begin cycling buffers.  Global key.
+(global-set-key (kbd "M-<tab>") 'buffer-flip)
+
+;; transient keymap used once cycling starts
+(setq buffer-flip-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map (kbd "M-<tab>")   'buffer-flip-forward)
+        (define-key map (kbd "M-S-<tab>") 'buffer-flip-backward)
+        (define-key map (kbd "M-ESC")     'buffer-flip-abort)
+        map))
+
+;; buffers matching these patterns will be skipped
+(setq buffer-flip-skip-patterns
+      '("^\\*helm\\b"
+        "^\\*swiper\\*$"))
+
 ;; This only seems to work in GUIs
 (when (display-graphic-p)
   ;;;; bm.el config
@@ -1256,7 +1274,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
