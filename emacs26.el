@@ -561,6 +561,14 @@ Version 2015-12-08"
                               (tramp-cleanup-all-connections)
                               (tramp-cleanup-all-buffers) ))
 
+;; Eshell
+(defun eshell-new(shell-name)
+  "Open a new instance of eshell."
+  (interactive "seshell-name: ")
+  (eshell 'N)
+  (switch-to-buffer "*eshell*")
+  (rename-buffer shell-name))
+
 ;;;; Setup some MS Windows specific stuff
 (when (window-system) 'w32
       (setq tramp-default-method "plink")
@@ -827,6 +835,7 @@ Version 2015-12-08"
   ("c" avy-copy-line "copy" :color blue)
   ("m" avy-move-line "move" :color blue)
   ("k" avy-kill-whole-line "kill" :color blue)
+  ("r" avy-kill-ring-save-whole-line "->kr" :color blue)
 
   ("e" thing-copy-to-line-end "copy-e" :color blue)
   ("b" thing-copy-to-line-beginning "copy-b" :color blue)
