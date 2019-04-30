@@ -832,10 +832,11 @@ Version 2015-12-08"
 (defhydra hydra-lines ()
   "Lines"
 
-  ("c" avy-copy-line "copy" :color blue)
+  ("c" avy-copy-line "avy-copy-line" :color blue)
+  ("l" thing-copy-line "copy-l" :color blue)
+  ("r" avy-kill-ring-save-whole-line "copy->kr" :color blue)
   ("m" avy-move-line "move" :color blue)
   ("k" avy-kill-whole-line "kill" :color blue)
-  ("r" avy-kill-ring-save-whole-line "->kr" :color blue)
 
   ("e" thing-copy-to-line-end "copy-e" :color blue)
   ("b" thing-copy-to-line-beginning "copy-b" :color blue)
