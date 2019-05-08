@@ -521,8 +521,10 @@
 	    [(2012 4 7)
 	     nil "replace a word with a synonym looked up in a web service." single])
  (theme-looper .
-	       [(20190424 2258)
-		((cl-lib
+	       [(20190430 2029)
+		((emacs
+		  (24))
+		 (cl-lib
 		  (0 5)))
 		"Loop thru the available color-themes" single])
  (theme-changer .
@@ -1339,9 +1341,11 @@
 	 [(1 22)
 	  nil "major mode for editing and running Prolog (and Mercury) code" single])
  (projectile-extras .
-		    [(20190425 2311)
+		    [(20190428 1049)
 		     ((emacs
-		       (24)))
+		       (24))
+		      (cl-lib
+		       (0 5)))
 		     "A few extra functions for projectile" single])
  (projectile .
 	     [(0 10 0)
