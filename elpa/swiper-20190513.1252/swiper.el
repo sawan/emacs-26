@@ -4,7 +4,7 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Package-Version: 20190511.1123
+;; Package-Version: 20190513.1252
 ;; Version: 0.11.0
 ;; Package-Requires: ((emacs "24.1") (ivy "0.11.0"))
 ;; Keywords: matching
@@ -321,13 +321,14 @@ Make sure `swiper-mc' is on `mc/cmds-to-run-once' list."
     (error "Multiple-cursors isn't installed"))
   (unless (window-minibuffer-p)
     (error "Call me only from `swiper'"))
-  (let ((cands (nreverse ivy--old-cands)))
+  (let ((cands (nreverse ivy--old-cands))
+        (action (ivy--get-action ivy-last)))
     (unless (string= ivy-text "")
       (ivy-exit-with-action
        (lambda (_)
          (let (cand)
            (while (setq cand (pop cands))
-             (swiper--action cand)
+             (funcall action cand)
              (when cands
                (mc/create-fake-cursor-at-point))))
          (multiple-cursors-mode 1))))))
