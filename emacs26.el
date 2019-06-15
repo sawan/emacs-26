@@ -83,6 +83,8 @@
 (add-to-list 'load-path "~/.emacs.d/vendors/emacros.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/no-easy-keys.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/moccur-edit.el")
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/vendors/aweshell/"))
+
 
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
@@ -94,7 +96,7 @@
 (require 'multiple-cursors)
 (require 'moccur-edit)
 (require 'thing-edit)
-
+(require 'aweshell)
 (require 'no-easy-keys)
 (no-easy-keys)
 
@@ -478,7 +480,12 @@ Position the cursor at its beginning, according to the current mode."
     (forward-line 1)
     (back-to-indentation)))
 
-(global-set-key (kbd "M-;") 'comment-dwim-2)
+(defun comment-and-next-line()
+  (interactive)
+  (comment-dwim-2)
+  (next-line))
+
+(global-set-key (kbd "M-;") #'comment-and-next-line)
 
 (defun yank-n-times (n)
   "yank n number of times."
@@ -1142,7 +1149,13 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 
 (hydra-move-keys)
 
-(global-set-key (kbd "s-z") #'hydra-move/body)
+;; Meh key on Ergodox EZ
+(global-set-key (kbd "C-M-S-f") #'hydra-move/body)
+(global-set-key (kbd "C-M-S-a") #'hydra-avy/body)
+(global-set-key (kbd "C-M-S-b") #'my/switch-to-buffer/body)
+(global-set-key (kbd "C-M-S-i") #'find-file)
+(global-set-key (kbd "C-M-S-x") #'counsel-M-x)
+(global-set-key (kbd "C-M-S-s") #'save-buffer)
 
 
 (global-origami-mode 1)
@@ -1284,7 +1297,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
