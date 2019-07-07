@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "company-prescient" "20190619.2305" "prescient.el + Company" '((emacs "25.1") (prescient "3.1") (company "0.9.6")) :stars '(#("112" 0 3 (font-lock-face paradox-star-face))) :commit "04265919c883ff26b59e1fb866d525dcf1693ceb" :keywords '("extensions") :authors '(("Radon Rosborough" . "radon.neon@gmail.com")) :maintainer '("Radon Rosborough" . "radon.neon@gmail.com") :url "https://github.com/raxod502/prescient.el")
