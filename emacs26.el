@@ -1094,7 +1094,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   ("a" smarter-move-beginning-of-line)
   ("e" move-end-of-line)
   ("n" next-line)
-  ("p" previous-line)
+  ("m" previous-line)
   ("k" forward-char)
   ("j" backward-char)
   ("l" forward-word)
@@ -1107,7 +1107,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   ("c" avy-goto-char-2 "goto-char-2")
   ("r" recenter-top-bottom "re-center")
   ("s" swiper "swiper" :color blue)
-  ("m" counsel-imenu "iM" :color blue)
+  ("i" counsel-imenu "iM" :color blue)
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
   ("<ESC>" nil "quit" :color blue)
@@ -1151,10 +1151,10 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 (hydra-move-keys)
 
 ;; Meh key on Ergodox EZ
-(global-set-key (kbd "C-M-S-f") #'hydra-move/body)
+(global-set-key (kbd "C-M-S-j") #'hydra-move/body)
 (global-set-key (kbd "C-M-S-a") #'hydra-avy/body)
 (global-set-key (kbd "C-M-S-b") #'my/switch-to-buffer/body)
-(global-set-key (kbd "C-M-S-i") #'find-file)
+(global-set-key (kbd "C-M-S-f") #'find-file)
 (global-set-key (kbd "C-M-S-x") #'counsel-M-x)
 (global-set-key (kbd "C-M-S-s") #'save-buffer)
 
