@@ -228,7 +228,7 @@
 (defun dos2unix ()
   "Not exactly but it's easier to remember"
   (interactive)
-  (set-buffer-file-coding-system 'unix 't) )
+  (set-buffer-file-coding-system 'unix 't))
 
 
 ;; http://emacs.stackexchange.com/a/13122
@@ -771,7 +771,7 @@ Version 2015-12-08"
   )
 
 
-(defhydra hydra-avy ()
+(defhydra hydra-avy (:post (forward-char))
   "Avy"
   ("l" avy-goto-line "line" :color blue)
   ("j" avy-goto-char-in-line :color blue)
@@ -782,6 +782,8 @@ Version 2015-12-08"
   ("P" sprint-backward "sprint-b ":color blue)
   ("W" avy-goto-word-1 "word-1" :color blue)
   ("w" avy-goto-word-0 "word-0" :color blue)
+  ("z" avy-zap-to-char "Z" :color blue)
+  ("x" avy-zap-up-to-char "u-Z" :color blue)
 
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
@@ -1093,17 +1095,19 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   ("e" move-end-of-line)
   ("n" next-line)
   ("p" previous-line)
-  ("f" forward-char)
-  ("b" backward-char)
-  ("w" forward-word)
-  ("q" backward-word)
+  ("k" forward-char)
+  ("j" backward-char)
+  ("l" forward-word)
+  ("h" backward-word)
   ("d" scroll-up-command)
   ("u" scroll-down-command)
   ("t" beginning-of-buffer)
   ("T" end-of-buffer)
-  ("l" avy-goto-line "goto-line")
+  ("g" avy-goto-line "goto-line")
   ("c" avy-goto-char-2 "goto-char-2")
   ("r" recenter-top-bottom "re-center")
+  ("s" swiper "swiper" :color blue)
+  ("m" counsel-imenu "iM" :color blue)
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
   ("<ESC>" nil "quit" :color blue)
