@@ -1151,7 +1151,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 (hydra-move-keys)
 
 ;; Meh key on Ergodox EZ
-(global-set-key (kbd "C-M-S-j") #'hydra-move/body)
+(global-set-key (kbd "C-M-S-g") #'hydra-move/body)
 (global-set-key (kbd "C-M-S-a") #'hydra-avy/body)
 (global-set-key (kbd "C-M-S-b") #'my/switch-to-buffer/body)
 (global-set-key (kbd "C-M-S-f") #'find-file)
