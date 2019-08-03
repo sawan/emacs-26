@@ -83,12 +83,14 @@
 (add-to-list 'load-path "~/.emacs.d/vendors/emacros.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/no-easy-keys.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/moccur-edit.el")
+(add-to-list 'load-path "~/.emacs.d/vendors/revbufs.el")
 
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
 
 (add-hook 'after-init-hook 'global-company-mode)
 
+(require 'revbufs)
 (require 'magit)
 (require 'kill-lines)
 (require 'multiple-cursors)
@@ -783,7 +785,7 @@ Version 2015-12-08"
   ("W" avy-goto-word-1 "word-1" :color blue)
   ("w" avy-goto-word-0 "word-0" :color blue)
   ("z" avy-zap-to-char "Z" :color blue)
-  ("x" avy-zap-up-to-char "u-Z" :color blue)
+  ("x" avy-zap-up-to-char "Z-u" :color blue)
 
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
@@ -792,7 +794,13 @@ Version 2015-12-08"
   )
 
 (global-set-key (kbd "<f1>") 'hydra-avy/body)
-(global-set-key (kbd "C-j") 'hydra-avy/body)
+
+(defun mark-and-hydra()
+  (interactive)
+  (call-interactively 'set-mark-command)
+  (hydra-avy/body))
+
+(global-set-key (kbd "C-SPC") 'mark-and-hydra)
 
 
 (require 'expand-region)
@@ -812,7 +820,6 @@ Version 2015-12-08"
 (defun h-er()
   (interactive)
   (hydra-er/body))
-
 
 (defhydra hydra-text-commands ()
   "Text commands"
@@ -1069,7 +1076,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   ("D" delete-char-backward "Delete back" :color blue)
   ("i" insert-at-char-forward "Insert forward" :color blue)
   ("I" insert-at-char-backward "Insert back" :color blue)
-  ("z" zap-up-to-char-forward "Zap up-to forward" :color blue)
+  ("z" zap-xup-to-char-forward "Zap up-to forward" :color blue)
   ("Z" zap-up-to-char-backward "Zap up-to backwards" :color blue)
   ("e" execute-at-char-forward "Execute forward" :color blue)
   ("E" execute-at-char-backward "Execute backwards" :color blue)
@@ -1093,18 +1100,19 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   "move"
   ("a" smarter-move-beginning-of-line)
   ("e" move-end-of-line)
-  ("n" next-line)
-  ("m" previous-line)
-  ("k" forward-char)
-  ("j" backward-char)
-  ("l" forward-word)
-  ("h" backward-word)
+  ("j" next-line)
+  ("k" previous-line)
+  ("l" forward-char)
+  ("h" backward-char)
+  (";" forward-word)
+  ("g" backward-word)
   ("d" scroll-up-command)
   ("u" scroll-down-command)
   ("t" beginning-of-buffer)
   ("T" end-of-buffer)
-  ("g" avy-goto-line "goto-line")
+  ("G" avy-goto-line "goto-line")
   ("c" avy-goto-char-2 "goto-char-2")
+  ("w" avy-goto-word-or-subword-1 "goto-word")
   ("r" recenter-top-bottom "re-center")
   ("s" swiper "swiper" :color blue)
   ("i" counsel-imenu "iM" :color blue)
@@ -1157,6 +1165,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 (global-set-key (kbd "C-M-S-f") #'find-file)
 (global-set-key (kbd "C-M-S-x") #'counsel-M-x)
 (global-set-key (kbd "C-M-S-s") #'save-buffer)
+(global-set-key (kbd "C-M-S-m") #'hydra-bookmarks/body)
 
 
 (global-origami-mode 1)
@@ -1174,7 +1183,6 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
                          (-filter 'listp items)))
                  (positions
                   (-as-> (-map #'cdr items) positions
-                         (-filter 'identity positions)
                          (-map-when 'markerp 'marker-position positions)
                          (-filter 'natnump positions)
                          (cons (point-min) positions)
@@ -1259,6 +1267,59 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 
 (global-set-key (kbd "M-o") 'ace-window)
 
+;; (require 'major-mode-hydra)
+;; (global-set-key (kbd "M-SPC") #'major-mode-hydra)
+
+;; (major-mode-hydra-define emacs-lisp-mode nil
+;;   ("Eval"
+;;    (("b" eval-buffer "buffer")
+;;     ("e" eval-defun "defun")
+;;     ("r" eval-region "region"))
+;;    "REPL"
+;;    (("I" ielm "ielm"))
+;;    "Test"
+;;    (("t" ert "prompt")
+;;     ("T" (ert t) "all")
+;;     ("F" (ert :failed) "failed"))
+;;    "Doc"
+;;    (("d" describe-thing-at-point "thing-at-pt")
+;;     ("f" describe-function "function")
+;;     ("v" describe-variable "variable")
+;;     ("i" info-lookup-symbol "info lookup"))))
+
+;; (defvar jp-window--title (with-faicon "windows" "Window Management" 1 -0.05))
+
+;; (pretty-hydra-define jp-window (:foreign-keys warn :title jp-window--title :quit-key "q")
+;;   ("Actions"
+;;    (("TAB" other-window "switch")
+;;     ("x" ace-delete-window "delete")
+;;     ("m" ace-delete-other-windows "maximize")
+;;     ("s" ace-swap-window "swap")
+;;     ("a" ace-select-window "select"))
+
+;;    "Resize"
+;;    (("h" move-border-left "←")
+;;     ("j" move-border-down "↓")
+;;     ("k" move-border-up "↑")
+;;     ("l" move-border-right "→")
+;;     ("n" balance-windows "balance")
+;;     ("f" toggle-frame-fullscreen "toggle fullscreen"))
+
+;;    "Split"
+;;    (("b" split-window-right "horizontally")
+;;     ("B" split-window-horizontally-instead "horizontally instead")
+;;     ("v" split-window-below "vertically")
+;;     ("V" split-window-vertically-instead "vertically instead"))
+
+;;    "Zoom"
+;;    (("+" zoom-in "in")
+;;     ("=" zoom-in)
+;;     ("-" zoom-out "out")
+;;     ("0" jp-zoom-default "reset"))))
+
+;; (all-the-icons-ivy-setup)
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1266,7 +1327,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("542e6fee85eea8e47243a5647358c344111aa9c04510394720a3108803c8ddd1" "669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" "562c2a97808ab67d71c02d50f951231e4a6505f4014a01d82f8d88f5008bbe88" "bf5bdab33a008333648512df0d2b9d9710bdfba12f6a768c7d2c438e1092b633" "030346c2470ddfdaca479610c56a9c2aa3e93d5de3a9696f335fd46417d8d3e4" "571a762840562ec5b31b6a9d4b45cfb1156ce52339e188a8b66749ed9b3b22a2" "bd0c3e37c53f6515b5f5532bdae38aa0432a032171b415159d5945a162bc5aaa" "97b8bf2dacc3ae8ffbd6f0a76c606a659a0dbca5243e55a750cbccdad7efb098" "e396098fd5bef4f0dd6cedd01ea48df1ecb0554d8be0d8a924fb1d926f02f90f" "acfac6b14461a344f97fad30e2362c26a3fe56a9f095653832d8fc029cb9d05c" "37c5cf50a60548aa7e01dbe36fd8bb643af7502d55d26f000070255a6b21c528" "8ba0a9fc75f2e3b4c254183e814b8b7b8bcb1ad6ca049fde50e338e1c61a12a0" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "2f524d307a2df470825718e27b8e3b81c0112dad112ad126805c043d7c1305c6" "5cdc1832748ae451c19a1546a4bc200750557a924f6124428272f114b6d28ac1" "a9ab62408cda1e1758d913734527a8fdbe6f22e1c06a104375456107063aff9c" "45a8b89e995faa5c69aa79920acff5d7cb14978fbf140cdd53621b09d782edcf" "fc65950aacea13c96940a2065ef9b8faefe7a4da44331adf22ea46f8c9b34cdd" "a0befffb88a6ef016010ee95e4799648f5aa6f0ab92cedb37868b97e45f85a13" "be327a6a477b07f76081480fb93a61fffaa8ddc2acc18030e725da75342b2c2e" "058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
+    ("2642a1b7f53b9bb34c7f1e032d2098c852811ec2881eec2dc8cc07be004e45a0" "ff829b1ac22bbb7cee5274391bc5c9b3ddb478e0ca0b94d97e23e8ae1a3f0c3e" "fa477d10f10aa808a2d8165a4f7e6cee1ab7f902b6853fbee911a9e27cf346bc" "11e0bc5e71825b88527e973b80a84483a2cfa1568592230a32aedac2a32426c1" "ef07cb337554ffebfccff8052827c4a9d55dc2d0bc7f08804470451385d41c5c" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" "7803ff416cf090613afd3b4c3de362e64063603522d4974bcae8cfa53cf1fd1b" "542e6fee85eea8e47243a5647358c344111aa9c04510394720a3108803c8ddd1" "669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" "562c2a97808ab67d71c02d50f951231e4a6505f4014a01d82f8d88f5008bbe88" "bf5bdab33a008333648512df0d2b9d9710bdfba12f6a768c7d2c438e1092b633" "030346c2470ddfdaca479610c56a9c2aa3e93d5de3a9696f335fd46417d8d3e4" "571a762840562ec5b31b6a9d4b45cfb1156ce52339e188a8b66749ed9b3b22a2" "bd0c3e37c53f6515b5f5532bdae38aa0432a032171b415159d5945a162bc5aaa" "97b8bf2dacc3ae8ffbd6f0a76c606a659a0dbca5243e55a750cbccdad7efb098" "e396098fd5bef4f0dd6cedd01ea48df1ecb0554d8be0d8a924fb1d926f02f90f" "acfac6b14461a344f97fad30e2362c26a3fe56a9f095653832d8fc029cb9d05c" "37c5cf50a60548aa7e01dbe36fd8bb643af7502d55d26f000070255a6b21c528" "8ba0a9fc75f2e3b4c254183e814b8b7b8bcb1ad6ca049fde50e338e1c61a12a0" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "2f524d307a2df470825718e27b8e3b81c0112dad112ad126805c043d7c1305c6" "5cdc1832748ae451c19a1546a4bc200750557a924f6124428272f114b6d28ac1" "a9ab62408cda1e1758d913734527a8fdbe6f22e1c06a104375456107063aff9c" "45a8b89e995faa5c69aa79920acff5d7cb14978fbf140cdd53621b09d782edcf" "fc65950aacea13c96940a2065ef9b8faefe7a4da44331adf22ea46f8c9b34cdd" "a0befffb88a6ef016010ee95e4799648f5aa6f0ab92cedb37868b97e45f85a13" "be327a6a477b07f76081480fb93a61fffaa8ddc2acc18030e725da75342b2c2e" "058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(origami-parser-alist
    (quote
     ((java-mode . origami-java-parser)
@@ -1298,7 +1359,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
