@@ -1146,11 +1146,14 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 (defun hydra-move-post()
   (set-cursor-color "#ffffff"))
 
+(setq hydra-hint-display-type 'posframe)
+(setq hydra-hint-display-type 'lv)
+
 (defhydra hydra-move
-  (:timeout 5
-	    :body-pre (set-cursor-color "#5BFF33")
-	    :post (hydra-move-post))
-  "move"
+  (:timeout 10
+   :body-pre (set-cursor-color "#5BFF33")
+   :post (hydra-move-post)
+   :foreign-keys warn)
   ("a" smarter-move-beginning-of-line)
   ("e" move-end-of-line)
   ("j" next-line)
@@ -1169,11 +1172,17 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   ("r" recenter-top-bottom "re-center")
   ("s" swiper "swiper" :color blue)
   ("i" counsel-imenu "iM" :color blue)
-  ("<return>" nil "quit" :color blue)
-  ("<RETURN>" nil "quit" :color blue)
+  ("<return>" newline-and-indent "quit" :color blue)
+  ("<RETURN>" newline-and-indent "quit" :color blue)
   ("<ESC>" nil "quit" :color blue)
+  ("<spc>" nil "quit" :color blue)
+  ("<tab>" nil "quit" :color blue)
+  ("q" nil "quit" :color blue)
+  ("<delete>" nil "quit" :color blue)
+  ("<backspace>" nil "quit" :color blue)
 
-)
+  )
+
 
 (defun next-line-and-avy (n)
   (next-line n)
