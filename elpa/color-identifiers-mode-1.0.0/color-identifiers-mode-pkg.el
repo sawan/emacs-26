@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "color-identifiers-mode" "1.0.0" "Color identifiers based on their names" '((dash "2.5.0") (emacs "24")) :stars '(#("183" 0 3 (font-lock-face paradox-star-face))) :commit "536151410dbb198b328dc62b829d9692cec0b1bd" :keywords '("faces" "languages") :authors '(("Ankur Dave" . "ankurdave@gmail.com")) :maintainer '("Ankur Dave" . "ankurdave@gmail.com") :url "https://github.com/ankurdave/color-identifiers-mode")

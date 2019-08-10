@@ -567,6 +567,10 @@ Version 2015-12-08"
                               (tramp-cleanup-all-connections)
                               (tramp-cleanup-all-buffers) ))
 
+(require 'exec-path-from-shell)
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+
 ;; Eshell
 (defun eshell-new(shell-name)
   "Open a new instance of eshell."
@@ -576,25 +580,27 @@ Version 2015-12-08"
   (rename-buffer shell-name))
 
 ;;;; Setup some MS Windows specific stuff
-(when (window-system) 'w32
-      (setq tramp-default-method "plink")
-      (add-to-list 'tramp-remote-path "~/bin")
+(defun windows-crap ()
+  (interactive)
+  (when (window-system) 'w32
+	(setq tramp-default-method "plink")
+	(add-to-list 'tramp-remote-path "~/bin")
 
-      (setq w32-pass-lwindow-to-system nil)
-      (setq w32-lwindow-modifier 'super) ; Left Windows key
+	(setq w32-pass-lwindow-to-system nil)
+	(setq w32-lwindow-modifier 'super) ; Left Windows key
 
-      (setq w32-pass-rwindow-to-system nil)
-      (setq w32-rwindow-modifier 'super) ; Right Windows key
+	(setq w32-pass-rwindow-to-system nil)
+	(setq w32-rwindow-modifier 'super) ; Right Windows key
 
-      (setq explicit-shell-file-name "c:/msys64/cygwin64/bin/bash.exe")
-      (setq shell-file-name "bash.exe")
-      (setq explicit-bash.exe-args '("--noediting" "--login" "-i"))
-      (setenv "SHELL" shell-file-name)
-      (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+	(setq explicit-shell-file-name "c:/msys64/cygwin64/bin/bash.exe")
+	(setq shell-file-name "bash.exe")
+	(setq explicit-bash.exe-args '("--noediting" "--login" "-i"))
+	(setenv "SHELL" shell-file-name)
+	(add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
 
-      ;; Make this behave the same was as on Mac OS X
-      (global-set-key (kbd "s-s") 'save-buffer))
-
+	;; Make this behave the same was as on Mac OS X
+	(global-set-key (kbd "s-s") 'save-buffer))
+)
 
 ;;;; key-chord
 (require 'key-chord)
@@ -1421,7 +1427,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
