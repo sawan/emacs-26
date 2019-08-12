@@ -1135,7 +1135,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   ("D" delete-char-backward "Delete back" :color blue)
   ("i" insert-at-char-forward "Insert forward" :color blue)
   ("I" insert-at-char-backward "Insert back" :color blue)
-  ("z" zap-xup-to-char-forward "Zap up-to forward" :color blue)
+  ("z" zap-up-to-char-forward "Zap up-to forward" :color blue)
   ("Z" zap-up-to-char-backward "Zap up-to backwards" :color blue)
   ("e" execute-at-char-forward "Execute forward" :color blue)
   ("E" execute-at-char-backward "Execute backwards" :color blue)
@@ -1161,7 +1161,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
   (:timeout 10
    :body-pre (set-cursor-color "#5BFF33")
    :post (hydra-move-post)
-   :foreign-keys message)
+   :foreign-keys warn)
 
   ("Lines" (
 	    ("a" smarter-move-beginning-of-line)
@@ -1196,7 +1196,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	("<SPC>" (insert " ") "quit" :color blue)
 	("<tab>" nil "quit" :color blue)
 	("q" nil "quit" :color blue)
-	("<backspace>" (delete-backward-char) "quit" :color blue)
+	("<backspace>" (delete-backward-char 1) "quit" :color blue)
 	("<\\t>" (indent-for-tab-command) "quit" :color blue)))
   )
 
