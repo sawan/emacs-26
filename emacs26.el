@@ -1155,38 +1155,49 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 (setq hydra-hint-display-type 'posframe)
 (setq hydra-hint-display-type 'lv)
 
-(defhydra hydra-move
+(global-disable-mouse-mode)
+
+(pretty-hydra-define hydra-move
   (:timeout 10
    :body-pre (set-cursor-color "#5BFF33")
    :post (hydra-move-post)
-   :foreign-keys warn)
-  ("a" smarter-move-beginning-of-line)
-  ("e" move-end-of-line)
-  ("j" next-line)
-  ("k" previous-line)
-  ("l" forward-char)
-  ("h" backward-char)
-  (";" forward-word)
-  ("g" backward-word)
-  ("d" scroll-up-command)
-  ("u" scroll-down-command)
-  ("t" beginning-of-buffer)
-  ("T" end-of-buffer)
-  ("G" avy-goto-line "goto-line")
-  ("c" avy-goto-char-2 "goto-char-2")
-  ("w" avy-goto-word-or-subword-1 "goto-word")
-  ("r" recenter-top-bottom "re-center")
-  ("s" swiper "swiper" :color blue)
-  ("i" counsel-imenu "iM" :color blue)
-  ("<return>" newline-and-indent "quit" :color blue)
-  ("<RETURN>" newline-and-indent "quit" :color blue)
-  ("<ESC>" nil "quit" :color blue)
-  ("<spc>" nil "quit" :color blue)
-  ("<tab>" nil "quit" :color blue)
-  ("q" nil "quit" :color blue)
-  ("<delete>" nil "quit" :color blue)
-  ("<backspace>" nil "quit" :color blue)
+   :foreign-keys message)
 
+  ("Lines" (
+	    ("a" smarter-move-beginning-of-line)
+	    ("e" move-end-of-line)
+	    ("n" next-line)
+	    ("p" previous-line)
+	    ("g" avy-goto-line "goto-line"))
+
+  "Char-Word" (
+		 ("k" forward-char)
+		 ("j" backward-char)
+		 ("l" forward-word)
+		 ("h" backward-word)
+		 ("c" avy-goto-char-2 "goto-char-2")
+		 ("w" avy-goto-word-or-subword-1 "goto-word"))
+
+  "Buffer" (
+	     ("d" scroll-up-command)
+	     ("u" scroll-down-command)
+	     ("t" beginning-of-buffer)
+	     ("T" end-of-buffer)
+	     ("r" recenter-top-bottom "re-center"))
+
+  "Extra" (
+	    ("s" swiper "swiper" :color blue)
+	    ("i" counsel-imenu "iM" :color blue))
+
+  "Q" (
+	("<return>" newline-and-indent "quit" :color blue)
+	("<RETURN>" newline-and-indent "quit" :color blue)
+	("<ESC>" nil "quit" :color blue)
+	("<SPC>" (insert " ") "quit" :color blue)
+	("<tab>" nil "quit" :color blue)
+	("q" nil "quit" :color blue)
+	("<backspace>" (delete-backward-char) "quit" :color blue)
+	("<\\t>" (indent-for-tab-command) "quit" :color blue)))
   )
 
 
@@ -1427,7 +1438,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
