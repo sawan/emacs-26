@@ -9,6 +9,13 @@
 ;;;### (autoloads nil "disable-mouse" "disable-mouse.el" (0 0 0 0))
 ;;; Generated autoloads from disable-mouse.el
 
+(autoload 'disable-mouse-in-keymap "disable-mouse" "\
+Rebind all mouse commands in MAP so that they are disabled.
+When INCLUDE-TARGETS is non-nil, also disable mouse actions that
+target GUI elements such as the modeline.
+
+\(fn MAP &optional INCLUDE-TARGETS)" nil nil)
+
 (autoload 'disable-mouse-mode "disable-mouse" "\
 Disable the mouse in the current buffer.
 You can still use the mouse to click into other buffers or
@@ -16,20 +23,22 @@ interact with GUI elements such as divider lines.
 
 \(fn &optional ARG)" t nil)
 
-(defvar global-disable-mouse-mode nil "\
-Non-nil if Global Disable-Mouse mode is enabled.
-See the `global-disable-mouse-mode' command
+(defvar disable-mouse-global-mode nil "\
+Non-nil if Disable-Mouse-Global mode is enabled.
+See the `disable-mouse-global-mode' command
 for a description of this minor mode.")
 
-(custom-autoload 'global-disable-mouse-mode "disable-mouse" nil)
+(custom-autoload 'disable-mouse-global-mode "disable-mouse" nil)
 
-(autoload 'global-disable-mouse-mode "disable-mouse" "\
+(autoload 'disable-mouse-global-mode "disable-mouse" "\
 Disable the mouse globally.
 Interact with GUI elements such as divider lines will also be prevented.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "disable-mouse" '("global-disable-mouse-mode-" "disable-mouse-")))
+(defalias 'global-disable-mouse-mode 'disable-mouse-global-mode)
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "disable-mouse" '("disable-mouse-")))
 
 ;;;***
 

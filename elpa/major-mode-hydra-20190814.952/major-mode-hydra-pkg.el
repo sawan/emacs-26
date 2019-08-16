@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "major-mode-hydra" "20190814.952" "Major mode keybindings managed by Hydra" '((dash "2.15.0") (pretty-hydra "0.2.0") (emacs "25")) :stars '(#("54" 0 2 (font-lock-face paradox-star-face))) :commit "d9fb688dae3e134bb1ff7f35474c58f33a5bb992" :authors '(("Jerry Peng" . "pr2jerry@gmail.com")) :maintainer '("Jerry Peng" . "pr2jerry@gmail.com") :url "https://github.com/jerrypnz/major-mode-hydra.el")
