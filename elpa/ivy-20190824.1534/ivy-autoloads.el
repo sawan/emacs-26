@@ -60,7 +60,8 @@ When SORT is non-nil, `ivy-sort-functions-alist' determines how
 to sort candidates before displaying them.
 
 ACTION is a function to call after selecting a candidate.
-It takes the candidate, which is a string, as its only argument.
+It takes one argument, the selected candidate. If COLLECTION is
+an alist, the argument is a cons cell, otherwise it's a string.
 
 MULTI-ACTION, when non-nil, is called instead of ACTION when
 there are marked candidates. It takes the list of candidates as
