@@ -670,6 +670,8 @@ Version 2015-12-08"
 
   (defhydra hydra-bookmarks ()
     "Bookmarks"
+    ("<return>" bm-toggle "toggle" :color blue)
+    ("<RETURN>" bm-toggle "toggle" :color blue)
     ("t" bm-toggle "toggle" :color blue)
     ("n" bm-next   "next"   :color red)
     ("p" bm-previous "previous" :color red)
@@ -1170,7 +1172,11 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	    ("e" move-end-of-line)
 	    ("n" next-line)
 	    ("p" previous-line)
-	    ("g" avy-goto-line "goto-line"))
+	    ("P" djcb-duplicate-line)
+	    ("g" avy-goto-line "goto-line")
+	    ("L" kill-whole-line :color red)
+	    ("K" kill-visual-line :color red))
+
 
   "Char-Word" (
 		 ("k" forward-char)
@@ -1179,8 +1185,9 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 		 ("h" backward-word)
 		 ("D" kill-word)
 		 ("d" delete-char :color red)
-		 ("L" kill-whole-line :color red)
-		 ("K" kill-visual-line :color red)
+		 ("b" delete-backward-char :color red)
+		 ("B" backward-kill-word :color red)
+		 ("d" delete-char :color red)
 		 ("c" avy-goto-char-2 "goto-char-2")
 		 ("w" avy-goto-word-or-subword-1 "goto-word"))
 
@@ -1192,8 +1199,10 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	     ("r" recenter-top-bottom "re-center"))
 
   "Extra" (
-	    ("s" swiper "swiper" :color blue)
-	    ("i" counsel-imenu "iM" :color blue))
+	    ("s" save-buffer   "save" :color red)
+	    ("i" counsel-imenu "iM" :color blue)
+	    ("/" undo-tree-undo "undo" :color red)
+	    (";" comment-and-next-line "comment" :color red))
 
   "Q" (
 	("<return>" newline-and-indent "quit" :color blue)
