@@ -758,6 +758,19 @@ Version 2015-12-08"
           ;; functions.
           (iedit-start (current-word)))))))
 
+
+(require 'multi-term)
+(defun init-multi-term (new-name)
+  (let ((mt-buffer-name "*terminal<1>*"))
+    (multi-term)
+    (with-current-buffer mt-buffer-name
+      (rename-buffer new-name))))
+
+(defun mt (shell-name)
+  (interactive "sshell-name: ")
+  (init-multi-term shell-name))
+
+
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.sls$" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
@@ -1497,7 +1510,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (multi-term dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
