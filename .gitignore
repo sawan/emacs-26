@@ -25,3 +25,5 @@ network-security.data
 .python-environments
 eshell-aliases
 bookmarks
+transient/history.el
+Shell-script-mac.el
