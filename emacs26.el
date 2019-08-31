@@ -759,6 +759,7 @@ Version 2015-12-08"
           (iedit-start (current-word)))))))
 
 
+;;https://emacs.stackexchange.com/questions/2146/how-to-open-and-rename-several-multi-term-buffers-on-start-up
 (require 'multi-term)
 (defun init-multi-term (new-name)
   (let ((mt-buffer-name "*terminal<1>*"))
@@ -1132,7 +1133,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
    ("i" (ivy-switch-buffer))
    ("f" (counsel-find-file) "Find file")
    ("b" (ibuffer) "IBuffer")
-   ("w" other-window "o-window")
+   ("o" ace-window "o-window")
    ("d" delete-other-windows "d-o-window")
    ("q" nil)
    )
