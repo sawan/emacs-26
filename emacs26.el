@@ -1168,6 +1168,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	    :foreign-keys warn)
 
   ("Lines" (
+	    ("3" set-mark-command "Mark")
 	    ("5" down-n-lines )
 	    ("4" up-n-lines )
 	    ("a" smarter-move-beginning-of-line)
