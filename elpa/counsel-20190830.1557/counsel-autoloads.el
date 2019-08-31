@@ -498,6 +498,13 @@ selected color.
 
 \(fn)" t nil)
 
+(autoload 'counsel-fonts "counsel" "\
+Show a list of all supported font families for a particular frame.
+
+You can insert or kill the name of the selected font.
+
+\(fn)" t nil)
+
 (autoload 'counsel-rhythmbox "counsel" "\
 Choose a song from the Rhythmbox library to play or enqueue.
 

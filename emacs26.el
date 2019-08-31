@@ -1163,50 +1163,61 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 
 (pretty-hydra-define hydra-move
   (:timeout 10
-   :body-pre (set-cursor-color "#5BFF33")
-   :post (hydra-move-post)
-   :foreign-keys warn)
+	    :body-pre (set-cursor-color "#5BFF33")
+	    :post (hydra-move-post)
+	    :foreign-keys warn)
 
   ("Lines" (
+	    ("5" down-n-lines )
+	    ("4" up-n-lines )
 	    ("a" smarter-move-beginning-of-line)
 	    ("e" move-end-of-line)
 	    ("n" next-line)
 	    ("p" previous-line)
 	    ("P" djcb-duplicate-line)
 	    ("g" avy-goto-line "goto-line")
-	    ("L" kill-whole-line :color red)
-	    ("K" kill-visual-line :color red))
+	    ("L" kill-whole-line)
+	    ("K" kill-visual-line))
+
+   "Avy" (
+	  ("c" avy-goto-char-2 "goto-char-2")
+	  ("w" avy-goto-word-or-subword-1 "goto-word")
+	  ("2" avy-kill-ring-save-region "Copy Region")
+	  ("y" yank "Paste" ))
 
 
-  "Char-Word" (
-		 ("k" forward-char)
-		 ("j" backward-char)
-		 ("l" forward-word)
-		 ("h" backward-word)
-		 ("D" kill-word)
-		 ("d" delete-char :color red)
-		 ("b" delete-backward-char :color red)
-		 ("B" backward-kill-word :color red)
-		 ("d" delete-char :color red)
-		 ("c" avy-goto-char-2 "goto-char-2")
-		 ("w" avy-goto-word-or-subword-1 "goto-word"))
+   "Char-Word" (
+		("k" forward-char)
+		("j" backward-char)
+		("l" forward-word)
+		("h" backward-word)
+		("D" kill-word)
+		("d" delete-char)
+		("b" delete-backward-char)
+		("B" backward-kill-word)
+		("d" delete-char))
 
-  "Buffer" (
+   "Buffer" (
 	     ("m" scroll-up-command)
 	     ("u" scroll-down-command)
 	     ("t" beginning-of-buffer)
 	     ("T" end-of-buffer)
 	     ("r" recenter-top-bottom "re-center"))
 
-  "Extra" (
-	    ("s" save-buffer   "save" :color red)
-	    ("i" counsel-imenu "iM" :color blue)
-	    ("/" undo-tree-undo "undo" :color red)
-	    (";" comment-and-next-line "comment" :color red))
+   "Extra" (
+	    ("s" save-buffer   "save")
+	    ("i" counsel-imenu "iM" )
+	    ("/" undo-tree-undo "undo")
+	    (";" comment-and-next-line "comment")
+	    (">" py-indent-right-and-next-line "i >")
+	    ("<" py-indent-right-and-next-line "i <")
+	    ("x" eval-defun "eval-defun" )
+	    ("z" bm-toggle "Bookmark"))
 
-  "Q" (
-	("<return>" newline-and-indent "quit" :color blue)
-	("<RETURN>" newline-and-indent "quit" :color blue)
+
+   "Q" (
+	("<return>" newline-and-indent "quit" :color red)
+	("<RETURN>" newline-and-indent "quit" :color red)
 	("<ESC>" nil "quit" :color blue)
 	("=" nil "quit" :color blue)
 	("-" nil "quit" :color blue)
@@ -1216,6 +1227,37 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	("<\\t>" (indent-for-tab-command) "quit" :color blue)))
   )
 
+;; http://whattheemacsd.com/key-bindings.el-02.html
+;; Move more quickly
+(defun down-n-lines ()
+                  (interactive)
+                  (ignore-errors (next-line 5)))
+
+(defun up-n-lines ()
+                  (interactive)
+                  (ignore-errors (previous-line 5)))
+
+;; (global-set-key (kbd "C-S-f")
+                ;; (lambda ()
+                  ;; (interactive)
+                  ;; (ignore-errors (forward-char 10))))
+;;
+;; (global-set-key (kbd "C-S-b")
+                ;; (lambda ()
+                  ;; (interactive)
+                  ;; (ignore-errors (backward-char 10))))
+;;
+
+(defun py-indent-right-and-next-line()
+  (interactive "")
+  (elpy-nav-indent-shift-right)
+  (next-line 1))
+
+
+(defun py-indent-left-and-next-line()
+  (interactive "")
+  (elpy-nav-indent-shift-left)
+  (next-line 1))
 
 (defun next-line-and-avy (n)
   (next-line n)
@@ -1454,7 +1496,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 			 (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
