@@ -1182,9 +1182,10 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	    :foreign-keys warn)
 
   ("Lines" (
-	    ("3" set-mark-command "Mark")
-	    ("5" down-n-lines )
+	    ("2" set-mark-command "Mark")
+	    ("3" avy-kill-ring-save-region "Copy Region")
 	    ("4" up-n-lines )
+	    ("5" down-n-lines )
 	    ("a" smarter-move-beginning-of-line)
 	    ("e" move-end-of-line)
 	    ("n" next-line)
@@ -1197,7 +1198,8 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
    "Avy" (
 	  ("c" avy-goto-char-2 "goto-char-2")
 	  ("w" avy-goto-word-or-subword-1 "goto-word")
-	  ("2" avy-kill-ring-save-region "Copy Region")
+	  ("6" avy-zap-to-char "zap-to-c")
+	  ("7" avy-zap-up-to-char "zap-up-to-c")
 	  ("y" yank "Paste" ))
 
 
