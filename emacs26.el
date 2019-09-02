@@ -1228,7 +1228,6 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	    (";" comment-and-next-line "comment")
 	    (">" py-indent-right-and-next-line "i >")
 	    ("<" py-indent-right-and-next-line "i <")
-	    ("x" eval-defun "eval-defun" )
 	    ("z" bm-toggle "Bookmark"))
 
 

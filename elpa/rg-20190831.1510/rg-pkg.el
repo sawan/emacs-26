@@ -1,4 +1,4 @@
-(define-package "rg" "20190828.1339" "A search tool based on ripgrep."
+(define-package "rg" "20190831.1510" "A search tool based on ripgrep."
   '((cl-lib "0.5")
     (emacs "24.4")
     (s "1.10.0")
