@@ -1227,7 +1227,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 	    ("/" undo-tree-undo "undo")
 	    (";" comment-and-next-line "comment")
 	    (">" py-indent-right-and-next-line "i >")
-	    ("<" py-indent-right-and-next-line "i <")
+	    ("<" py-indent-left-and-next-line "i <")
 	    ("z" bm-toggle "Bookmark"))
 
 
