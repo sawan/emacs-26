@@ -221,11 +221,20 @@ In that case, insert the number."
 (setq ivy-re-builders-alist
       '((t . ivy--regex-fuzzy)))
 
+;; https://github.com/abo-abo/swiper/wiki/ivy-display-function
+(setq ivy-display-functions-alist
+      '(
+        (ivy-completion-in-region . ivy-display-function-overlay)
+        (counsel-company . ivy-display-function-overlay)
+	))
+
 (counsel-mode 1)
+
 (setq counsel-grep-base-command
       "rg -i -M 120 --no-heading --line-number --color never %s %s")
 
 (global-set-key "\C-s" 'swiper)
+(global-set-key "\M-i" 'complete-symbol)
 
 (require 'ivy-rich)
 (ivy-rich-mode 1)
@@ -732,18 +741,7 @@ Version 2015-12-08"
            ((scan-error) nil))))
     (apply #'insert (nreverse closing))))
 
-;;;; fastnav
-(require 'fastnav)
-(global-set-key "\M-r" 'replace-char-forward)
-(global-set-key "\M-R" 'replace-char-backward)
-(global-set-key "\M-i" 'insert-at-char-forward)
-(global-set-key "\M-I" 'insert-at-char-backward)
-(global-set-key "\M-j" 'execute-at-char-forward)
-(global-set-key "\M-J" 'execute-at-char-backward)
-(global-set-key "\M-k" 'delete-char-forward)
-(global-set-key "\M-K" 'delete-char-backward)
-(global-set-key "\M-p" 'sprint-forward)
-(global-set-key "\M-P" 'sprint-backward)
+
 
 ;;;; undo-tree
 ;; http://www.dr-qubit.org/emacs.php#undo-tree
@@ -811,6 +809,10 @@ Version 2015-12-08"
 
 
 (elpy-enable)
+
+(define-key elpy-mode-map (kbd "C-M-i") 'elpy-company-backend)
+(define-key elpy-mode-map (kbd "M-k") 'counsel-company)
+
 
 (defun python-add-debug-highlight ()
   "Adds a highlighter for use by `python-pdb-breakpoint-string'"
