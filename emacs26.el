@@ -1183,7 +1183,7 @@ Other buffers: %s(my/number-names my/last-buffers) b: ibuffer q: quit w: other-w
 
   ("Lines" (
 	    ("2" set-mark-command "Mark")
-	    ("3" avy-kill-ring-save-region "Copy Region")
+	    ("3" copy-region-as-kill "Copy Region")
 	    ("4" up-n-lines )
 	    ("5" down-n-lines )
 	    ("a" smarter-move-beginning-of-line)
