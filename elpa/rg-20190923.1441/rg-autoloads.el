@@ -66,6 +66,13 @@ specified default if left out.
             Default is `never'.
 :flags      `ask' or a list of command line flags that will be used when
             invoking the search.
+:menu       Bind the command into `rg-menu'.  Must be a list with three
+            items in it.  The first item is the description of the
+            group in witch the new command will appear.  If the group
+            does not exist a new will be created.  The second item is
+            the key binding for this new command (ether a key vector
+            or a key description string) and the third item is the
+            description of the command that will appear in the menu.
 
 Example:
 \(rg-define-search search-home-dir-in-elisp
@@ -74,6 +81,7 @@ Example:
   :format literal
   :files \"elisp\"
   :dir (getenv \"HOME\"))
+  :menu (\"Custom\" \"H\" \"Home dir\")
 
 \(fn NAME &rest ARGS)" nil t)
 
@@ -130,6 +138,19 @@ List all `rg-mode' buffers in `ibuffer'.
 
 ;;;***
 
+;;;### (autoloads nil "rg-menu" "rg-menu.el" (0 0 0 0))
+;;; Generated autoloads from rg-menu.el
+
+(autoload 'rg-enable-menu "rg-menu" "\
+Bind `rg-menu' to PREFIX key.
+If prefix is not supplied `rg-keymap-prefix' is used.
+
+\(fn &optional PREFIX)" t nil)
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "rg-menu" '("rg-menu")))
+
+;;;***
+
 ;;;### (autoloads nil "rg-result" "rg-result.el" (0 0 0 0))
 ;;; Generated autoloads from rg-result.el
 
@@ -151,7 +172,8 @@ Setup wgrep rg support.
 
 ;;;***
 
-;;;### (autoloads nil nil ("rg-compat.el" "rg-pkg.el") (0 0 0 0))
+;;;### (autoloads nil nil ("rg-info-hack.el" "rg-pkg.el") (0 0 0
+;;;;;;  0))
 
 ;;;***
 

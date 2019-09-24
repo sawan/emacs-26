@@ -2,7 +2,7 @@
 ;; Copyright (C) 2015-2019 jack angers
 ;; Author: jack angers and contributors
 ;; Version: 0.5.3
-;; Package-Version: 20190917.1533
+;; Package-Version: 20190923.1849
 ;; Package-Requires: ((emacs "24.3") (f "0.20.0") (s "1.11.0") (dash "2.9.0") (popup "0.5.3"))
 ;; Keywords: programming
 
@@ -402,6 +402,17 @@ or most optimal searcher."
            :regex "\\b\\*?JJJ\\s*=[^=\\n]+"
            :tests ("NSString *test = @\"asdf\"")
            :not ("NSString *testnot = @\"asdf\"" "NSString *nottest = @\"asdf\""))
+
+    (:type "type" :supports ("ag" "grep" "rg" "git-grep") :language "objc"
+           :regex "(@interface|@protocol|@implementation)\\b\\s*JJJ\\b\\s*"
+           :tests ("@interface test: UIWindow")
+           :not ("@interface testnon: UIWindow"))
+
+
+    (:type "type" :supports ("ag" "grep" "rg" "git-grep") :language "objc"
+           :regex "typedef\\b\\s+(NS_OPTIONS|NS_ENUM)\\b\\([^,]+?,\\s*JJJ\\b\\s*"
+           :tests ("typedef NS_ENUM(NSUInteger, test)")
+           :not ("typedef NS_ENUMD(NSUInteger, test)"))
 
     ;; swift
     (:type "variable" :supports ("ag" "grep" "rg" "git-grep") :language "swift"
@@ -1310,7 +1321,16 @@ or most optimal searcher."
            :tests ("val test " "var test"))
     (:type "type" :supports ("ag" "grep" "rg" "git-grep") :language "kotlin"
            :regex "(class|interface)\\s*JJJ\\b"
-           :tests ("class test" "class test : SomeInterface" "interface test")))
+           :tests ("class test" "class test : SomeInterface" "interface test"))
+
+    ;; protobuf
+    (:type "message" :supports ("ag" "grep" "rg" "git-grep") :language "protobuf"
+           :regex "message\\s+JJJ\\s*\\\{"
+           :tests ("message test{" "message test {"))
+
+    (:type "enum" :supports ("ag" "grep" "rg" "git-grep") :language "protobuf"
+           :regex "enum\\s+JJJ\\s*\\\{"
+           :tests ("enum test{" "enum test {")))
 
 
   "List of regex patttern templates organized by language and type to use for generating the grep command."
@@ -1453,7 +1473,8 @@ or most optimal searcher."
     (:language "fsharp" :ext "fsi" :agtype "fsharp" :rgtype nil)
     (:language "fsharp" :ext "fsx" :agtype "fsharp" :rgtype nil)
     (:language "kotlin" :ext "kt" :agtype "kotlin" :rgtype "kotlin")
-    (:language "kotlin" :ext "kts" :agtype "kotlin" :rgtype "kotlin"))
+    (:language "kotlin" :ext "kts" :agtype "kotlin" :rgtype "kotlin")
+    (:language "protobuf" :ext "proto" :agtype "proto" :rgtype "protobuf"))
 
   "Mapping of programming language(s) to file extensions."
   :group 'dumb-jump
@@ -2077,7 +2098,8 @@ current file."
     (:comment "//" :language "systemverilog")
     (:comment "--" :language "vhdl")
     (:comment "//" :language "scss")
-    (:comment "//" :language "pascal"))
+    (:comment "//" :language "pascal")
+    (:comment "//" :language "protobuf"))
   "List of one-line comments organized by language."
   :group 'dumb-jump
   :type

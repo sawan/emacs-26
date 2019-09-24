@@ -8,7 +8,7 @@
 ;;         Roland McGrath <roland@gnu.org>
 ;; Version: 1.8.0
 ;; URL: https://github.com/dajva/rg.el
-;; Package-Requires: ((cl-lib "0.5") (emacs "24.4") (s "1.10.0") (wgrep "2.1.10"))
+;; Package-Requires: ((cl-lib "0.5") (emacs "25.1") (s "1.10.0") (transient "0.1.0") (wgrep "2.1.10"))
 ;; Keywords: matching, tools
 
 ;; This file is not part of GNU Emacs.
@@ -30,68 +30,22 @@
 
 ;;; Commentary:
 
-;; This package is a frontend to ripgrep (rg) and works in a similar
-;; way to Emacs built in `rgrep' command or external `ag' if you like.
-;; It depends on and reuse parts of built in grep with adjustments to
-;; ripgrep is using `wgrep' for inline editing of search result.
+;; A search package based on the ripgrep command line tool.
+;; It allows you to interactively create searches, doing automatic
+;; searches based on the editing context, refining and modifying
+;; search results and much more.  It is also highly configurable to be
+;; able to fit different users' needs.
 
-;; Install the package and and use the default key bindings:
-;; (rg-enable-default-bindings)
+;; If you are used to built-in Emacs rgrep command, transitioning to
+;; rg should be simple.  rg provides a lot of extra features
+;; but the basics are similar.
 ;;
-;; The default key binding prefix is C-c s but can be changed by
-;; supplying a prefix of choice to the above function call:
-;; (rg-enable-default-bindings)
+;; The big benefit of using ripgrep instead of grep as a backend is
+;; speed.  Especially when searching large source code repositories
+;; where ripgrep really shines.
 
-;; `rg' is the main entry point but there are functions for easy
-;; searching:
-;; `rg-project' - Search in a project.
-;; `rg-dwim' - Hands free search.  Search thing at point in project in
-;; files matching the type alias of the current buffer file name.
+;; See info node `(rgel)Top' for documentation or online at https://rgel.readthedocs.io."
 
-;; The search results buffer has bindings for modification of
-;; the last search for quick reruns with refined parameters.
-;; Possible refinements are: toggle case insensitive search, toggle
-;; '--no-ignore' flag, change directory, change file pattern and change
-;; search string.  See `rg-mode' for details.
-
-;; This package by default use the setting of
-;; `case-fold-search' variable to decide whether to do a case
-;; sensitive search or not, similar to the '--smart-case' rg flag.
-;; This can be changed by changing the `rg-ignore-case' variable.
-
-;; ripgrep has built in type aliases that can be selected on
-;; invocation of `rg'.  Customize `rg-custom-type-aliases' to add your
-;; own aliases:
-;; (setq rg-custom-type-aliases
-;;   '(("foo" .    "*.foo *.bar")
-;;     ("baz" .    "*.baz *.qux")))
-;;
-;; You may also add lambdas to `rg-custom-type-aliases' to add aliases
-;; dynamically based on mode, directory, project, etc.:
-;; (add-to-list
-;;  'rg-custom-type-aliases
-;;  (lambda ()
-;;    (when (in-frontend-app)
-;;      (cons "ui" "*.js *.hbs *.json"))))
-
-;; The `rg-define-toggle' macro can be used to define a toggle-able
-;; flag for the rg command line.  Such flags can then be toggled from
-;; the results buffer to repeat the search with updated flags.
-
-;; The `rg-define-search' macro can be used to define custom search
-;; functions that is not available in this package.
-
-;; The two `rg-save-search' functions will allow for saving search
-;; result buffers with or without custom naming.
-;; `rg-list-searches' will display a list of all search buffers with
-;; search info and allow jumping to results.
-
-;; Search history is stored per result buffer.  It's possible to
-;; navigate back and forward in earlier searches with
-;; `rg-back-history` and `rg-forward-history`.  Whenever a search is
-;; modified or a new is created future searches are cleared.
-
-;; This package use `wgrep' for inline editing of search results.
 
 ;;; Code:
 
@@ -99,7 +53,9 @@
 (require 'edmacro)
 (require 'grep)
 (require 'rg-ibuffer)
+(require 'rg-menu)
 (require 'rg-result)
+(require 'rg-info-hack)
 (require 's)
 (require 'vc)
 
@@ -148,9 +104,14 @@ NIL means case sensitive search will be forced."
                  (const :tag "Off" nil))
   :group 'rg)
 
-(defcustom rg-keymap-prefix "\C-cs"
+(defcustom rg-use-transient-menu nil
+  "Use transient menu instead of a the global keymap."
+  :type 'boolean
+  :group 'rg)
+
+(defcustom rg-keymap-prefix (kbd "C-c s")
   "Prefix for global `rg' keymap."
-  :type 'string
+  :type 'key-sequence
   :group 'rg)
 
 (defcustom rg-default-alias-fallback "all"
@@ -525,15 +486,16 @@ a saved buffer in which case the saved buffer will be reused."
         (kill-buffer buf)))))
 
 ;;;###autoload
-(defun rg-enable-default-bindings(&optional prefix)
+(defun rg-enable-default-bindings (&optional prefix)
   "Enable the global `rg' default key bindings under PREFIX key.
 If prefix is not supplied `rg-keymap-prefix' is used."
   (interactive)
-  (setq prefix (or prefix rg-keymap-prefix))
-  (when prefix
-    (global-set-key prefix rg-global-map)
-    (message "Global key bindings for `rg' enabled with prefix: %s"
-             (edmacro-format-keys prefix))))
+  (when-let ((prefix (or prefix rg-keymap-prefix)))
+    (if rg-use-transient-menu
+        (rg-enable-menu prefix)
+      (global-set-key prefix rg-global-map)
+      (message "Global key bindings for `rg' enabled with prefix: %s"
+               (edmacro-format-keys prefix)))))
 
 ;;;###autoload
 (defun rg-use-old-defaults ()
@@ -542,20 +504,6 @@ If prefix is not supplied `rg-keymap-prefix' is used."
   (define-key rg-mode-map "\C-c>" nil)
   (define-key rg-mode-map "\C-b" 'rg-back-history)
   (define-key rg-mode-map "\C-c<" nil))
-
-(eval-and-compile
-  ;; Copied macroexp-parse-body from macroexp.el since this is only
-  ;; available in emacs > 25.
-  (defun rg-search-parse-body (args)
-    "Parse a function ARGS into (DECLARATIONS . EXPS)."
-    (let ((decls ()))
-      (while (and (cdr args)
-                  (let ((e (car args)))
-                    (or (stringp e)
-                        (memq (car-safe e)
-                              '(:documentation declare interactive cl-declare)))))
-        (push (pop args) decls))
-      (cons (nreverse decls) args))))
 
 (eval-and-compile
   (defun rg-set-search-defaults (args)
@@ -578,6 +526,21 @@ the :query option is missing, set it to ASK"
     (unless (plist-get args :dir)
       (setq args (plist-put args :dir 'ask)))
     args))
+
+(eval-and-compile
+  (defun rg-ensure-quoted (arg)
+    "Ensure that ARG is quoted."
+    (if (and (consp arg)
+             (eq (car arg) 'quote))
+        arg
+      `(quote ,arg)))
+
+  (defun rg-ensure-unquoted (arg)
+    "Ensure that ARG is quoted."
+    (if (and (consp arg)
+             (eq (car arg) 'quote))
+        (cadr arg)
+      arg)))
 
 (eval-and-compile
   (defun rg-search-parse-local-bindings (search-cfg)
@@ -626,10 +589,10 @@ the :query option is missing, set it to ASK"
       (when (eq flags-opt 'ask)
         (setq flags-opt 'flags))
 
+      (setq flags-opt (rg-ensure-quoted flags-opt))
       (setq binding-list
             (append binding-list
                     `((flags (funcall rg-command-line-flags-function ,flags-opt)))))
-
       binding-list)))
 
 (eval-and-compile
@@ -662,6 +625,20 @@ the :query option is missing, set it to ASK"
               (append iargs '((flags . (split-string
                                         (read-string "Command line flags: ")))))))
       iargs)))
+
+(eval-and-compile
+  (defun rg-search-parse-menu-arg (search-cfg name)
+    "Parse :menu option in SEARCH-CFG.
+Returns forms for binding function with NAME into rg-menu."
+    (when-let ((menu-opt (rg-ensure-unquoted
+                          (plist-get search-cfg :menu))))
+      (unless (and (consp menu-opt)
+                   (= (length menu-opt) 3))
+        (user-error "'%S' should be a list of length 3" menu-opt))
+      `((rg-menu-wrap-transient-search ,name)
+        (rg-menu-transient-insert
+         ,@menu-opt
+         ',(intern (concat (symbol-name name) "--transient")))))))
 
 (defconst rg-elisp-font-lock-keywords
   '(("(\\(rg-define-search\\)\\_>[ \t']*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
@@ -702,6 +679,13 @@ specified default if left out.
             Default is `never'.
 :flags      `ask' or a list of command line flags that will be used when
             invoking the search.
+:menu       Bind the command into `rg-menu'.  Must be a list with three
+            items in it.  The first item is the description of the
+            group in witch the new command will appear.  If the group
+            does not exist a new will be created.  The second item is
+            the key binding for this new command (ether a key vector
+            or a key description string) and the third item is the
+            description of the command that will appear in the menu.
 
 Example:
 \(rg-define-search search-home-dir-in-elisp
@@ -709,19 +693,23 @@ Example:
   :query ask
   :format literal
   :files \"elisp\"
-  :dir (getenv \"HOME\"\)\)"
+  :dir (getenv \"HOME\"\)\)
+  :menu (\"Custom\" \"H\" \"Home dir\")"
   (declare (indent defun))
-  (let* ((body (rg-search-parse-body args))
+  (let* ((body (macroexp-parse-body args))
          (decls (car body))
          (search-cfg (rg-set-search-defaults (cdr body)))
          (local-bindings (rg-search-parse-local-bindings search-cfg))
-         (iargs (rg-search-parse-interactive-args search-cfg)))
-    `(defun ,name ,(mapcar 'car iargs)
+         (iargs (rg-search-parse-interactive-args search-cfg))
+         (menu-forms (rg-search-parse-menu-arg search-cfg name)))
+    `(progn
+       (defun ,name ,(mapcar 'car iargs)
        ,@decls
        (interactive
         (list ,@(mapcar 'cdr iargs)))
        (let ,local-bindings
-         (rg-run query files dir literal confirm flags)))))
+         (rg-run query files dir literal confirm flags)))
+       ,@menu-forms)))
 
 ;;;###autoload (autoload 'rg-project "rg.el" "" t)
 (rg-define-search rg-project

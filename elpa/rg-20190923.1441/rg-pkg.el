@@ -1,7 +1,8 @@
-(define-package "rg" "20190917.1351" "A search tool based on ripgrep."
+(define-package "rg" "20190923.1441" "A search tool based on ripgrep."
   '((cl-lib "0.5")
-    (emacs "24.4")
+    (emacs "25.1")
     (s "1.10.0")
+    (transient "0.1.0")
     (wgrep "2.1.10"))
   :keywords
   '("matching" "tools")

@@ -5,10 +5,10 @@
 ;; Author: Radon Rosborough <radon.neon@gmail.com>
 ;; Homepage: https://github.com/raxod502/prescient.el
 ;; Keywords: extensions
-;; Package-Version: 20190727.2126
+;; Package-Version: 20190921.3
 ;; Created: 7 Aug 2017
 ;; Package-Requires: ((emacs "25.1"))
-;; Version: 3.2
+;; Version: 3.3
 
 ;;; Commentary:
 
