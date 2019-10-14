@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "pretty-hydra" "20190715.937" "A macro for creating nice-looking hydras" '((hydra "0.15.0") (s "1.12.0") (dash "2.15.0") (dash-functional "1.2.0") (emacs "24")) :stars '(#("54" 0 2 (font-lock-face paradox-star-face))) :commit "854827d0585a4fc9310708bfae2514957f4dc341" :authors '(("Jerry Peng" . "pr2jerry@gmail.com")) :maintainer '("Jerry Peng" . "pr2jerry@gmail.com") :url "https://github.com/jerrypnz/major-mode-hydra.el")

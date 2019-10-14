@@ -134,6 +134,8 @@ In that case, insert the number."
 (require 'no-easy-keys)
 (no-easy-keys)
 
+(global-disable-mouse-mode)
+
 (require 'autopair)
 (autopair-global-mode)
 
@@ -1207,8 +1209,6 @@ Other buffers: %s(my/number-names my/last-buffers)
 
 (setq hydra-hint-display-type 'posframe)
 (setq hydra-hint-display-type 'lv)
-
-(global-disable-mouse-mode)
 
 (pretty-hydra-define hydra-move
   (:timeout 10
