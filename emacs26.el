@@ -220,7 +220,7 @@ In that case, insert the number."
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 
 ;; wrap lines at 80 columns
-(setq-default fill-column 80)
+(setq-default fill-column 120)
 (add-hook 'find-file-hook 'turn-on-auto-fill)
 
 ;; ivy
