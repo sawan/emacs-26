@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "nova-theme" "20191105.1829" "A dark, pastel color theme" '((emacs "24.3")) :stars '(#("23" 0 2 (font-lock-face paradox-star-face))) :commit "fc4ce3f420a7456a9ca4166d8d3038c10b61a53c" :keywords '("theme" "dark" "nova" "pastel" "faces") :authors '(("Muir Manders" . "muir+emacs@mnd.rs")) :maintainer '("Muir Manders" . "muir+emacs@mnd.rs") :url "https://github.com/muirmanders/emacs-nova-theme")
