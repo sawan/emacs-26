@@ -1231,6 +1231,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 	    ("K" kill-visual-line))
 
    "Avy" (
+	  ("C" avy-goto-char-in-line "goto-char-in-line")
 	  ("c" avy-goto-char-2 "goto-char-2")
 	  ("w" avy-goto-word-or-subword-1 "goto-word")
 	  ("6" avy-zap-to-char "zap-to-c")
