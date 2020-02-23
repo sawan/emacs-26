@@ -27,3 +27,4 @@ eshell-aliases
 bookmarks
 transient/history.el
 Shell-script-mac.el
+elpy/*
