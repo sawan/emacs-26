@@ -1454,6 +1454,12 @@ Other buffers: %s(my/number-names my/last-buffers)
 
 (global-set-key (kbd "M-o") 'ace-window)
 
+;; SLIME
+(setq inferior-lisp-program "/opt/local/bin/clisp")
+(require 'slime)
+(slime-setup '(slime-fancy))
+
+
 ;; (require 'major-mode-hydra)
 ;; (global-set-key (kbd "M-SPC") #'major-mode-hydra)
 
