@@ -929,7 +929,7 @@ ipdb.set_trace(); ## DEBUG ##"
   ("q" er/mark-inside-quotes "i-quotes" :color red)
   ("p" er/mark-inside-pairs "i-pairs" :color red)
   ("P" er/mark-outside-pairs "o-pairs" :color red)
-  ("l" thing-copy-line "line" :color red)
+  ("l" thing-copy-line "line" :color blue)
   ("c" copy-region-as-kill "copy-region" :color blue)
   ("<return>" nil))
 
@@ -1271,6 +1271,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 	    (";" comment-and-next-line "comment")
 	    (">" py-indent-right-and-next-line "i >")
 	    ("<" py-indent-left-and-next-line "i <")
+	    ("<tab>" indent-for-tab-command)
 	    ("z" bm-toggle "Bookmark")
 	    ("R" hydra-er/body "hydra-eR" :exit t))
 
@@ -1282,9 +1283,8 @@ Other buffers: %s(my/number-names my/last-buffers)
 	("=" nil "quit" :color blue)
 	("-" nil "quit" :color blue)
 	("<SPC>" (insert " ") "quit" :color blue)
-	("<backspace>" (delete-backward-char 1) "quit" :color blue)
-	("<\\t>" (indent-for-tab-command) "quit" :color blue)))
-  )
+	("<backspace>" delete-backward-char "quit" :color blue)))
+   )
 
 ;; http://whattheemacsd.com/key-bindings.el-02.html
 ;; Move more quickly
