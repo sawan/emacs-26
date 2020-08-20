@@ -7,10 +7,10 @@
 (setq package-user-dir "~/.emacs.d/elpa/")
 (setq package-list-archives ())
 (setq package-archives '(
-	     ("gnu" . "https://elpa.gnu.org/packages/")
+             ("gnu" . "https://elpa.gnu.org/packages/")
              ("melpa" . "http://melpa.milkbox.net/packages/")
-	     ("melpa-stable" . "https://stable.melpa.org/packages/")
-	     ("marmalade" . "http://marmalade-repo.org/packages/")
+             ("melpa-stable" . "https://stable.melpa.org/packages/")
+             ("marmalade" . "http://marmalade-repo.org/packages/")
 ))
 
 
@@ -21,49 +21,49 @@
   (interactive)
   (package-refresh-contents)
   (mapc #'(lambda (package)
-	    (unless (package-installed-p package)
-	      (package-install package)))
+            (unless (package-installed-p package)
+              (package-install package)))
         '(
-	  browse-kill-ring
-	  magit
-	  paredit
-	  undo-tree
-	  bm
-	  pos-tip
-	  yasnippet
-	  rainbow-delimiters
-	  rainbow-mode
-	  fastnav
-	  hungry-delete
-	  visual-regexp
-	  visual-regexp-steroids
-	  key-chord
-	  yaml-mode
-	  color-moccur
-	  table
-	  iedit
-	  multiple-cursors
-	  macrostep
-	  jedi
-	  elpy
-	  expand-region
-	  hydra
-	  autopair
-	  wrap-region
-	  move-text
-	  visual-regexp-steroids
-	  beacon
-	  boxquote
-	  ov
-	  paradox
-	  kaolin-themes
-	  flx
-	  ivy
-	  ivy-hydra
-	  smex
-	  counsel
-	  avy
-	  )))
+          browse-kill-ring
+          magit
+          paredit
+          undo-tree
+          bm
+          pos-tip
+          yasnippet
+          rainbow-delimiters
+          rainbow-mode
+          fastnav
+          hungry-delete
+          visual-regexp
+          visual-regexp-steroids
+          key-chord
+          yaml-mode
+          color-moccur
+          table
+          iedit
+          multiple-cursors
+          macrostep
+          jedi
+          elpy
+          expand-region
+          hydra
+          autopair
+          wrap-region
+          move-text
+          visual-regexp-steroids
+          beacon
+          boxquote
+          ov
+          paradox
+          kaolin-themes
+          flx
+          ivy
+          ivy-hydra
+          smex
+          counsel
+          avy
+          )))
 
 (defmacro after (mode &rest body)
   "`eval-after-load' MODE evaluate BODY."
@@ -158,14 +158,14 @@ In that case, insert the number."
 
 (defun minibuffer-text-size ()
   (setq-local  face-remapping-alist
-	       '((default :height 1.5))))
+               '((default :height 1.5))))
 
 (defun echo-area-text-size()
 ;; https://www.emacswiki.org/emacs/EchoArea
   ;; Most strange.....
   (with-current-buffer (get-buffer " *Echo Area 0*")
     (setq-local face-remapping-alist
-		'((default (:height 1.5 variable-pitch)))))
+                '((default (:height 1.5 variable-pitch)))))
 )
 
 (add-hook 'find-file-hook 'bigger-text)
@@ -236,7 +236,7 @@ In that case, insert the number."
       '(
         (ivy-completion-in-region . ivy-display-function-overlay)
         (counsel-company . ivy-display-function-overlay)
-	))
+        ))
 
 (counsel-mode 1)
 
@@ -262,16 +262,16 @@ In that case, insert the number."
 
 ;; enable paren highliting for all files
 (add-hook 'find-file-hook (lambda()
-			    (show-paren-mode t)))
+                            (show-paren-mode t)))
 
 ;; display path to file in frame title
 ;(setq-default mode-line-format
 (setq-default frame-title-format
               (list '((buffer-file-name " %f"
-		(dired-directory
-		dired-directory
-		(revert-buffer-function " %b"
-					("%b - Dir:  " default-directory)))))))
+                (dired-directory
+                dired-directory
+                (revert-buffer-function " %b"
+                                        ("%b - Dir:  " default-directory)))))))
 
 ;;;; utility functions
 (defun dos2unix ()
@@ -293,30 +293,30 @@ In that case, insert the number."
   (interactive)
   (ov-clear)
   (let* (
-	($beg (if mark-active (region-beginning) (point-min)))
-	($end (if mark-active (region-end) (point-max)))
-	($st (buffer-substring-no-properties $beg $end))
-	($lines)
-	($dup))
+        ($beg (if mark-active (region-beginning) (point-min)))
+        ($end (if mark-active (region-end) (point-max)))
+        ($st (buffer-substring-no-properties $beg $end))
+        ($lines)
+        ($dup))
   (deactivate-mark t)
   (save-excursion
     (goto-char $beg)
     (while (< (point) $end)
       (let* (($b (point))
-	     ($e (point-at-eol))
-	     ($c (buffer-substring-no-properties $b $e))
-	     ($a (assoc $c $lines)))
-	(when (not (eq $b $e))
-	  (if $a
-	      (progn
-		(setq $dup (cons $b $dup))
-		(setq $dup (cons (cdr $a) $dup)))
-	    (setq $lines
-		  (cons (cons $c $b) $lines)))))
+             ($e (point-at-eol))
+             ($c (buffer-substring-no-properties $b $e))
+             ($a (assoc $c $lines)))
+        (when (not (eq $b $e))
+          (if $a
+              (progn
+                (setq $dup (cons $b $dup))
+                (setq $dup (cons (cdr $a) $dup)))
+            (setq $lines
+                  (cons (cons $c $b) $lines)))))
       (forward-line 1))
     (mapc (lambda ($p)
-	    (ov-set (ov-line $p) 'face '(:foreground "red")))
-	  (sort (delete-dups $dup) '<)))))
+            (ov-set (ov-line $p) 'face '(:foreground "red")))
+          (sort (delete-dups $dup) '<)))))
 
 (defhydra hydra-dup-lines ()
   "Duplicate lines"
@@ -362,11 +362,11 @@ Continues until end of buffer.  Also display the count as a message."
   (save-excursion
     (save-restriction
       (let ((regexp (read-string "Regexp: "))
-	    (to-string (read-string "Replacement: ")))
-	(narrow-to-region start end)
-	(goto-char (point-min))
-	(while (re-search-forward regexp nil t)
-	  (replace-match to-string nil nil))))))
+            (to-string (read-string "Replacement: ")))
+        (narrow-to-region start end)
+        (goto-char (point-min))
+        (while (re-search-forward regexp nil t)
+          (replace-match to-string nil nil))))))
 
 ;; edit files as root
 (defun sudo-find-file (file-name)
@@ -451,6 +451,19 @@ instead of a char."
 
 (require 'hungry-delete)
 (global-hungry-delete-mode)
+
+
+;; no tabs by default. modes that really need tabs should enable
+;; indent-tabs-mode explicitly. makefile-mode already does that, for
+;; example.
+(setq-default indent-tabs-mode nil)
+
+;; if indent-tabs-mode is off, untabify before saving
+(add-hook 'write-file-hooks
+          (lambda () (if (not indent-tabs-mode)
+                         (untabify (point-min) (point-max)))
+            nil ))
+
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
@@ -573,7 +586,7 @@ Version 2015-12-08"
     (with-temp-buffer (insert "\n")
                       (append-to-register ?1 (point-min) (point-max)))
     (message "Appended to register 1: 「%s」." (buffer-substring-no-properties
-						$p1 $p2))))
+                                                $p1 $p2))))
 (defun xah-paste-from-register-1 ()
   "Paste text from register 1.
 See also: `xah-copy-to-register-1', `insert-register'.
@@ -606,7 +619,7 @@ Version 2015-12-08"
 (require 'tramp)
 (setq  tramp-completion-reread-directory-timeout 0)
 (add-hook 'tramp-mode-hook
-	  #'(setq ag-executable "~/bin/ag"))
+          #'(setq ag-executable "~/bin/ag"))
 
 ;; (setq tramp-verbose 10)
 ;; (setq tramp-debug-buffer t)
@@ -637,23 +650,23 @@ Version 2015-12-08"
 (defun windows-crap ()
   (interactive)
   (when (window-system) 'w32
-	(setq tramp-default-method "plink")
-	(add-to-list 'tramp-remote-path "~/bin")
+        (setq tramp-default-method "plink")
+        (add-to-list 'tramp-remote-path "~/bin")
 
-	(setq w32-pass-lwindow-to-system nil)
-	(setq w32-lwindow-modifier 'super) ; Left Windows key
+        (setq w32-pass-lwindow-to-system nil)
+        (setq w32-lwindow-modifier 'super) ; Left Windows key
 
-	(setq w32-pass-rwindow-to-system nil)
-	(setq w32-rwindow-modifier 'super) ; Right Windows key
+        (setq w32-pass-rwindow-to-system nil)
+        (setq w32-rwindow-modifier 'super) ; Right Windows key
 
-	(setq explicit-shell-file-name "c:/msys64/cygwin64/bin/bash.exe")
-	(setq shell-file-name "bash.exe")
-	(setq explicit-bash.exe-args '("--noediting" "--login" "-i"))
-	(setenv "SHELL" shell-file-name)
-	(add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
+        (setq explicit-shell-file-name "c:/msys64/cygwin64/bin/bash.exe")
+        (setq shell-file-name "bash.exe")
+        (setq explicit-bash.exe-args '("--noediting" "--login" "-i"))
+        (setenv "SHELL" shell-file-name)
+        (add-hook 'comint-output-filter-functions 'comint-strip-ctrl-m)
 
-	;; Make this behave the same was as on Mac OS X
-	(global-set-key (kbd "s-s") 'save-buffer))
+        ;; Make this behave the same was as on Mac OS X
+        (global-set-key (kbd "s-s") 'save-buffer))
 )
 
 ;;;; key-chord
@@ -714,8 +727,8 @@ Version 2015-12-08"
   ;; kill-buffer-hook is not called when emacs is killed, so we
   ;; must save all bookmarks first.
   (add-hook 'kill-emacs-hook '(lambda nil
-				(bm-buffer-save-all)
-				(bm-repository-save)))
+                                (bm-buffer-save-all)
+                                (bm-repository-save)))
 
   (setq bm-marker 'bm-marker-right)
 
@@ -1098,8 +1111,8 @@ _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
 ;; Keeps focus on *Occur* window, even when when target is visited via RETURN key.
 ;; See hydra-occur-dwim for more options.
 (defadvice occur-mode-goto-occurrence (after
-					occur-mode-goto-occurrence-advice
-					activate)
+                                        occur-mode-goto-occurrence-advice
+                                        activate)
   (other-window 1)
   (next-error-follow-minor-mode t)
   (hydra-occur-dwim/body))
@@ -1164,8 +1177,8 @@ _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
 
 
 (defhydra my/switch-to-buffer (:exit t
-			       :body-pre (setq my/last-buffers
-		               (my/name-of-buffers 5)))
+                               :body-pre (setq my/last-buffers
+                               (my/name-of-buffers 5)))
 "
 Other buffers: %s(my/number-names my/last-buffers)
 "
@@ -1220,77 +1233,85 @@ Other buffers: %s(my/number-names my/last-buffers)
 (setq hydra-hint-display-type 'posframe)
 (setq hydra-hint-display-type 'lv)
 
+;;; hmove
+
+;; " ' insert.
+;; . jump  to definition
+;; copy line
+;; switch to buffer
+;; hydra poppin -- hydra-er, hydra-bm, hydra-buffer
+
 (pretty-hydra-define hydra-move
   (:timeout 10
-	    :body-pre (set-cursor-color "#5BFF33")
-	    :post (hydra-move-post)
-	    :foreign-keys warn)
+            :body-pre (set-cursor-color "#5BFF33")
+            :post (hydra-move-post)
+            :foreign-keys warn)
 
   ("Lines" (
-	    ("2" set-mark-command "Mark")
-	    ("3" copy-region-as-kill "Copy Region")
-	    ("4" up-n-lines )
-	    ("5" down-n-lines )
-	    ("a" smarter-move-beginning-of-line)
-	    ("e" move-end-of-line)
-	    ("n" next-line)
-	    ("p" previous-line)
-	    ("P" djcb-duplicate-line)
-	    ("g" avy-goto-line "goto-line")
-	    ("G" goto-line "goto-line-num")
-	    ("L" kill-whole-line)
-	    ("K" kill-visual-line))
+            ("2" set-mark-command "Mark")
+            ("3" copy-region-as-kill "Copy Region")
+            ("4" up-n-lines )
+            ("5" down-n-lines )
+            ("a" smarter-move-beginning-of-line)
+            ("e" move-end-of-line)
+            ("n" next-line)
+            ("p" previous-line)
+            ("P" djcb-duplicate-line)
+            ("g" avy-goto-line "goto-line")
+            ("G" goto-line "goto-line-num")
+            ("L" kill-whole-line)
+            ("K" kill-visual-line))
 
    "Avy" (
-	  ("C" avy-goto-char-in-line "goto-char-in-line" :blue)
-	  ("c" avy-goto-char-2 "goto-char-2")
-	  ("w" avy-goto-word-or-subword-1 "goto-word")
-	  ("6" avy-zap-to-char "zap-to-c")
-	  ("7" avy-zap-up-to-char "zap-up-to-c")
-	  ("y" yank "Paste" ))
+          ("C" avy-goto-char-in-line "goto-char-in-line" :blue)
+          ("c" avy-goto-char-2 "goto-char-2")
+          ("w" avy-goto-word-or-subword-1 "goto-word")
+          ("6" avy-zap-to-char "zap-to-c")
+          ("7" avy-zap-up-to-char "zap-up-to-c")
+          ("y" yank "Paste" ))
 
 
    "Char-Word" (
-		("k" forward-char)
-		("j" backward-char)
-		("l" forward-word)
-		("h" backward-word)
-		("D" kill-word)
-		("d" hungry-delete-forward)
-		("b" hungry-delete-backward)
-		("B" backward-kill-word))
+                ("k" forward-char)
+                ("j" backward-char)
+                ("l" forward-word)
+                ("h" backward-word)
+                ("D" kill-word)
+                ("d" hungry-delete-forward)
+                ("b" hungry-delete-backward)
+                ("B" backward-kill-word))
 
    "Buffer" (
-	     ("m" scroll-up-command)
-	     ("u" scroll-down-command)
-	     ("t" beginning-of-buffer)
-	     ("T" end-of-buffer)
-	     ("r" recenter-top-bottom "re-center"))
+             ("m" scroll-up-command)
+             ("u" scroll-down-command)
+             ("t" beginning-of-buffer)
+             ("T" end-of-buffer)
+             ("r" recenter-top-bottom "re-center"))
 
    "Region" (
-	     ("v" eval-region :color blue)
-	     )
+             ("v" eval-region :color blue)
+             )
 
    "Extra" (
-	    ("s" save-buffer   "save")
-	    ("i" counsel-imenu "iM" )
-	    ("/" undo-tree-undo "undo")
-	    (";" comment-and-next-line "comment")
-	    (">" py-indent-right-and-next-line "i >")
-	    ("<" py-indent-left-and-next-line "i <")
-	    ("<tab>" indent-for-tab-command)
-	    ("z" bm-toggle "Bookmark")
-	    ("R" hydra-er/body "hydra-eR" :exit t))
+            ("s" save-buffer   "save")
+            ("i" counsel-imenu "iM" )
+            ("/" undo-tree-undo "undo")
+            (";" comment-and-next-line "comment")
+            (">" py-indent-right-and-next-line "i >")
+            ("<" py-indent-left-and-next-line "i <")
+            ("<tab>" indent-for-tab-command)
+            ("z" bm-toggle "Bookmark")
+            ("R" hydra-er/body "hydra-eR" :exit t))
 
 
    "Q" (
-	("<return>" newline-and-indent "quit" :color red)
-	("<RETURN>" newline-and-indent "quit" :color red)
-	("<ESC>" nil "quit" :color blue)
-	("=" nil "quit" :color blue)
-	("-" nil "quit" :color blue)
-	("<SPC>" (insert " ") "quit" :color blue)
-	("<backspace>" delete-backward-char "quit" :color blue)))
+        ("<return>" newline-and-indent "quit" :color red)
+        ("<RETURN>" newline-and-indent "quit" :color red)
+        ("<ESC>" nil "quit" :color blue)
+        ("=" nil "quit" :color blue)
+        ("-" nil "quit" :color blue)
+        ("<SPC>" (insert " ") "quit" :color blue)
+        ("<backspace>" delete-backward-char "quit" :color blue)))
    )
 
 ;; http://whattheemacsd.com/key-bindings.el-02.html
@@ -1338,17 +1359,17 @@ Other buffers: %s(my/number-names my/last-buffers)
 (defun hydra-move-keys()
   (interactive)
   (global-set-key (kbd "C-n") (lambda() (interactive)
-				(move-and-hydra #'next-line)))
+                                (move-and-hydra #'next-line)))
   (global-set-key (kbd "C-p") (lambda() (interactive)
-				(move-and-hydra #'previous-line)))
+                                (move-and-hydra #'previous-line)))
   (global-set-key (kbd "C-f") (lambda() (interactive)
-				(move-and-hydra #'forward-char)))
+                                (move-and-hydra #'forward-char)))
   (global-set-key (kbd "C-b") (lambda() (interactive)
-				(move-and-hydra #'backward-char)))
+                                (move-and-hydra #'backward-char)))
   (global-set-key (kbd "M-f") (lambda() (interactive)
-				(move-and-hydra #'forward-word)))
+                                (move-and-hydra #'forward-word)))
   (global-set-key (kbd "M-b") (lambda() (interactive)
-				(move-and-hydra #'backward-word))))
+                                (move-and-hydra #'backward-word))))
 
 (defun hydra-move-no-keys()
   (interactive)
@@ -1432,7 +1453,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 
 
 (defhydra hydra-macro (:hint nil :color pink
-			     :pre
+                             :pre
                              (when defining-kbd-macro
                                  (kmacro-end-macro 1)))
   "
@@ -1537,7 +1558,7 @@ Other buffers: %s(my/number-names my/last-buffers)
  '(c-max-one-liner-length 120)
  '(custom-safe-themes
    (quote
-    ("fc0fe24e7f3d48ac9cf1f87b8657c6d7a5dd203d5dabd2f12f549026b4c67446" "8ce796252a78d1a69e008c39d7b84a9545022b64609caac98dc7980d76ae34e3" "9f9450547564423166a7d2de976c9ca712293170415ec78ed98d198748b44a90" "67ea2e2549ab1ba9b27a4fc3c78353225d6fd155a69292dc6f7d3286bd8d3a82" "3a78cae35163bb71df460ebcfdebf811fd7bc74eaa15428c7e0bccfd4f858d30" "df01ad8d956b9ea15ca75adbb012f99d2470f33c7b383a8be65697239086672e" "d04406d092bf8c6b0859a2b83f72db6c6444519a7f1f24199d1ca495393f477b" "53993d7dc1db7619da530eb121aaae11c57eaf2a2d6476df4652e6f0bd1df740" "f7b0f2d0f37846ef75157f5c8c159e6d610c3efcc507cbddec789c02e165c121" "2f945b8cbfdd750aeb82c8afb3753ebf76a1c30c2b368d9d1f13ca3cc674c7bc" "ed573618e4c25fa441f12cbbb786fb56d918f216ae4a895ca1c74f34a19cfe67" "b69323309e5839676409607f91c69da2bf913914321c995f63960c3887224848" "43b219a31db8fddfdc8fdbfdbd97e3d64c09c1c9fdd5dff83f3ffc2ddb8f0ba0" "a7928e99b48819aac3203355cbffac9b825df50d2b3347ceeec1e7f6b592c647" "054e929c1df4293dd68f99effc595f5f7eb64ff3c064c4cfaad186cd450796db" "58c2c8cc4473c5973e77f4b78a68c0978e68f1ddeb7a1eb34456fce8450be497" "0eb3c0868ff890b0c4ee138069ce2a8936a8a69ba150efa6bfb9fb7c05af5ec3" "f47f2c6b2052c81ecf8f2da64f481a92b53a3fd17680b054ea9b81c916dee4b9" "9b21a3576c9f2206be84863e24edc5384ac382d1292c6c998131dbc586ef7acc" "a9d67f7c030b3fa6e58e4580438759942185951e9438dd45f2c668c8d7ab2caf" "51043b04c31d7a62ae10466da95a37725638310a38c471cc2e9772891146ee52" "53760e1863395dedf3823564cbd2356e9345e6c74458dcc8ba171c039c7144ed" "d8dc153c58354d612b2576fea87fe676a3a5d43bcc71170c62ddde4a1ad9e1fb" "886fe9a7e4f5194f1c9b1438955a9776ff849f9e2f2bbb4fa7ed8879cdca0631" "2642a1b7f53b9bb34c7f1e032d2098c852811ec2881eec2dc8cc07be004e45a0" "ff829b1ac22bbb7cee5274391bc5c9b3ddb478e0ca0b94d97e23e8ae1a3f0c3e" "fa477d10f10aa808a2d8165a4f7e6cee1ab7f902b6853fbee911a9e27cf346bc" "11e0bc5e71825b88527e973b80a84483a2cfa1568592230a32aedac2a32426c1" "ef07cb337554ffebfccff8052827c4a9d55dc2d0bc7f08804470451385d41c5c" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" "7803ff416cf090613afd3b4c3de362e64063603522d4974bcae8cfa53cf1fd1b" "542e6fee85eea8e47243a5647358c344111aa9c04510394720a3108803c8ddd1" "669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" "562c2a97808ab67d71c02d50f951231e4a6505f4014a01d82f8d88f5008bbe88" "bf5bdab33a008333648512df0d2b9d9710bdfba12f6a768c7d2c438e1092b633" "030346c2470ddfdaca479610c56a9c2aa3e93d5de3a9696f335fd46417d8d3e4" "571a762840562ec5b31b6a9d4b45cfb1156ce52339e188a8b66749ed9b3b22a2" "bd0c3e37c53f6515b5f5532bdae38aa0432a032171b415159d5945a162bc5aaa" "97b8bf2dacc3ae8ffbd6f0a76c606a659a0dbca5243e55a750cbccdad7efb098" "e396098fd5bef4f0dd6cedd01ea48df1ecb0554d8be0d8a924fb1d926f02f90f" "acfac6b14461a344f97fad30e2362c26a3fe56a9f095653832d8fc029cb9d05c" "37c5cf50a60548aa7e01dbe36fd8bb643af7502d55d26f000070255a6b21c528" "8ba0a9fc75f2e3b4c254183e814b8b7b8bcb1ad6ca049fde50e338e1c61a12a0" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "2f524d307a2df470825718e27b8e3b81c0112dad112ad126805c043d7c1305c6" "5cdc1832748ae451c19a1546a4bc200750557a924f6124428272f114b6d28ac1" "a9ab62408cda1e1758d913734527a8fdbe6f22e1c06a104375456107063aff9c" "45a8b89e995faa5c69aa79920acff5d7cb14978fbf140cdd53621b09d782edcf" "fc65950aacea13c96940a2065ef9b8faefe7a4da44331adf22ea46f8c9b34cdd" "a0befffb88a6ef016010ee95e4799648f5aa6f0ab92cedb37868b97e45f85a13" "be327a6a477b07f76081480fb93a61fffaa8ddc2acc18030e725da75342b2c2e" "058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
+    ("bb28b083fe1c61848c10c049be076afc572ea9bee6e1f8dc2631c5ee4f7388c8" "7e5d400035eea68343be6830f3de7b8ce5e75f7ac7b8337b5df492d023ee8483" "fc0fe24e7f3d48ac9cf1f87b8657c6d7a5dd203d5dabd2f12f549026b4c67446" "8ce796252a78d1a69e008c39d7b84a9545022b64609caac98dc7980d76ae34e3" "9f9450547564423166a7d2de976c9ca712293170415ec78ed98d198748b44a90" "67ea2e2549ab1ba9b27a4fc3c78353225d6fd155a69292dc6f7d3286bd8d3a82" "3a78cae35163bb71df460ebcfdebf811fd7bc74eaa15428c7e0bccfd4f858d30" "df01ad8d956b9ea15ca75adbb012f99d2470f33c7b383a8be65697239086672e" "d04406d092bf8c6b0859a2b83f72db6c6444519a7f1f24199d1ca495393f477b" "53993d7dc1db7619da530eb121aaae11c57eaf2a2d6476df4652e6f0bd1df740" "f7b0f2d0f37846ef75157f5c8c159e6d610c3efcc507cbddec789c02e165c121" "2f945b8cbfdd750aeb82c8afb3753ebf76a1c30c2b368d9d1f13ca3cc674c7bc" "ed573618e4c25fa441f12cbbb786fb56d918f216ae4a895ca1c74f34a19cfe67" "b69323309e5839676409607f91c69da2bf913914321c995f63960c3887224848" "43b219a31db8fddfdc8fdbfdbd97e3d64c09c1c9fdd5dff83f3ffc2ddb8f0ba0" "a7928e99b48819aac3203355cbffac9b825df50d2b3347ceeec1e7f6b592c647" "054e929c1df4293dd68f99effc595f5f7eb64ff3c064c4cfaad186cd450796db" "58c2c8cc4473c5973e77f4b78a68c0978e68f1ddeb7a1eb34456fce8450be497" "0eb3c0868ff890b0c4ee138069ce2a8936a8a69ba150efa6bfb9fb7c05af5ec3" "f47f2c6b2052c81ecf8f2da64f481a92b53a3fd17680b054ea9b81c916dee4b9" "9b21a3576c9f2206be84863e24edc5384ac382d1292c6c998131dbc586ef7acc" "a9d67f7c030b3fa6e58e4580438759942185951e9438dd45f2c668c8d7ab2caf" "51043b04c31d7a62ae10466da95a37725638310a38c471cc2e9772891146ee52" "53760e1863395dedf3823564cbd2356e9345e6c74458dcc8ba171c039c7144ed" "d8dc153c58354d612b2576fea87fe676a3a5d43bcc71170c62ddde4a1ad9e1fb" "886fe9a7e4f5194f1c9b1438955a9776ff849f9e2f2bbb4fa7ed8879cdca0631" "2642a1b7f53b9bb34c7f1e032d2098c852811ec2881eec2dc8cc07be004e45a0" "ff829b1ac22bbb7cee5274391bc5c9b3ddb478e0ca0b94d97e23e8ae1a3f0c3e" "fa477d10f10aa808a2d8165a4f7e6cee1ab7f902b6853fbee911a9e27cf346bc" "11e0bc5e71825b88527e973b80a84483a2cfa1568592230a32aedac2a32426c1" "ef07cb337554ffebfccff8052827c4a9d55dc2d0bc7f08804470451385d41c5c" "6bc387a588201caf31151205e4e468f382ecc0b888bac98b2b525006f7cb3307" "7803ff416cf090613afd3b4c3de362e64063603522d4974bcae8cfa53cf1fd1b" "542e6fee85eea8e47243a5647358c344111aa9c04510394720a3108803c8ddd1" "669e02142a56f63861288cc585bee81643ded48a19e36bfdf02b66d745bcc626" "562c2a97808ab67d71c02d50f951231e4a6505f4014a01d82f8d88f5008bbe88" "bf5bdab33a008333648512df0d2b9d9710bdfba12f6a768c7d2c438e1092b633" "030346c2470ddfdaca479610c56a9c2aa3e93d5de3a9696f335fd46417d8d3e4" "571a762840562ec5b31b6a9d4b45cfb1156ce52339e188a8b66749ed9b3b22a2" "bd0c3e37c53f6515b5f5532bdae38aa0432a032171b415159d5945a162bc5aaa" "97b8bf2dacc3ae8ffbd6f0a76c606a659a0dbca5243e55a750cbccdad7efb098" "e396098fd5bef4f0dd6cedd01ea48df1ecb0554d8be0d8a924fb1d926f02f90f" "acfac6b14461a344f97fad30e2362c26a3fe56a9f095653832d8fc029cb9d05c" "37c5cf50a60548aa7e01dbe36fd8bb643af7502d55d26f000070255a6b21c528" "8ba0a9fc75f2e3b4c254183e814b8b7b8bcb1ad6ca049fde50e338e1c61a12a0" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "2f524d307a2df470825718e27b8e3b81c0112dad112ad126805c043d7c1305c6" "5cdc1832748ae451c19a1546a4bc200750557a924f6124428272f114b6d28ac1" "a9ab62408cda1e1758d913734527a8fdbe6f22e1c06a104375456107063aff9c" "45a8b89e995faa5c69aa79920acff5d7cb14978fbf140cdd53621b09d782edcf" "fc65950aacea13c96940a2065ef9b8faefe7a4da44331adf22ea46f8c9b34cdd" "a0befffb88a6ef016010ee95e4799648f5aa6f0ab92cedb37868b97e45f85a13" "be327a6a477b07f76081480fb93a61fffaa8ddc2acc18030e725da75342b2c2e" "058b8c7effa451e6c4e54eb883fe528268467d29259b2c0dc2fd9e839be9c92e" "9a3366202553fb2d2ad1a8fa3ac82175c4ec0ab1f49788dc7cfecadbcf1d6a81" "78cb079a46e0b94774ed0cdc9bd2cde0f65a0b964541c221e10a7709e298e568" "d2868794b5951d57fb30bf223a7e46f3a18bf7124a1c288a87bd5701b53d775a" "3cacf6217f589af35dc19fe0248e822f0780dfed3f499e00a7ca246b12d4ed81" "f730a5e82e7eda7583c6526662fb7f1b969b60b4c823931b07eb4dd8f59670e3" "f6c0353ac9dac7fdcaced3574869230ea7476ff1291ba8ed62f9f9be780de128" "e4cbf084ecc5b7d80046591607f321dd655ec1bbb2dbfbb59c913623bf89aa98" default)))
  '(origami-parser-alist
    (quote
     ((java-mode . origami-java-parser)
@@ -1555,18 +1576,18 @@ Other buffers: %s(my/number-names my/last-buffers)
      (lisp-interaction-mode . origami-elisp-parser)
      (clojure-mode . origami-clj-parser)
      (triple-braces closure
-		    ((regex . "\\(?:\\(?:{{{\\|}}}\\)\\)")
-		     (end-marker . "}}}")
-		     (start-marker . "{{{")
-		     t)
-		    (create)
-		    (function
-		     (lambda
-		       (content)
-		       (let
-			   ((positions
-			     (origami-get-positions content regex)))
-			 (origami-build-pair-tree create start-marker end-marker positions))))))))
+                    ((regex . "\\(?:\\(?:{{{\\|}}}\\)\\)")
+                     (end-marker . "}}}")
+                     (start-marker . "{{{")
+                     t)
+                    (create)
+                    (function
+                     (lambda
+                       (content)
+                       (let
+                           ((positions
+                             (origami-get-positions content regex)))
+                         (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
     (deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
