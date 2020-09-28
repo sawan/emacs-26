@@ -225,22 +225,24 @@ In that case, insert the number."
 
 ;; ivy
 (ivy-mode 1)
-(ivy-historian-mode t)
-(setq ivy-initial-inputs-alist nil)
-(setq ivy-use-virtual-buffers t)
-(setq ivy-count-format "(%d/%d) ")
-(setq ivy-re-builders-alist
-      '((t . ivy--regex-fuzzy)))
 
-;; https://github.com/abo-abo/swiper/wiki/ivy-display-function
-(setq ivy-display-functions-alist
-      '(
-        (ivy-completion-in-region . ivy-display-function-overlay)
-        (counsel-company . ivy-display-function-overlay)
-        ))
+(ivy-historian-mode 1)
 
-(setq counsel-grep-base-command
-      "rg -i -M 120 --no-heading --line-number --color never %s %s")
+(counsel-mode 1)
+
+
+;; (require 'ivy-posframe)
+;; display at `ivy-posframe-style'
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+;; (ivy-posframe-mode 1)
+
+(ivy-explorer-mode 1)
+(setq ivy-explorer-message-function 'ivy-explorer--lv-message)
 
 (global-set-key "\C-s" 'swiper)
 (global-set-key "\M-i" 'complete-symbol)
@@ -1590,7 +1592,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                          (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (ivy-avy ivy-explorer ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (ivy-posframe ivy-avy ivy-explorer ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
