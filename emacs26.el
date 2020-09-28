@@ -61,7 +61,6 @@
           ivy
           ivy-hydra
           smex
-          counsel
           avy
           )))
 
@@ -237,8 +236,6 @@ In that case, insert the number."
         (ivy-completion-in-region . ivy-display-function-overlay)
         (counsel-company . ivy-display-function-overlay)
         ))
-
-(counsel-mode 1)
 
 (setq counsel-grep-base-command
       "rg -i -M 120 --no-heading --line-number --color never %s %s")
