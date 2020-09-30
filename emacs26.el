@@ -83,6 +83,7 @@
 (add-to-list 'load-path "~/.emacs.d/vendors/no-easy-keys.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/moccur-edit.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/revbufs.el")
+(add-to-list 'load-path "~/.emacs.d/vendors/visual-regexp.el")
 
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
@@ -125,6 +126,7 @@ In that case, insert the number."
       (company-complete-number (string-to-number k)))))
 
 
+(require 'visual-regexp)
 (require 'revbufs)
 (require 'magit)
 (require 'kill-lines)
@@ -250,7 +252,9 @@ In that case, insert the number."
 (require 'ivy-rich)
 (ivy-rich-mode 1)
 (setq ivy-format-function #'ivy-format-function-line)
-
+(setq ivy-initial-inputs-alist nil)
+(setq ivy-re-builders-alist
+      '((t . ivy--regex-fuzzy)))
 
 ;;;; desktop
 ;; Auto save desktop as well during buffer auto-save
@@ -1261,7 +1265,8 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("g" avy-goto-line "goto-line")
             ("G" goto-line "goto-line-num")
             ("L" kill-whole-line)
-            ("K" kill-visual-line))
+            ("K" kill-visual-line)
+            ("x" transpose-lines))
 
    "Avy" (
           ("C" avy-goto-char-in-line "goto-char-in-line" :blue)
@@ -1313,7 +1318,9 @@ Other buffers: %s(my/number-names my/last-buffers)
         ("-" nil "quit" :color blue)
         ("q" nil "quit" :color blue)
         ("<SPC>" (insert " ") "quit" :color blue)
-        ("<backspace>" delete-backward-char "quit" :color blue)))
+        ("<backspace>" delete-backward-char "quit" :color blue)
+
+        ))
    )
 
 ;; http://whattheemacsd.com/key-bindings.el-02.html
@@ -1592,7 +1599,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                          (origami-build-pair-tree create start-marker end-marker positions))))))))
  '(package-selected-packages
    (quote
-    (ivy-posframe ivy-avy ivy-explorer ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
+    (shift-number ivy-posframe ivy-avy ivy-explorer ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term dumb-jump abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair)))
  '(paradox-github-token t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
