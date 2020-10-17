@@ -51,7 +51,6 @@
           autopair
           wrap-region
           move-text
-          visual-regexp-steroids
           beacon
           boxquote
           ov
@@ -83,7 +82,6 @@
 (add-to-list 'load-path "~/.emacs.d/vendors/no-easy-keys.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/moccur-edit.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/revbufs.el")
-(add-to-list 'load-path "~/.emacs.d/vendors/visual-regexp.el")
 
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
@@ -372,6 +370,32 @@ Continues until end of buffer.  Also display the count as a message."
         (goto-char (point-min))
         (while (re-search-forward regexp nil t)
           (replace-match to-string nil nil))))))
+
+
+;; https://www.emacswiki.org/emacs/ReBuilder
+(defun reb-query-replace (to-string)
+  "Replace current RE from point with `query-replace-regexp'."
+  (interactive
+   (progn
+     (reb-quit)
+     (barf-if-buffer-read-only)
+     (list (query-replace-read-to (reb-target-binding reb-regexp)
+                                  "Query replace"  t))))
+  (with-current-buffer reb-target-buffer
+    (query-replace-regexp (reb-target-binding reb-regexp) to-string)))
+
+(defun reb-beginning-of-buffer ()
+  "In re-builder, move target buffer point position back to beginning."
+  (interactive)
+  (set-window-point (get-buffer-window reb-target-buffer)
+                    (with-current-buffer reb-target-buffer (point-min))))
+
+(defun reb-end-of-buffer ()
+  "In re-builder, move target buffer point position back to beginning."
+  (interactive)
+  (set-window-point (get-buffer-window reb-target-buffer)
+                    (with-current-buffer reb-target-buffer (point-max))))
+
 
 ;; edit files as root
 (defun sudo-find-file (file-name)

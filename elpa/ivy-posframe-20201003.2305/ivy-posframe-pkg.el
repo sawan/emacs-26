@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "ivy-posframe" "20201003.2305" "Using posframe to show Ivy" '((emacs "26.0") (posframe "0.8.0") (ivy "0.13.0")) :commit "1beb31be468ec16924aad2c804ce9d8cfe22dfeb" :keywords '("abbrev" "convenience" "matching" "ivy") :authors '(("Feng Shu" . "tumashu@163.com") ("Naoya Yamashita" . "conao3@gmail.com")) :maintainer '("Feng Shu" . "tumashu@163.com") :url "https://github.com/tumashu/ivy-posframe")
