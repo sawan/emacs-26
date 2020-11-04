@@ -1293,7 +1293,7 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("x" transpose-lines))
 
    "Avy" (
-          ("C" avy-goto-char-in-line "goto-char-in-line" :blue)
+          ("o" avy-goto-char-in-line "goto-char-in-line" :blue)
           ("c" avy-goto-char-2 "goto-char-2")
           ("w" avy-goto-word-or-subword-1 "goto-word")
           ("6" avy-zap-to-char "zap-to-c")
@@ -1316,7 +1316,9 @@ Other buffers: %s(my/number-names my/last-buffers)
              ("u" scroll-down-command)
              ("t" beginning-of-buffer)
              ("T" end-of-buffer)
-             ("r" recenter-top-bottom "re-center"))
+             ("r" recenter-top-bottom "re-center")
+             ("0" ace-window "ace-windows")
+             ("9" my/switch-to-buffer/body "hydra-buffers" :exit t))
 
    "Region" (
              ("v" eval-region :color blue)
@@ -1331,8 +1333,8 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("<" py-indent-left-and-next-line "i <")
             ("<tab>" indent-for-tab-command)
             ("z" bm-toggle "Bookmark")
-            ("R" hydra-er/body "hydra-eR" :exit t)
-            ("Q" my/switch-to-buffer/body "hydra-buffers" :exit t))
+            ("R" hydra-er/body "hydra-eR" :exit t))
+
 
 
    "Q" (
