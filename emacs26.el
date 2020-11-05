@@ -1178,7 +1178,7 @@ _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
          (delq nil
                (mapcar
                 (lambda (b)
-                  (unless (string-match "^ " (setq b (buffer-name b)))
+                  (unless (string-match "^ \\|shell\-" (setq b (buffer-name b)))
                     b))
                 (buffer-list)))))
     (subseq bns 1 (min (1+ n) (length bns)))))
