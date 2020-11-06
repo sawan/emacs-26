@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "exec-path-from-shell" "20201105.419" "Get environment variables such as $PATH from the shell" '((emacs "24.1")) :stars '(#("801" 0 3 (font-lock-face paradox-star-face))) :commit "ad68d367475e698cee043df3af160d85d5fa29e4" :keywords '("unix" "environment") :authors '(("Steve Purcell" . "steve@sanityinc.com")) :maintainer '("Steve Purcell" . "steve@sanityinc.com") :url "https://github.com/purcell/exec-path-from-shell")

@@ -1426,6 +1426,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 (global-set-key (kbd "C-M-S-x") #'counsel-M-x)
 (global-set-key (kbd "C-M-S-s") #'save-buffer)
 (global-set-key (kbd "C-M-S-m") #'hydra-bookmarks/body)
+(global-set-key (kbd "C-M-S-w") #'ace-window)
 
 
 (global-origami-mode 1)
