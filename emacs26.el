@@ -92,9 +92,11 @@
 
 (setq company-selection-wrap-around t)
 
-(define-key company-active-map (kbd "<return>") 'company-complete-selection)
-(define-key company-active-map (kbd "<tab>") 'company-select-next)
-(define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+(defun sv-company-mode-keys ()
+  (interactive)
+  (define-key company-active-map (kbd "<return>") 'company-complete-selection)
+  (define-key company-active-map (kbd "<tab>") 'company-select-next)
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
 
 ;; https://oremacs.com/2017/12/27/company-numbers/
 (setq company-show-numbers t)
@@ -555,6 +557,27 @@ Position the cursor at its beginning, according to the current mode."
 ; crosshairs
 (require 'crosshairs)
 (global-set-key (kbd "<M-f12>") 'flash-crosshairs)
+(crosshairs-toggle-when-idle)
+
+
+;; Indent HTML, XML
+(defun jta-reformat-xml ()
+  "Reformats xml to make it readable (respects current selection)."
+  (interactive)
+  (save-excursion
+    (let ((beg (point-min))
+          (end (point-max)))
+      (if (and mark-active transient-mark-mode)
+          (progn
+            (setq beg (min (point) (mark)))
+            (setq end (max (point) (mark))))
+        (widen))
+      (setq end (copy-marker end t))
+      (goto-char beg)
+      (while (re-search-forward ">\\s-*<" end t)
+        (replace-match ">\n<" t t))
+      (goto-char beg)
+      (indent-region beg end nil))))
 
 ;; http://endlessparentheses.com/implementing-comment-line.html and
 (defun endless/comment-line-or-region (n)
@@ -721,7 +744,8 @@ Version 2015-12-08"
 ;; buffers matching these patterns will be skipped
 (setq buffer-flip-skip-patterns
       '("^\\*helm\\b"
-        "^\\*swiper\\*$"))
+        "^\\*swiper\\*$"
+        "^shell-.*$"))
 
 ;; This only seems to work in GUIs
 (when (display-graphic-p)
@@ -1319,12 +1343,17 @@ Other buffers: %s(my/number-names my/last-buffers)
              ("r" recenter-top-bottom "re-center")
              ("0" ace-window "ace-windows")
              ("9" my/switch-to-buffer/body "hydra-buffers" :exit t))
+             ;; ("8" buffer-flip-forward "b-flip-f" )
+             ;; ("7" buffer-flip-backward "b-flip-b" )
+             ;; ("6" buffer-flip-abort "b-flip-abort" ))
 
    "Region" (
              ("v" eval-region :color blue)
              )
 
    "Extra" (
+            ("." xref-find-definitions "goto")
+            ("C-." pop-tag-mark "pop")
             ("s" save-buffer   "save")
             ("i" counsel-imenu "iM" )
             ("/" undo-tree-undo "undo")
@@ -1335,8 +1364,6 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("z" bm-toggle "Bookmark")
             ("R" hydra-er/body "hydra-eR" :exit t))
 
-
-
    "Q" (
         ("<return>" newline-and-indent "quit" :color red)
         ("<RETURN>" newline-and-indent "quit" :color red)
@@ -1345,9 +1372,9 @@ Other buffers: %s(my/number-names my/last-buffers)
         ("-" nil "quit" :color blue)
         ("q" nil "quit" :color blue)
         ("<SPC>" (insert " ") "quit" :color blue)
-        ("<backspace>" delete-backward-char "quit" :color blue)
+        ("<backspace>" delete-backward-char "quit" :color blue))
 
-        ))
+   )
    )
 
 ;; http://whattheemacsd.com/key-bindings.el-02.html
@@ -1427,6 +1454,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 (global-set-key (kbd "C-M-S-s") #'save-buffer)
 (global-set-key (kbd "C-M-S-m") #'hydra-bookmarks/body)
 (global-set-key (kbd "C-M-S-w") #'ace-window)
+(global-set-key (kbd "C-M-S-k") #'kill-buffer)
 
 
 (global-origami-mode 1)
