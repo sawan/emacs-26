@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/sawanvithlani/.emacs.d/elpa/reykjavik-theme-20201219.947/reykjavik-theme.el  -*- no-byte-compile: t -*-
+(define-package "reykjavik-theme" "20201219.947" "Theme with a dark background." '((emacs "24")) :stars '(#("7" 0 1 (font-lock-face paradox-star-face))) :commit "f6d8e83946633603234cd1dac725e17447f40bce" :authors '(("martin haesler")) :maintainer '("martin haesler"))
