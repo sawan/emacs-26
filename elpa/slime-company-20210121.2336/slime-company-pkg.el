@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/sawanvithlani/.emacs.d/elpa/slime-company-20210121.2336/slime-company.el  -*- no-byte-compile: t -*-
+(define-package "slime-company" "20210121.2336" "slime completion backend for company mode" '((emacs "24.4") (slime "2.13") (company "0.9.0")) :stars '("") :commit "54f587353708cd20a13a4b3060ef3799c8e874e0" :authors '(("Ole Arndt" . "anwyn@sugarshark.com")) :maintainer '("Ole Arndt" . "anwyn@sugarshark.com") :keywords '("convenience" "lisp" "abbrev"))
