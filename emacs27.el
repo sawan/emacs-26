@@ -1371,8 +1371,7 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("z" bm-toggle "Bookmark")
             ("N" bm-next "Next Bookmark")
             ("R" hydra-er/body "hydra-eR" :exit t)
-            ("E" elpy-black-fix-code "Black" :color red)
-            ("," (insert ",") "," :color red))
+            ("E" elpy-black-fix-code "Black" :color red))
 
    "Q" (
         ("<return>" newline-and-indent "quit" :color red)
@@ -1382,6 +1381,7 @@ Other buffers: %s(my/number-names my/last-buffers)
         ("-" nil "quit" :color blue)
         ("q" nil "quit" :color blue)
         ("<SPC>" (insert " ") "quit" :color blue)
+        ("," (insert ",") "," :color red)
         ("<backspace>" delete-backward-char "quit" :color blue))
 
    )
