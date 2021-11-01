@@ -96,7 +96,13 @@
   (interactive)
   (define-key company-active-map (kbd "<return>") 'company-complete-selection)
   (define-key company-active-map (kbd "<tab>") 'company-select-next)
-  (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+
+  (setq completion-styles '(orderless))
+
+  (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder))))
+
+
 
 ;; https://oremacs.com/2017/12/27/company-numbers/
 (setq company-show-numbers t)
