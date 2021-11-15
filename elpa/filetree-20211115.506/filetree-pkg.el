@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/sawanvithlani/.emacs.d/elpa/filetree-20211115.506/filetree.el  -*- no-byte-compile: t -*-
+(define-package "filetree" "20211115.506" "File tree view/manipulatation package" '((emacs "27.1") (dash "2.12.0") (helm "3.7.0")) :stars '("") :commit "884b3f3e84499b876d49be1c0c34a96b16a22c51" :authors '(("Ketan Patel" . "knpatel401@gmail.com")) :maintainer '("Ketan Patel" . "knpatel401@gmail.com") :url "https://github.com/knpatel401/filetree")
