@@ -1387,7 +1387,8 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("N" bm-next "Next Bookmark")
             ("R" hydra-er/body "hydra-eR" :exit t)
             ("E" elpy-black-fix-code "Black" :color red)
-            ("Q" query-replace "Qrepl" :exit t))
+            ("Q" query-replace "Qrepl" :exit t)
+            ("Y" counsel-yank-pop "Yank-pop" :color red))
 
    "Q" (
         ("<return>" newline-and-indent "quit" :color red)
