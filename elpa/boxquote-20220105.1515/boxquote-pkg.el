@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/sawanvithlani/.emacs.d/elpa/boxquote-20220105.1515/boxquote.el  -*- no-byte-compile: t -*-
+(define-package "boxquote" "20220105.1515" "Quote text with a semi-box." '((cl-lib "0.5")) :commit "67775ce80886b776efedceb31cdbacec1e26678e" :authors '(("Dave Pearson" . "davep@davep.org")) :maintainer '("Dave Pearson" . "davep@davep.org") :keywords '("quoting") :url "https://github.com/davep/boxquote.el")
