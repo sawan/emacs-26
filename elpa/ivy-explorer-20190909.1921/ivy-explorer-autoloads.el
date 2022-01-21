@@ -22,6 +22,11 @@ or call the function `ivy-explorer-mode'.")
 (autoload 'ivy-explorer-mode "ivy-explorer" "\
 Globally enable `ivy-explorer' for file navigation.
 
+If called interactively, enable Ivy-Explorer mode if ARG is
+positive, and disable it if ARG is zero or negative.  If called
+from Lisp, also enable the mode if ARG is omitted or nil, and
+toggle it if ARG is `toggle'; disable the mode otherwise.
+
 `ivy-explorer-mode' is a global minor mode which changes
 `read-file-name-function' which is used for file completion.
 
@@ -33,7 +38,7 @@ See `ivy-explorer-map' for bindings used in the minibuffer.
 
 \(fn &optional ARG)" t nil)
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ivy-explorer" '("ivy-explorer" "counsel-explorer")))
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ivy-explorer" '("counsel-explorer" "ivy-explorer")))
 
 ;;;***
 
