@@ -248,7 +248,7 @@ In that case, insert the number."
 (setq ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
 
 
-(ivy-historian-mode 1)
+;;(ivy-historian-mode 1)
 
 (counsel-mode 1)
 
@@ -268,8 +268,8 @@ In that case, insert the number."
 (global-set-key "\C-s" 'swiper)
 (global-set-key "\M-i" 'complete-symbol)
 
-(require 'ivy-rich)
-(ivy-rich-mode 1)
+;; (require 'ivy-rich)
+;; (ivy-rich-mode 1)
 (setq ivy-format-function #'ivy-format-function-line)
 (setq ivy-initial-inputs-alist nil)
 (setq ivy-re-builders-alist
@@ -1693,3 +1693,5 @@ Other buffers: %s(my/number-names my/last-buffers)
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;(setq debug-on-error t)
