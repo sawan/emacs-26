@@ -1,2 +1,0 @@
-;;; Generated package description from move-text.el  -*- no-byte-compile: t -*-
-(define-package "move-text" "20220908.1632" "Move current line or region with M-up or M-down." 'nil :stars '(#("75" 0 2 (font-lock-face paradox-star-face))) :commit "646378e8848811fdbc571a9d16c76ac62f27aaad" :authors '(("Jason Milkins" . "jasonm23@gmail.com")) :maintainer '("Jason Milkins" . "jasonm23@gmail.com") :keywords '("edit") :url "https://github.com/emacsfodder/move-text")
