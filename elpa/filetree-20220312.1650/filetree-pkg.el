@@ -1,2 +1,0 @@
-;;; Generated package description from filetree.el  -*- no-byte-compile: t -*-
-(define-package "filetree" "20220312.1650" "File tree view/manipulatation package" '((dash "2.12.0") (helm "3.7.0") (seq "2.23") (transient "0.3.6")) :stars '("") :commit "9125e5b7ebbb99b8c007018fcfd5034e7ac6630d" :authors '(("Ketan Patel" . "knpatel401@gmail.com")) :maintainer '("Ketan Patel" . "knpatel401@gmail.com") :url "https://github.com/knpatel401/filetree")
