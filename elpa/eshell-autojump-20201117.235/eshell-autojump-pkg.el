@@ -1,0 +1,2 @@
+;;; Generated package description from eshell-autojump.el  -*- no-byte-compile: t -*-
+(define-package "eshell-autojump" "20201117.235" "autojump command for Eshell" 'nil :stars '(#("8" 0 1 (font-lock-face paradox-star-face))) :commit "c1056bfc6b46646ae1e606247689fef9aee621af" :authors '(("Alex Schroeder")) :maintainer '("Yen-Chin, Lee" . "coldnew.tw@gmail.com") :url "http://github.com/coldnew/eshell-autojump")

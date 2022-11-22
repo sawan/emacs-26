@@ -1,1 +1,1 @@
-((nano-theme :fetcher github :repo "rougier/nano-theme"))
+((aweshell :fetcher github-ssh :repo "manateelazycat/aweshell") (nano-theme :fetcher github :repo "rougier/nano-theme"))

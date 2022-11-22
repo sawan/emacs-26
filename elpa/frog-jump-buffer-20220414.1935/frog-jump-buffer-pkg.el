@@ -1,2 +1,0 @@
-;;; Generated package description from frog-jump-buffer.el  -*- no-byte-compile: t -*-
-(define-package "frog-jump-buffer" "20220414.1935" "The fastest buffer-jumping Emacs lisp package around." '((emacs "24") (avy "0.4.0") (dash "2.4.0") (frog-menu "0.2.8")) :stars '("") :commit "ff0cfe9cb4a60d855f0754b741a9417ee413dee0" :authors '(("Justin Talbott")) :maintainer '("Justin Talbott") :keywords '("convenience" "tools") :url "https://github.com/waymondo/frog-jump-buffer")
