@@ -712,6 +712,13 @@ Version 2015-12-08"
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
 (exec-path-from-shell-copy-env "PATH")
 
+(global-set-key (kbd "C-x g") 'magit-status)
+
+(quelpa
+ '(aweshell :fetcher github-ssh
+            :repo "manateelazycat/aweshell"))
+(require 'aweshell)
+
 ;; Eshell
 (defun eshell-new(shell-name)
   "Open a new instance of eshell."
@@ -742,6 +749,12 @@ Version 2015-12-08"
         ;; Make this behave the same was as on Mac OS X
         (global-set-key (kbd "s-s") 'save-buffer))
 )
+
+
+
+;;;; rg.el
+;; (rg-enable-menu)
+(global-set-key (kbd "C-c s") 'deadgrep)
 
 ;;;; key-chord
 (require 'key-chord)
@@ -1024,28 +1037,52 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (global-set-key (kbd "C-SPC") 'mark-and-hydra)
 
-
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
-(global-set-key (kbd "C-x g") 'magit-status)
+;; https://www.reddit.com/r/emacs/comments/ypwrzx/comment/ivmh16b/?utm_source=reddit&utm_medium=web2x&context=3
+;; works for a = b[c] -- marks 'b[c]' instead of 'a = b'
+
+(defun er/mark-index-expression ()
+  "Mark the current symbol (including dots) and then paren to closing paren."
+  (interactive)
+  (let ((symbol-regexp "\\(\\s_\\|\\sw\\|\\.\\)+"))
+    (when (or (looking-at symbol-regexp)
+              (er/looking-back-on-line symbol-regexp))
+      (skip-syntax-backward "_w.")
+      (set-mark (point))
+      (when (looking-at symbol-regexp)
+        (goto-char (match-end 0)))
+      (if (looking-at "\\[\\|{")
+          (forward-list))
+      (exchange-point-and-mark))))
+
+(add-to-list 'er/try-expand-list 'er/mark-index-expression)
+
 
 (defhydra hydra-er()
   "Expand Region"
   ("w" er/mark-word "word" :color red)
   ("s" er/mark-symbol "symbol" :color red)
   ("m" er/mark-method-call "method-call" :color red)
-  ("q" er/mark-inside-quotes "i-quotes" :color red)
+  ("f" er/mark-defun "function" :color red)
   ("p" er/mark-inside-pairs "i-pairs" :color red)
   ("P" er/mark-outside-pairs "o-pairs" :color red)
-  ("f" er/mark-defun "function" :color red)
+  ("i" er/mark-inside-quotes "i-quotes" :color red)
+  ("I" er/mark-outside-quotes "o-quotes" :color red)
+  ("-" er/contract-region "-" :color red)
+  ("=" er/expand-region "-" :color red)
   ("l" thing-copy-line "line" :color blue)
   ("c" copy-region-as-kill "copy-region" :color blue)
+  ("q" nil )
   ("<return>" nil))
 
 (defun h-er()
   (interactive)
   (hydra-er/body))
+
+(global-set-key (kbd "C-=") 'hydra-er/body)
+
 
 (defhydra hydra-text-commands ()
   "Text commands"
@@ -1351,9 +1388,11 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("C" thing-copy-line)
             ("g" avy-goto-line "goto-line")
             ("G" goto-line "goto-line-num")
+            ("C-G" goto-match-paren "goto-match-paren")
             ("L" kill-whole-line)
             ("K" kill-visual-line)
-            ("x" transpose-lines))
+            ("x" transpose-lines)
+            ("|" flash-crosshairs))
 
    "Avy" (
           ("o" avy-goto-char-in-line "goto-char-in-line" :blue)
@@ -1383,19 +1422,21 @@ Other buffers: %s(my/number-names my/last-buffers)
              ("T" end-of-buffer)
              ("r" recenter-top-bottom "re-center")
              ("0" ace-window "ace-windows")
-             ("9" my/switch-to-buffer/body "hydra-buffers" :exit t))
-             ;; ("8" buffer-flip-forward "b-flip-f" )
+             ("9" my/switch-to-buffer/body "hydra-buffers" :exit t)
+             ("8" buffer-flip "b-flip-f" ))
              ;; ("7" buffer-flip-backward "b-flip-b" )
              ;; ("6" buffer-flip-abort "b-flip-abort" ))
 
    "Region" (
              ("v" eval-region :color blue)
-             )
+             ("E" eval-defun "eval-defun" :color red))
 
    "Extra" (
+            ("A" goto-match-paren "paren")
             ("." xref-find-definitions "goto")
             ("C-." pop-tag-mark "pop")
             ("s" save-buffer   "save")
+            ("S" deadgrep   "rip-g" :color red)
             ("i" counsel-imenu "iM" )
             ("/" undo-tree-undo "undo")
             (";" comment-and-next-line "comment")
@@ -1406,7 +1447,6 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("N" bm-next "Next Bookmark")
             ("R" hydra-er/body "hydra-eR" :exit t)
             ;; ("E" elpy-black-fix-code "Black" :color red)
-            ("E" eval-defun "eval-defun" :color red)
             ("Q" query-replace "Qrepl" :exit t)
             ("Y" counsel-yank-pop "Yank-pop" :color red))
 
@@ -1419,6 +1459,11 @@ Other buffers: %s(my/number-names my/last-buffers)
         ("q" nil "quit" :color blue)
         ("<SPC>" (insert " ") "quit" :color blue)
         ("," (insert ",") "," :color red)
+        ("{" (insert "{") "{")
+        ("}" (insert "}") "}")
+        (")" (insert ")") ")")
+        ("(" (insert "(") "(")
+        ("\"" (insert "\"") "\"")
         ("<backspace>" delete-backward-char "quit" :color blue))
 
    )
