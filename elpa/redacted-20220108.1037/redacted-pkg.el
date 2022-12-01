@@ -1,0 +1,2 @@
+;;; Generated package description from redacted.el  -*- no-byte-compile: t -*-
+(define-package "redacted" "20220108.1037" "Obscure text in buffer" '((emacs "25.1")) :stars '("") :commit "b3f44ccf51d9d5274f7837fc825db0a378055744" :authors '(("Benjamin Kästner" . "benjamin.kaestner@gmail.com")) :maintainer '("Benjamin Kästner" . "benjamin.kaestner@gmail.com") :keywords '("games") :url "https://github.com/bkaestner/redacted.el")

@@ -151,6 +151,73 @@ In that case, insert the number."
 
 (global-disable-mouse-mode)
 
+
+;; Vampire timezone
+;; How much sun-protection-free time left?
+;; (require 'solar)
+;;
+;; (setq-default calendar-longitude -122.1697
+              ;; calendar-latitude 37.4275)
+;;
+;; (defun time-to-vampire-time (&optional time)
+  ;; (let* ((today-sun (solar-sunrise-sunset (calendar-current-date)))
+         ;; (today-sunrise (* 3600 (caar today-sun)))
+         ;; (today-sunset (* 3600 (caadr today-sun)))
+         ;; (tomorrow-sunrise
+          ;; (* 3600 (caar (solar-sunrise-sunset (calendar-current-date 1)))))
+         ;; (time (pcase (decode-time time)
+                 ;; (`(,s ,m ,h . ,_) (+ s (* 60 (+ m (* 60 h))))))))
+    ;; (cond ((<= time today-sunrise) (list 'sunrise (- today-sunrise time)))
+          ;; ((<= time today-sunset) (list 'sunset (- today-sunset time)))
+          ;; (t (list 'sunrise (+ tomorrow-sunrise (- (* 24 3600) time)))))))
+;;
+;; (defun vampire-time-update ()
+  ;; (let* ((time (time-to-vampire-time))
+         ;; (msg (format "%s till %s" (format-seconds "%h:%.2m:%.2s" (cadr time)) (car time)))
+         ;; (width (string-width msg))
+         ;; (msg (concat (propertize " " 'display
+                                  ;; `(space :align-to (- right-fringe ,width)))
+                      ;; msg)))
+    ;; (with-current-buffer " *Echo Area 0*"
+      ;; (remove-overlays (point-min) (point-max))
+      ;; (overlay-put (make-overlay (point-min) (point-max) nil nil t)
+                   ;; 'after-string msg))
+    ;; (with-current-buffer " *Minibuf-0*"
+      ;; (delete-region (point-min) (point-max))
+      ;; (insert msg))
+    ;; (when-let (buffer (get-buffer " *Vampire Time Screensaver*"))
+      ;; (with-current-buffer buffer
+        ;; (delete-region (point-min) (point-max))
+        ;; (let ((l1 (propertize (concat " " (format-seconds "%h:%.2m:%.2s" (cadr time)))
+                              ;; 'face '(:height 10.0 :weight normal)))
+              ;; (l2 (propertize (format "till %s" (car time))
+                               ;; 'face '(:height 4.0 :weight normal))))
+          ;; (insert l1 (propertize " \n" 'face '(:height 10.0 :weight normal)))
+          ;; (insert (propertize " "
+                              ;; 'display `(space :width (,(- (shr-string-pixel-width l1)
+                                                           ;; (shr-string-pixel-width l2)))))
+                  ;; l2)))
+      ;; (posframe-show buffer :poshandler 'posframe-poshandler-frame-center
+                     ;; :internal-border-width 3))))
+;;
+;; (add-hook 'post-command-hook 'vampire-time-update)
+;;
+;; (defvar vampire-time-timer (run-at-time t 1 'vampire-time-update))
+;;
+;; (defun vampire-time-screensaver ()
+  ;; (if insecure-lock-mode
+      ;; (progn
+        ;; (get-buffer-create " *Vampire Time Screensaver*")
+        ;; (vampire-time-update))
+    ;; (posframe-delete " *Vampire Time Screensaver*")))
+
+(require 'posframe)
+(require 'insecure-lock)
+;; (insecure-lock-run-idle 600)
+;; (insecure-lock-run-idle 3)
+;; (setq insecure-lock-mode-hook '(vampire-time-screensaver insecure-lock-blank-screen))
+(setq insecure-lock-mode-hook '(insecure-lock-blank-screen insecure-lock-posframe)) ;; Enable date time display
+
 (require 'autopair)
 (autopair-global-mode)
 
@@ -501,6 +568,20 @@ instead of a char."
 
 (global-set-key (kbd "<C-f10>") 'goto-match-paren)
 
+
+;; https://stackoverflow.com/a/33450643
+(defun my-kill-thing-at-point (thing)
+  "Kill the `thing-at-point' for the specified kind of THING."
+  (let ((bounds (bounds-of-thing-at-point thing)))
+    (if bounds
+        (kill-region (car bounds) (cdr bounds))
+      (error "No %s at point" thing))))
+
+(defun my-kill-word-at-point ()
+  "Kill the word at point."
+  (interactive)
+  (my-kill-thing-at-point 'word))
+
 (require 'hungry-delete)
 (global-hungry-delete-mode)
 
@@ -626,6 +707,16 @@ Position the cursor at its beginning, according to the current mode."
 
 (global-set-key (kbd "M-;") #'comment-and-next-line)
 
+
+;; https://emacs.stackexchange.com/a/59400
+(defun tmpify-region ()
+  "Function takes current region, and appends to *scratch* buffer"
+  (interactive)
+  (with-current-buffer "*scratch*" (insert "\n\n\t"))
+  (append-to-buffer "*scratch*" (region-beginning) (region-end))
+  (message "Moved to *scratch*")
+  (delete-active-region))
+
 (defun yank-n-times (n)
   "yank n number of times."
   (interactive "nPaste how many times? ")
@@ -718,6 +809,8 @@ Version 2015-12-08"
  '(aweshell :fetcher github-ssh
             :repo "manateelazycat/aweshell"))
 (require 'aweshell)
+
+(require 'dwim-shell-commands)
 
 ;; Eshell
 (defun eshell-new(shell-name)
@@ -1074,6 +1167,7 @@ ipdb.set_trace(); ## DEBUG ##"
   ("=" er/expand-region "-" :color red)
   ("l" thing-copy-line "line" :color blue)
   ("c" copy-region-as-kill "copy-region" :color blue)
+  ("t" tmpify-region :color blue)
   ("q" nil )
   ("<return>" nil))
 
@@ -1409,7 +1503,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                 ("j" backward-char)
                 ("l" forward-word)
                 ("h" backward-word)
-                ("D" kill-word)
+                ("D" my-kill-word-at-point)
                 ("d" hungry-delete-forward)
                 ("b" hungry-delete-backward)
                 ("B" backward-kill-word)
@@ -1795,7 +1889,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                               (origami-get-positions content regex)))
                           (origami-build-pair-tree create start-marker end-marker positions))))))
  '(package-selected-packages
-   '(pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
+   '(dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
  '(paradox-github-token t)
  '(pos-tip-background-color "#01323d")
  '(pos-tip-foreground-color "#9eacac")
