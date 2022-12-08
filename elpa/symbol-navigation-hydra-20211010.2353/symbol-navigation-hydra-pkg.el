@@ -1,0 +1,2 @@
+;;; Generated package description from symbol-navigation-hydra.el  -*- no-byte-compile: t -*-
+(define-package "symbol-navigation-hydra" "20211010.2353" "A symbol-aware, range-aware hydra" '((auto-highlight-symbol "1.61") (hydra "0.15.0") (emacs "24.4") (multiple-cursors "1.4.0")) :commit "b3b1257e676514d93cd2d71a10a485bf00b5375f" :authors '(("Brett Wines" . "bgwines@cs.stanford.edu")) :maintainer '("Brett Wines" . "bgwines@cs.stanford.edu") :keywords '("highlight" "face" "match" "convenience" "hydra" "symbol") :url "https://github.com/bgwines/symbol-navigation-hydra")
