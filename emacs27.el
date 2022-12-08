@@ -389,6 +389,34 @@ In that case, insert the number."
                              "python -m json.tool"
                              (buffer-name) t)))
 
+
+;; Rust
+;; https://robert.kra.hn/posts/rust-emacs-setup/
+
+(require 'rustic)
+(setq rustic-format-on-save t)
+
+(require 'lsp-mode)
+;; what to use when checking on-save. "check" is default, I prefer clippy
+(setq lsp-rust-analyzer-cargo-watch-command "clippy")
+(setq lsp-eldoc-render-all t)
+(setq lsp-idle-delay 0.6)
+;; enable / disable the hints as you prefer:
+(setq lsp-rust-analyzer-server-display-inlay-hints t)
+(setq lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
+(setq lsp-rust-analyzer-display-chaining-hints t)
+(setq lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
+(setq lsp-rust-analyzer-display-closure-return-type-hints t)
+(setq lsp-rust-analyzer-display-parameter-hints nil)
+(setq lsp-rust-analyzer-display-reborrow-hints nil)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+
+(require 'lsp-ui)
+(setq lsp-ui-peek-always-show t)
+(setq lsp-ui-sideline-show-hover t)
+(setq lsp-ui-doc-enable nil)
+
+
 ;; http://emacs.stackexchange.com/a/13122
 (require 'ov)
 (defun highlight-duplicate-lines-in-region-or-buffer ()
@@ -592,6 +620,7 @@ instead of a char."
   (my-kill-thing-at-point 'word))
 
 (require 'hungry-delete)
+(add-to-list 'hungry-delete-except-modes 'minibuffer-mode)
 (global-hungry-delete-mode)
 
 
