@@ -160,63 +160,64 @@ In that case, insert the number."
               ;; calendar-latitude 37.4275)
 ;;
 ;; (defun time-to-vampire-time (&optional time)
-  ;; (let* ((today-sun (solar-sunrise-sunset (calendar-current-date)))
-         ;; (today-sunrise (* 3600 (caar today-sun)))
-         ;; (today-sunset (* 3600 (caadr today-sun)))
-         ;; (tomorrow-sunrise
-          ;; (* 3600 (caar (solar-sunrise-sunset (calendar-current-date 1)))))
-         ;; (time (pcase (decode-time time)
-                 ;; (`(,s ,m ,h . ,_) (+ s (* 60 (+ m (* 60 h))))))))
-    ;; (cond ((<= time today-sunrise) (list 'sunrise (- today-sunrise time)))
-          ;; ((<= time today-sunset) (list 'sunset (- today-sunset time)))
-          ;; (t (list 'sunrise (+ tomorrow-sunrise (- (* 24 3600) time)))))))
-;;
+;;   (let* ((today-sun (solar-sunrise-sunset (calendar-current-date)))
+;;          (today-sunrise (* 3600 (caar today-sun)))
+;;          (today-sunset (* 3600 (caadr today-sun)))
+;;          (tomorrow-sunrise
+;;           (* 3600 (caar (solar-sunrise-sunset (calendar-current-date 1)))))
+;;          (time (pcase (decode-time time)
+;;                  (`(,s ,m ,h . ,_) (+ s (* 60 (+ m (* 60 h))))))))
+;;     (cond ((<= time today-sunrise) (list 'sunrise (- today-sunrise time)))
+;;           ((<= time today-sunset) (list 'sunset (- today-sunset time)))
+;;           (t (list 'sunrise (+ tomorrow-sunrise (- (* 24 3600) time)))))))
+
 ;; (defun vampire-time-update ()
-  ;; (let* ((time (time-to-vampire-time))
-         ;; (msg (format "%s till %s" (format-seconds "%h:%.2m:%.2s" (cadr time)) (car time)))
-         ;; (width (string-width msg))
-         ;; (msg (concat (propertize " " 'display
-                                  ;; `(space :align-to (- right-fringe ,width)))
-                      ;; msg)))
-    ;; (with-current-buffer " *Echo Area 0*"
-      ;; (remove-overlays (point-min) (point-max))
-      ;; (overlay-put (make-overlay (point-min) (point-max) nil nil t)
-                   ;; 'after-string msg))
-    ;; (with-current-buffer " *Minibuf-0*"
-      ;; (delete-region (point-min) (point-max))
-      ;; (insert msg))
-    ;; (when-let (buffer (get-buffer " *Vampire Time Screensaver*"))
-      ;; (with-current-buffer buffer
-        ;; (delete-region (point-min) (point-max))
-        ;; (let ((l1 (propertize (concat " " (format-seconds "%h:%.2m:%.2s" (cadr time)))
-                              ;; 'face '(:height 10.0 :weight normal)))
-              ;; (l2 (propertize (format "till %s" (car time))
-                               ;; 'face '(:height 4.0 :weight normal))))
-          ;; (insert l1 (propertize " \n" 'face '(:height 10.0 :weight normal)))
-          ;; (insert (propertize " "
-                              ;; 'display `(space :width (,(- (shr-string-pixel-width l1)
-                                                           ;; (shr-string-pixel-width l2)))))
-                  ;; l2)))
-      ;; (posframe-show buffer :poshandler 'posframe-poshandler-frame-center
-                     ;; :internal-border-width 3))))
-;;
-;; (add-hook 'post-command-hook 'vampire-time-update)
-;;
-;; (defvar vampire-time-timer (run-at-time t 1 'vampire-time-update))
-;;
+;;   (let* ((time (time-to-vampire-time))
+;;          (msg (format "%s till %s" (format-seconds "%h:%.2m:%.2s" (cadr time)) (car time)))
+;;          (width (string-width msg))
+;;          (msg (concat (propertize " " 'display
+;;                                   `(space :align-to (- right-fringe ,width)))
+;;                       msg)))
+;;     (with-current-buffer " *Echo Area 0*"
+;;       (remove-overlays (point-min) (point-max))
+;;       (overlay-put (make-overlay (point-min) (point-max) nil nil t)
+;;                    'after-string msg))
+;;     (with-current-buffer " *Minibuf-0*"
+;;       (delete-region (point-min) (point-max))
+;;       (insert msg))
+;;     (when-let (buffer (get-buffer " *Vampire Time Screensaver*"))
+;;       (with-current-buffer buffer
+;;         (delete-region (point-min) (point-max))
+;;         (let ((l1 (propertize (concat " " (format-seconds "%h:%.2m:%.2s" (cadr time)))
+;;                               'face '(:height 10.0 :weight normal)))
+;;               (l2 (propertize (format "till %s" (car time))
+;;                                'face '(:height 4.0 :weight normal))))
+;;           (insert l1 (propertize " \n" 'face '(:height 10.0 :weight normal)))
+;;           (insert (propertize " "
+;;                               'display `(space :width (,(- (shr-string-pixel-width l1)
+;;                                                            (shr-string-pixel-width l2)))))
+;;                   l2)))
+;;       (posframe-show buffer :poshandler 'posframe-poshandler-frame-center
+;;                      :internal-border-width 3))))
+;; ;;
+;; ;; (add-hook 'post-command-hook 'vampire-time-update)
+;; ;;
+;; ;; (defvar vampire-time-timer (run-at-time t 1 'vampire-time-update))
+;; ;;
 ;; (defun vampire-time-screensaver ()
-  ;; (if insecure-lock-mode
-      ;; (progn
-        ;; (get-buffer-create " *Vampire Time Screensaver*")
-        ;; (vampire-time-update))
-    ;; (posframe-delete " *Vampire Time Screensaver*")))
+;;   (if insecure-lock-mode
+;;       (progn
+;;         (get-buffer-create " *Vampire Time Screensaver*")
+;;         (vampire-time-update))
+;;     (posframe-delete " *Vampire Time Screensaver*")))
 
 (require 'posframe)
 (require 'insecure-lock)
 ;; (insecure-lock-run-idle 600)
 ;; (insecure-lock-run-idle 3)
 ;; (setq insecure-lock-mode-hook '(vampire-time-screensaver insecure-lock-blank-screen))
-(setq insecure-lock-mode-hook '(insecure-lock-blank-screen insecure-lock-posframe)) ;; Enable date time display
+(setq insecure-lock-require-password t)
+(setq insecure-lock-mode-hook '(insecure-lock-blank-screen insecure-lock-redact insecure-lock-posframe))
 
 (require 'autopair)
 (autopair-global-mode)
@@ -289,10 +290,18 @@ In that case, insert the number."
 (display-time)
 
 ;; use ibuffers for buffer listing
-(defalias 'list-buffers 'ibuffer)
+(add-to-list 'display-buffer-alist '("\\*Ibuffer\\*" (display-buffer-other-frame)) t)
+(setq
+ ibuffer-case-fold-search t
+ ibuffer-default-sorting-mode 'recency
+ ibuffer-default-sorting-mode 'major-mode
+ ibuffer-formats '((mark modified " " (name 150)))
+ ibuffer-use-other-window nil ;; enable/disable opening ibuffer in another window
+ ibuffer-always-compile-formats t) ;; If non-nil, increase the redisplay speed, at the cost of loading the elisp byte-compiler
 (setq ibuffer-default-sorting-mode 'major-mode)
-(setq ibuffer-default-sorting-mode 'recency)
-;; (add-hook 'ibuffer-mode-hook 'ibuffer-do-sort-by-recency)
+
+(add-hook 'ibuffer-mode-hook #'ibuffer-auto-mode) ;; auto-update ibuffer result
+(defalias 'list-buffers 'ibuffer)
 
 ;; Split windows horizontally by default
 (setq split-width-threshold nil)
