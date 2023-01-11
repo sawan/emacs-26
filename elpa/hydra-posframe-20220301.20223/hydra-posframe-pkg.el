@@ -1,0 +1,2 @@
+;;; Generated package description from hydra-posframe.el  -*- no-byte-compile: t -*-
+(define-package "hydra-posframe" "20220301.20223" "Display hydra diagnostics at point" '((emacs "26.1") (hydra "0.14.0") (posframe "1.1.4")) :authors '(("Aya Igarashi" . "ladiclexxx@gmail.com")) :maintainer '("Aya Igarashi" . "ladiclexxx@gmail.com") :keywords '("convenience" "languages" "tools") :url "https://github.com/Ladicle/hydra-posframe")
