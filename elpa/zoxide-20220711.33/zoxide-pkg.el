@@ -1,0 +1,2 @@
+;;; Generated package description from zoxide.el  -*- no-byte-compile: t -*-
+(define-package "zoxide" "20220711.33" "Find file by zoxide" '((emacs "25.1")) :stars '("") :commit "b09c06962316d28b14ecbb2340af7c0636ab6d16" :authors '(("Ruoyu Feng" . "emacs@vonfry.name")) :maintainer '("Ruoyu Feng" . "emacs@vonfry.name") :keywords '("converience" "matching") :url "https://gitlab.com/Vonfry/zoxide.el")

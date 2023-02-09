@@ -95,6 +95,7 @@
 (require 'thing-edit)
 (require 'no-easy-keys)
 ;; (require 'flex)
+(require 'substitute)
 
 (no-easy-keys)
 
@@ -106,6 +107,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 
 (setq company-selection-wrap-around t)
+(setq company-dabbrev-downcase nil)
 
 (defun sv-company-mode-keys ()
   (interactive)
@@ -393,7 +395,13 @@ In that case, insert the number."
 ;; Rust
 ;; https://robert.kra.hn/posts/rust-emacs-setup/
 
+(with-eval-after-load 'rustic-mode
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
 (require 'rustic)
+(setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rustic-mode))
+
 (setq rustic-format-on-save nil)
 
 (require 'lsp-ui)
@@ -695,7 +703,7 @@ Position the cursor at its beginning, according to the current mode."
 ; crosshairs
 (require 'crosshairs)
 (global-set-key (kbd "<M-f12>") 'flash-crosshairs)
-(crosshairs-toggle-when-idle t)
+;;(crosshairs-toggle-when-idle t)
 
 
 ;; Indent HTML, XML
@@ -893,8 +901,10 @@ Version 2015-12-08"
 (key-chord-define emacs-lisp-mode-map "er" 'eval-region)
 
 
+;;(keycast-mode t)
+
 ;; buffer-flip
-(require 'buff-flip)
+(require 'buffer-flip)
 ;; key to begin cycling buffers.  Global key.
 (global-set-key (kbd "M-<tab>") 'buffer-flip)
 
@@ -1278,6 +1288,33 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (global-set-key (kbd "<f4>") 'hydra-lines/body)
 
+;; https://www.emacswiki.org/emacs/WindowResize
+;; Hirose Yuuji and Bob Wiener
+(defun resize-window (&optional arg)
+  "*Resize window interactively."
+  (interactive "p")
+  (if (one-window-p) (error "Cannot resize sole window"))
+  (or arg (setq arg 1))
+  (let (c)
+    (catch 'done
+      (while t
+        (message
+         "h=heighten, s=shrink, w=widen, n=narrow (by %d);  1-9=unit, q=quit"
+         arg)
+        (setq c (read-char))
+        (condition-case ()
+            (cond
+             ((= c ?h) (enlarge-window arg))
+             ((= c ?s) (shrink-window arg))
+             ((= c ?w) (enlarge-window-horizontally arg))
+             ((= c ?n) (shrink-window-horizontally arg))
+             ((= c ?\^G) (keyboard-quit))
+             ((= c ?q) (throw 'done t))
+             ((and (> c ?0) (<= c ?9)) (setq arg (- c ?0)))
+             (t (beep)))
+          (error (beep)))))
+    (message "Done.")))
+
 (require 'highlight-symbol)
 (defhydra hydra-highlight-symbol ()
   "Highlight symbol"
@@ -1530,7 +1567,7 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("|" flash-crosshairs))
 
    "Avy" (
-          ("o" avy-goto-char-in-line "goto-char-in-line" :blue)
+          ("'" avy-goto-char-in-line "goto-char-in-line" :blue)
           ("C-c" avy-goto-char-2 "goto-char-2")
           ("c" avy-goto-char "goto-char")
           ("w" avy-goto-word-or-subword-1 "goto-word")
@@ -1557,7 +1594,7 @@ Other buffers: %s(my/number-names my/last-buffers)
              ("t" beginning-of-buffer)
              ("T" end-of-buffer)
              ("r" recenter-top-bottom "re-center")
-             ("0" ace-window "ace-windows")
+             ("o" ace-window "ace-windows")
              ("9" my/switch-to-buffer/body "hydra-buffers" :exit t)
              ("8" buffer-flip "b-flip" )
              ("<right>" buffer-flip-forward "b-flip-f" )
@@ -1946,7 +1983,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                               (origami-get-positions content regex)))
                           (origami-build-pair-tree create start-marker end-marker positions))))))
  '(package-selected-packages
-   '(hydra-posframe lsp-pyright color-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow subatomic-theme subatomic256-theme helm-swoop symbol-navigation-hydra timu-caribbean-theme ivy-xref xr dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
+   '(zoxide substitute keycast flycheck-rust hydra-posframe lsp-pyright color-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow subatomic-theme subatomic256-theme helm-swoop symbol-navigation-hydra timu-caribbean-theme ivy-xref xr dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
  '(paradox-github-token t)
  '(pos-tip-background-color "#01323d")
  '(pos-tip-foreground-color "#9eacac")
