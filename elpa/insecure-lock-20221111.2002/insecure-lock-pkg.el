@@ -1,2 +1,0 @@
-;;; Generated package description from insecure-lock.el  -*- no-byte-compile: t -*-
-(define-package "insecure-lock" "20221111.2002" "Extensible screen lock framework" '((emacs "28.1")) :stars '("") :commit "2750190c70ebf564fe142ab5ee7e44675609b06a" :authors '(("Qiantan Hong" . "qhong@alum.mit.edu")) :maintainer '("Qiantan Hong" . "qhong@alum.mit.edu") :keywords '("unix" "screensaver" "security") :url "https://github.com/BlueFlo0d/insecure-lock")
