@@ -12,6 +12,8 @@
     (xterm-color "1.6"))
   :commit "a5fc66c8167a827a57c4426e4b8dbe717b3be43c" :authors
   '(("Mozilla"))
+  :maintainers
+  '(("Mozilla"))
   :maintainer
   '("Mozilla")
   :keywords
