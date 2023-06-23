@@ -2,6 +2,11 @@
 
 ;; http://milkbox.net/note/single-file-master-emacs-configuration/
 ;;;; package.el
+
+(setq url-proxy-services
+      '(("http"     . "localhost:3128")
+        ("https"     . "localhost:3128")))
+
 (require 'package)
 
 (setq package-user-dir "~/.emacs.d/elpa/")
@@ -507,6 +512,25 @@ In that case, insert the number."
           (describe-function-1 function)
           (buffer-string)))
       nil nil nil 0)))
+
+;; query-replace case sensitivity
+(defun with-case-fold-search (orig-fun &rest args)
+  (let ((case-fold-search t))
+    (apply orig-fun args)))
+
+(defun without-case-fold-search (orig-fun &rest args)
+  (let ((case-fold-search nil))
+    (apply orig-fun args)))
+
+;; default behaviour, no case sensitivity
+;; (advice-add 'query-replace :around #'with-case-fold-search)
+
+;; case sensitive
+(advice-add 'query-replace :around #'without-case-fold-search)
+
+;; Restore default behaviour
+(advice-remove 'query-replace #'without-case-fold-search)
+
 
 (defun count-string-matches (strn)
   "Return number of matches STRING following the point.
@@ -1105,6 +1129,8 @@ Version 2015-12-08"
                              (define-key yaml-mode-map
                                (kbd "RET") 'newline-and-indent)))
 
+(add-hook 'yaml-mode-hook (lambda () (setq-local require-final-newline t)))
+
 (elpy-enable)
 
 (define-key elpy-mode-map (kbd "C-M-i") 'elpy-company-backend)
@@ -1293,6 +1319,7 @@ ipdb.set_trace(); ## DEBUG ##"
 
   ("D" djcb-duplicate-line "dup" :color red)
   ("C" thing-copy-line "dup" :color red)
+  ("v" eval-region "Eval" :color blue)
 
   ("g" avy-goto-line "goto" :color red)
 
@@ -1952,6 +1979,90 @@ Other buffers: %s(my/number-names my/last-buffers)
    ["#01323d" "#ec423a" "#93a61a" "#c49619" "#3c98e0" "#e2468f" "#3cafa5" "#60767e"])
  '(c-max-one-liner-length 120)
  '(compilation-message-face 'default)
+ '(connection-local-criteria-alist
+   '(((:application eshell)
+      eshell-connection-default-profile)
+     ((:application tramp :machine "localhost")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "GW6FXWNM4Y")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp)
+      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
+ '(connection-local-profile-alist
+   '((eshell-connection-default-profile
+      (eshell-path-env-list))
+     (tramp-connection-local-darwin-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . tramp-ps-time)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-busybox-ps-profile
+      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (user . string)
+       (group . string)
+       (comm . 52)
+       (state . 5)
+       (ppid . number)
+       (pgrp . number)
+       (ttname . string)
+       (time . tramp-ps-time)
+       (nice . number)
+       (etime . tramp-ps-time)
+       (args)))
+     (tramp-connection-local-bsd-ps-profile
+      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
+      (tramp-process-attributes-ps-format
+       (pid . number)
+       (euid . number)
+       (user . string)
+       (egid . number)
+       (group . string)
+       (comm . 52)
+       (state . string)
+       (ppid . number)
+       (pgrp . number)
+       (sess . number)
+       (ttname . string)
+       (tpgid . number)
+       (minflt . number)
+       (majflt . number)
+       (time . tramp-ps-time)
+       (pri . number)
+       (nice . number)
+       (vsize . number)
+       (rss . number)
+       (etime . number)
+       (pcpu . number)
+       (pmem . number)
+       (args)))
+     (tramp-connection-local-default-shell-profile
+      (shell-file-name . "/bin/sh")
+      (shell-command-switch . "-c"))
+     (tramp-connection-local-default-system-profile
+      (path-separator . ":")
+      (null-device . "/dev/null"))))
  '(cua-global-mark-cursor-color "#3cafa5")
  '(cua-normal-cursor-color "#8d9fa1")
  '(cua-overwrite-cursor-color "#c49619")
@@ -2012,7 +2123,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                               (origami-get-positions content regex)))
                           (origami-build-pair-tree create start-marker end-marker positions))))))
  '(package-selected-packages
-   '(helm-lsp which-key flycheck projectile dap-mode lsp-java timu-rouge-theme timu-spacegrey-theme timu-macos-theme doom-modeline nano-modeline zoxide substitute keycast flycheck-rust hydra-posframe lsp-pyright color-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow subatomic-theme subatomic256-theme helm-swoop symbol-navigation-hydra timu-caribbean-theme ivy-xref xr dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
+   '(wgrep helm-lsp which-key flycheck projectile dap-mode lsp-java timu-rouge-theme timu-spacegrey-theme timu-macos-theme doom-modeline nano-modeline zoxide substitute keycast flycheck-rust hydra-posframe lsp-pyright color-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow subatomic-theme subatomic256-theme helm-swoop symbol-navigation-hydra timu-caribbean-theme ivy-xref xr dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
  '(paradox-github-token t)
  '(pos-tip-background-color "#01323d")
  '(pos-tip-foreground-color "#9eacac")
