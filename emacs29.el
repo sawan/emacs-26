@@ -820,6 +820,60 @@ Position the cursor at its beginning, according to the current mode."
   (setq last-kill (current-kill 0 t))
   (dotimes 'n (insert last-kill)))
 
+;; https://stackoverflow.com/a/9411825
+(defun copy-buffer-file-name-as-kill (choice)
+  "Copies the buffer {name/mode}, file {name/full path/directory} to the kill-ring."
+  (interactive "cCopy (b) buffer name, (m) buffer major mode, (f) full buffer-file path, (d) buffer-file directory, (n) buffer-file basename")
+  (let ((new-kill-string)
+        (name (if (eq major-mode 'dired-mode)
+                  (dired-get-filename)
+                (or (buffer-file-name) ""))))
+    (cond ((eq choice ?f)
+           (setq new-kill-string name))
+          ((eq choice ?d)
+           (setq new-kill-string (file-name-directory name)))
+          ((eq choice ?n)
+           (setq new-kill-string (file-name-nondirectory name)))
+          ((eq choice ?b)
+           (setq new-kill-string (buffer-name)))
+          ((eq choice ?m)
+           (setq new-kill-string (format "%s" major-mode)))
+          (t (message "Quit")))
+    (when new-kill-string
+      (message "%s copied" new-kill-string)
+      (kill-new new-kill-string))))
+
+(defun xah-copy-file-path (&optional DirPathOnlyQ)
+  "Copy current buffer file path or dired path.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+
+If in dired, copy the current or marked files.
+
+If a buffer is not file and not dired, copy value of `default-directory'.
+
+URL `http://xahlee.info/emacs/emacs/emacs_copy_file_path.html'
+Version 2018-06-18 2021-09-30"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if (buffer-file-name)
+               (buffer-file-name)
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if DirPathOnlyQ
+         (progn
+           (message "Directory copied: %s" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: %s" $fpath)
+         $fpath )))))
+
 (defun xah-select-current-line ()
   "Select current line.
 URL `http://ergoemacs.org/emacs/modernization_mark-word.html'
@@ -1190,6 +1244,22 @@ ipdb.set_trace(); ## DEBUG ##"
 
 
 (add-hook 'python-mode-hook 'python-remove-debug-breaks)
+
+
+;; (setq hydra-hint-display-type 'lv)
+(use-package hydra-posframe
+  :ensure nil
+  :defer t
+  :quelpa (hydra-posframe
+           :fetcher git
+           :url "https://github.com/Ladicle/hydra-posframe.git")
+           ;; :repo "Ladicle/hydra-posframe")
+  :hook (after-init . hydra-posframe-mode))
+
+
+(setq hydra-hint-display-type 'posframe)
+(setq hydra-posframe-poshandler 'posframe-poshandler-frame-center)
+(setq hydra-posframe-poshandler 'posframe-poshandler-window-bottom-right-corner)
 
 
 (defhydra hydra-breadcrumb ()
@@ -1584,10 +1654,6 @@ Other buffers: %s(my/number-names my/last-buffers)
 (defun hydra-move-post()
   (set-cursor-color "#ffffff"))
 
-;; (setq hydra-hint-display-type 'lv)
-(setq hydra-hint-display-type 'posframe)
-(setq hydra-posframe-poshandler 'posframe-poshandler-frame-center)
-(setq hydra-posframe-poshandler 'posframe-poshandler-window-bottom-right-corner)
 
 
 ;;; hmove
@@ -1677,7 +1743,7 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("C-r" indent-relative "indent-R")
             ("z" bm-toggle "Bookmark")
             ("N" bm-next "Next Bookmark")
-            ("R" hydra-er/body "hydra-eR" :exit t)
+            ("=" hydra-er/body "hydra-eR" :exit t)
             ;; ("E" elpy-black-fix-code "Black" :color red)
             ("Q" query-replace "Q-replace" :exit t)
             ("Y" counsel-yank-pop "Yank-pop" :color red))
@@ -1686,7 +1752,6 @@ Other buffers: %s(my/number-names my/last-buffers)
         ("<return>" newline-and-indent "quit" :color red)
         ("<RETURN>" newline-and-indent "quit" :color red)
         ("<ESC>" nil "quit" :color blue)
-        ("=" nil "quit" :color blue)
         ("-" nil "quit" :color blue)
         ("q" nil "quit" :color blue)
         ("<SPC>" (insert " ") "quit" :color blue)
@@ -1892,15 +1957,6 @@ Other buffers: %s(my/number-names my/last-buffers)
   :quelpa (nano-theme
            :fetcher github
            :repo "rougier/nano-theme"))
-
-(use-package hydra-posframe
-  :ensure nil
-  :defer t
-  :quelpa (hydra-posframe
-           :fetcher git
-           :url "https://github.com/Ladicle/hydra-posframe.git")
-           ;; :repo "Ladicle/hydra-posframe")
-  :hook (after-init . hydra-posframe-enable))
 
 ;; SLIME
 (setq inferior-lisp-program "/opt/local/bin/clisp")
