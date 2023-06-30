@@ -1245,8 +1245,6 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (add-hook 'python-mode-hook 'python-remove-debug-breaks)
 
-
-;; (setq hydra-hint-display-type 'lv)
 (use-package hydra-posframe
   :ensure nil
   :defer t
@@ -1256,10 +1254,15 @@ ipdb.set_trace(); ## DEBUG ##"
            ;; :repo "Ladicle/hydra-posframe")
   :hook (after-init . hydra-posframe-mode))
 
-
 (setq hydra-hint-display-type 'posframe)
 (setq hydra-posframe-poshandler 'posframe-poshandler-frame-center)
 (setq hydra-posframe-poshandler 'posframe-poshandler-window-bottom-right-corner)
+
+
+(defun no-hydra-posframe ()
+  (interactive)
+  (hydra-posframe-mode nil)
+  (setq hydra-hint-display-type 'lv))
 
 
 (defhydra hydra-breadcrumb ()
