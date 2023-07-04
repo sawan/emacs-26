@@ -224,7 +224,9 @@ In that case, insert the number."
 ;; (insecure-lock-run-idle 3)
 ;; (setq insecure-lock-mode-hook '(vampire-time-screensaver insecure-lock-blank-screen))
 (setq insecure-lock-require-password t)
-(setq insecure-lock-mode-hook '(insecure-lock-blank-screen insecure-lock-redact insecure-lock-posframe))
+(setq insecure-lock-mode-hook '(insecure-lock-blank-screen
+                                insecure-lock-redact insecure-lock-posframe
+))
 
 (require 'autopair)
 (autopair-global-mode)
@@ -1245,6 +1247,9 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (add-hook 'python-mode-hook 'python-remove-debug-breaks)
 
+(require 'use-package)
+(require 'quelpa-use-package)
+
 (use-package hydra-posframe
   :ensure nil
   :defer t
@@ -1950,9 +1955,6 @@ Other buffers: %s(my/number-names my/last-buffers)
 
 (global-set-key (kbd "M-o") 'ace-window)
 
-
-(require 'use-package)
-(require 'quelpa-use-package)
 
 (use-package nano-theme
   :ensure nil
