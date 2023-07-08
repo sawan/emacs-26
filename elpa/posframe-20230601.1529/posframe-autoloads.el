@@ -230,6 +230,7 @@ Delete all posframe frames and buffers." t)
 (autoload 'posframe-benchmark "posframe-benchmark" "\
 Benchmark tool for posframe." t)
 (register-definition-prefixes "posframe-benchmark" '("posframe-benchmark-alist"))
+
 
 ;;; End of scraped data
 
