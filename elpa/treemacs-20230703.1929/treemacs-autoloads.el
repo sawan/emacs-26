@@ -713,6 +713,7 @@ The `imenu-create-index-function' for treemacs buffers.")
 ;;; Generated autoloads from treemacs-workspaces.el
 
 (register-definition-prefixes "treemacs-workspaces" '("treemacs-"))
+
 
 ;;; End of scraped data
 
