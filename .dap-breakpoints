@@ -1,0 +1,1 @@
+#s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data ("/Users/vithlasa/.deft/2023-05-10T2033.txt" ((:point 555)) "/Users/vithlasa/src/bitnami-charts-main/bitnami/redis/Chart.yaml" ((:point 767))))

@@ -28,3 +28,4 @@ bookmarks
 transient/history.el
 Shell-script-mac.el
 elpy/*
+eln-cache/

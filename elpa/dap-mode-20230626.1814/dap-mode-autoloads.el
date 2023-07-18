@@ -134,8 +134,6 @@ evaluate `(default-value \\='dap-mode)'.
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
 
-\\{dap-mode-map}
-
 (fn &optional ARG)" t)
 (defvar dap-auto-configure-mode nil "\
 Non-nil if Dap-Auto-Configure mode is enabled.
@@ -269,8 +267,6 @@ evaluate `(default-value \\='dap-ui-mode)'.
 
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
-
-\\{dap-ui-mode-map}
 
 (fn &optional ARG)" t)
 (autoload 'dap-ui-breakpoints-list "dap-ui" "\
