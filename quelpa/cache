@@ -1,1 +1,1 @@
-((aweshell :fetcher github-ssh :repo "manateelazycat/aweshell") (hydra-posframe :fetcher git :url "https://github.com/Ladicle/hydra-posframe.git") (nano-theme :fetcher github :repo "rougier/nano-theme"))
+((aweshell :fetcher github-ssh :repo "manateelazycat/aweshell") (hydra-posframe :fetcher git :url "https://github.com/Ladicle/hydra-posframe.git") (indent-bars :fetcher git :url "https://github.com/jdtsmith/indent-bars") (nano-theme :fetcher github :repo "rougier/nano-theme"))

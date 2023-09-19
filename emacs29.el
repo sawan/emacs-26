@@ -81,7 +81,37 @@
   `(eval-after-load ,mode
      '(progn ,@body)))
 
-(setq exec-path (append exec-path '("/opt/local/bin")))
+
+(setenv "SHELL" "/opt/homebrew/bin/bash")
+(setq explicit-shell-file-name "/opt/homebrew/bin/bash")
+(setq shell-file-name "/opt/homebrew/bin/bash")
+
+(require 'exec-path-from-shell)
+;; This sets $MANPATH, $PATH and exec-path from your shell,
+;; but only when executed in a GUI frame on OS X and Linux.
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
+(exec-path-from-shell-copy-env "SSH_AGENT_PID")
+(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
+(exec-path-from-shell-copy-env "PATH")
+
+;; https://emacs.stackexchange.com/a/71898
+(defun set-exec-path-from-shell-PATH ()
+  "Set up Emacs' `exec-path' and PATH environment variable to match
+that used by the user's shell.
+
+This is particularly useful under Mac OS X and macOS, where GUI
+apps are not started from a shell."
+  (interactive)
+  (let ((path-from-shell
+         (shell-command-to-string
+          "$SHELL --login -c 'echo -n $PATH'"
+          )))
+    ;;(setenv "PATH" path-from-shell)
+    (setq exec-path (split-string path-from-shell path-separator))))
+
+;;(set-exec-path-from-shell-PATH)
 
 ;;;; init.el
 
@@ -405,6 +435,8 @@ In that case, insert the number."
                              "python -m json.tool"
                              (buffer-name) t)))
 
+(require 'use-package)
+(require 'quelpa-use-package)
 
 ;; JAVA
 (condition-case nil
@@ -958,11 +990,6 @@ Version 2015-12-08"
                               (tramp-cleanup-all-connections)
                               (tramp-cleanup-all-buffers) ))
 
-(require 'exec-path-from-shell)
-(exec-path-from-shell-copy-env "SSH_AGENT_PID")
-(exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
-(exec-path-from-shell-copy-env "PATH")
-
 (global-set-key (kbd "C-x g") 'magit-status)
 
 (quelpa
@@ -1002,8 +1029,6 @@ Version 2015-12-08"
         ;; Make this behave the same was as on Mac OS X
         (global-set-key (kbd "s-s") 'save-buffer))
 )
-
-
 
 ;;;; rg.el
 ;; (rg-enable-menu)
@@ -1254,8 +1279,22 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (add-hook 'python-mode-hook 'python-remove-debug-breaks)
 
-(require 'use-package)
-(require 'quelpa-use-package)
+(use-package difftastic
+  :ensure nil
+  :defer t
+  :config
+  (eval-after-load 'magit-diff
+    '(transient-append-suffix 'magit-diff '(-1 -1)
+       [("D" "Difftastic diff (dwim)" difftastic-magit-diff)
+        ("S" "Difftastic show" difftastic-magit-show)])))
+
+(use-package indent-bars
+  :ensure nil
+  :defer t
+  :quelpa (indent-bars
+           :fetcher git
+           :url "https://github.com/jdtsmith/indent-bars")
+  :hook ((python-mode yaml-mode) . indent-bars-mode)) ; or whichever modes you prefer
 
 (use-package hydra-posframe
   :ensure nil
@@ -1270,6 +1309,10 @@ ipdb.set_trace(); ## DEBUG ##"
 (setq hydra-posframe-poshandler 'posframe-poshandler-frame-center)
 (setq hydra-posframe-poshandler 'posframe-poshandler-window-bottom-right-corner)
 
+
+(defun which-theme ()
+  (interactive)
+  (message "Theme: %s" (eval-expression 'custom-enabled-themes)))
 
 (defun no-hydra-posframe ()
   (interactive)
@@ -2191,7 +2234,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                               (origami-get-positions content regex)))
                           (origami-build-pair-tree create start-marker end-marker positions))))))
  '(package-selected-packages
-   '(acme-theme plain-theme inkpot-theme minimal-theme tao-theme alect-themes apropospriate-theme ample-zen-theme moe-theme immaterial-theme gruvbox-theme dracula-theme monokai-theme eat difftastic hippo-themes zzz-to-char amx elisp-depmap auto-package-update lsp-javacomp wgrep helm-lsp which-key flycheck projectile dap-mode lsp-java timu-rouge-theme timu-spacegrey-theme timu-macos-theme doom-modeline nano-modeline zoxide substitute keycast flycheck-rust hydra-posframe lsp-pyright color-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow subatomic-theme subatomic256-theme helm-swoop symbol-navigation-hydra timu-caribbean-theme ivy-xref xr dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
+   '(magit-delta indent-bars acme-theme plain-theme inkpot-theme minimal-theme tao-theme alect-themes apropospriate-theme ample-zen-theme moe-theme immaterial-theme gruvbox-theme dracula-theme monokai-theme eat difftastic hippo-themes zzz-to-char amx elisp-depmap auto-package-update lsp-javacomp wgrep helm-lsp which-key flycheck projectile dap-mode lsp-java timu-rouge-theme timu-spacegrey-theme timu-macos-theme doom-modeline nano-modeline zoxide substitute keycast flycheck-rust hydra-posframe lsp-pyright color-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow subatomic-theme subatomic256-theme helm-swoop symbol-navigation-hydra timu-caribbean-theme ivy-xref xr dwim-shell-command redacted insecure-lock pulsar ef-themes eshell-autojump eshell-up eshell-z aweshell deadgrep solarized-theme nano-theme quelpa-use-package use-package-hydra quelpa treemacs-all-the-icons treemacs-magit treemacs-tab-bar neotree doom-themes ivy-explorer flx-ido affe consult python-isort marginalia modus-themes orderless filetree buffer-expose all-the-icons-ivy-rich distinguished-theme material-theme shift-number ivy-posframe ivy-avy ivy-historian ivy-hydra sql-indent deft vue-mode vscode-dark-plus-theme all-the-icons-ibuffer anti-zenburn-theme berrys-theme cherry-blossom-theme espresso-theme jazz-theme slime slime-company brutalist-theme farmhouse-theme multi-term abyss-theme company-fuzzy disable-mouse exec-path-from-shell all-the-icons-ivy major-mode-hydra pretty-hydra monky frog-jump-buffer pinboard realgud realgud-ipdb buffer-flip string-inflection open-junk-file auto-highlight-symbol flucui-themes ivy-rich company-prescient ivy-prescient cyberpunk-2019-theme symbol-overlay ace-isearch ace-jump-buffer ample-theme atom-dark-theme atom-one-dark-theme blackboard-theme bubbleberry-theme calfw color-identifiers-mode company-nginx company-shell cyberpunk-theme danneskjold-theme defrepeater emacs-xkcd fancy-narrow fasd flash-region gandalf-theme gotham-theme nova-theme overcast-theme reykjavik-theme rimero-theme snazzy-theme tommyh-theme yaml-imenu comment-dwim-2 rg ace-window smex company-jedi avy-zap avy yaml-mode wrap-region visual-regexp-steroids undo-tree rainbow-mode rainbow-delimiters pos-tip paredit paradox ov origami multiple-cursors move-text magit macrostep key-chord kaolin-themes jedi iedit hungry-delete fastnav expand-region elpy csv-mode color-moccur browse-kill-ring boxquote bm beacon autopair))
  '(paradox-github-token t)
  '(pos-tip-background-color "#01323d")
  '(pos-tip-foreground-color "#9eacac")
