@@ -376,6 +376,11 @@ In that case, insert the number."
 
 (counsel-mode 1)
 
+(recentf-mode t)
+; 100 files ought to be enough.
+(setq recentf-max-saved-items 100)
+(global-set-key (kbd "C-x C-r") 'counsel-buffer-or-recentf)
+
 ;; (require 'ivy-posframe)
 ;; display at `ivy-posframe-style'
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
@@ -1674,6 +1679,7 @@ Other buffers: %s(my/number-names my/last-buffers)
    ("5" (my/switch-to-buffer 5))
    ("i" (counsel-ibuffer) "iBuffer")
    ("f" (counsel-find-file) "Find file")
+   ("r" (counsel-buffer-or-recentf) "counsel-recent-b-f")
    ("b" (counsel-switch-buffer) "Swi-buffer")
    ("B" (ibuffer) "I-buffer")
    ("o" ace-window "o-window")
