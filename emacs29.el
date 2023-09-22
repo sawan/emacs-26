@@ -18,12 +18,12 @@
 (setq package-user-dir "~/.emacs.d/elpa/")
 (setq package-list-archives ())
 (setq package-archives '(
-             ("gnu" . "https://elpa.gnu.org/packages/")
-             ("melpa" . "https://melpa.org/packages/")
-             ("melpa-stable" . "https://stable.melpa.org/packages/")
-             ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-             ;; ("marmalade" . "https://marmalade-repo.org/packages/")
-))
+                         ("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+                         ;; ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ))
 
 
 (package-initialize)
@@ -201,7 +201,7 @@ In that case, insert the number."
 ;; (require 'solar)
 ;;
 ;; (setq-default calendar-longitude -122.1697
-              ;; calendar-latitude 37.4275)
+;; calendar-latitude 37.4275)
 ;;
 ;; (defun time-to-vampire-time (&optional time)
 ;;   (let* ((today-sun (solar-sunrise-sunset (calendar-current-date)))
@@ -263,7 +263,7 @@ In that case, insert the number."
 (setq insecure-lock-require-password t)
 (setq insecure-lock-mode-hook '(insecure-lock-blank-screen
                                 insecure-lock-redact insecure-lock-posframe
-))
+                                ))
 
 (require 'autopair)
 (autopair-global-mode)
@@ -282,19 +282,19 @@ In that case, insert the number."
 (defun smaller-text ()
   (interactive)
   (text-scale-decrease 2.5)
-)
+  )
 
 (defun minibuffer-text-size ()
   (setq-local  face-remapping-alist
                '((default :height 1.5))))
 
 (defun echo-area-text-size()
-;; https://www.emacswiki.org/emacs/EchoArea
+  ;; https://www.emacswiki.org/emacs/EchoArea
   ;; Most strange.....
   (with-current-buffer (get-buffer " *Echo Area 0*")
     (setq-local face-remapping-alist
                 '((default (:height 1.5 variable-pitch)))))
-)
+  )
 
 (add-hook 'find-file-hook 'bigger-text)
 (add-hook 'minibuffer-setup-hook 'minibuffer-text-size)
@@ -377,7 +377,7 @@ In that case, insert the number."
 (counsel-mode 1)
 
 (recentf-mode t)
-; 100 files ought to be enough.
+                                        ; 100 files ought to be enough.
 (setq recentf-max-saved-items 100)
 (global-set-key (kbd "C-x C-r") 'counsel-buffer-or-recentf)
 
@@ -418,13 +418,13 @@ In that case, insert the number."
                             (show-paren-mode t)))
 
 ;; display path to file in frame title
-;(setq-default mode-line-format
+                                        ;(setq-default mode-line-format
 (setq-default frame-title-format
               (list '((buffer-file-name " %f"
-                (dired-directory
-                dired-directory
-                (revert-buffer-function " %b"
-                                        ("%b - Dir:  " default-directory)))))))
+                                        (dired-directory
+                                         dired-directory
+                                         (revert-buffer-function " %b"
+                                                                 ("%b - Dir:  " default-directory)))))))
 
 ;;;; utility functions
 (defun dos2unix ()
@@ -509,30 +509,30 @@ In that case, insert the number."
   (interactive)
   (ov-clear)
   (let* (
-        ($beg (if mark-active (region-beginning) (point-min)))
-        ($end (if mark-active (region-end) (point-max)))
-        ($st (buffer-substring-no-properties $beg $end))
-        ($lines)
-        ($dup))
-  (deactivate-mark t)
-  (save-excursion
-    (goto-char $beg)
-    (while (< (point) $end)
-      (let* (($b (point))
-             ($e (point-at-eol))
-             ($c (buffer-substring-no-properties $b $e))
-             ($a (assoc $c $lines)))
-        (when (not (eq $b $e))
-          (if $a
-              (progn
-                (setq $dup (cons $b $dup))
-                (setq $dup (cons (cdr $a) $dup)))
-            (setq $lines
-                  (cons (cons $c $b) $lines)))))
-      (forward-line 1))
-    (mapc (lambda ($p)
-            (ov-set (ov-line $p) 'face '(:foreground "red")))
-          (sort (delete-dups $dup) '<)))))
+         ($beg (if mark-active (region-beginning) (point-min)))
+         ($end (if mark-active (region-end) (point-max)))
+         ($st (buffer-substring-no-properties $beg $end))
+         ($lines)
+         ($dup))
+    (deactivate-mark t)
+    (save-excursion
+      (goto-char $beg)
+      (while (< (point) $end)
+        (let* (($b (point))
+               ($e (point-at-eol))
+               ($c (buffer-substring-no-properties $b $e))
+               ($a (assoc $c $lines)))
+          (when (not (eq $b $e))
+            (if $a
+                (progn
+                  (setq $dup (cons $b $dup))
+                  (setq $dup (cons (cdr $a) $dup)))
+              (setq $lines
+                    (cons (cons $c $b) $lines)))))
+        (forward-line 1))
+      (mapc (lambda ($p)
+              (ov-set (ov-line $p) 'face '(:foreground "red")))
+            (sort (delete-dups $dup) '<)))))
 
 (defhydra hydra-dup-lines ()
   "Duplicate lines"
@@ -545,19 +545,19 @@ In that case, insert the number."
 
 ;; http://www.emacswiki.org/emacs-en/PosTip
 (defun describe-function (function)
-   "Display the full documentation of FUNCTION (a symbol) in tooltip."
-   (interactive (list (function-called-at-point)))
-   (if (null function)
-       (pos-tip-show
-        "** You didn't specify a function! **" '("red"))
-     (pos-tip-show
-      (with-temp-buffer
-        (let ((standard-output (current-buffer)))
-          (prin1 function)
-          (princ " is ")
-          (describe-function-1 function)
-          (buffer-string)))
-      nil nil nil 0)))
+  "Display the full documentation of FUNCTION (a symbol) in tooltip."
+  (interactive (list (function-called-at-point)))
+  (if (null function)
+      (pos-tip-show
+       "** You didn't specify a function! **" '("red"))
+    (pos-tip-show
+     (with-temp-buffer
+       (let ((standard-output (current-buffer)))
+         (prin1 function)
+         (princ " is ")
+         (describe-function-1 function)
+         (buffer-string)))
+     nil nil nil 0)))
 
 ;; query-replace case sensitivity
 (defun with-case-fold-search (orig-fun &rest args)
@@ -679,7 +679,7 @@ instead of a char."
                          (point))))
 
 (defun replace-in-buffer ()
-"Replace text in whole buffer. Change OLD string to NEW string"
+  "Replace text in whole buffer. Change OLD string to NEW string"
   (interactive)
   (save-excursion
     (replace-string (read-string "OLD string:")
@@ -790,16 +790,16 @@ Position the cursor at its beginning, according to the current mode."
   (newline-and-indent))
 
 (defun kill-line-remove-blanks (&optional arg)
-"Delete current line and remove blanks after it"
-    (interactive "p")
-    (kill-whole-line arg)
-    (back-to-indentation))
+  "Delete current line and remove blanks after it"
+  (interactive "p")
+  (kill-whole-line arg)
+  (back-to-indentation))
 
 (global-set-key [(control return)] 'smart-open-line)
 (global-set-key [(control shift return)] 'smart-open-line-above)
 
 ;; DrewsLibraries from EmacsWiki
-; crosshairs
+                                        ; crosshairs
 (require 'crosshairs)
 (global-set-key (kbd "<M-f12>") 'flash-crosshairs)
 ;;(crosshairs-toggle-when-idle t)
@@ -1033,7 +1033,7 @@ Version 2015-12-08"
 
         ;; Make this behave the same was as on Mac OS X
         (global-set-key (kbd "s-s") 'save-buffer))
-)
+  )
 
 ;;;; rg.el
 ;; (rg-enable-menu)
@@ -1127,7 +1127,7 @@ Version 2015-12-08"
   (defun bm()
     (interactive)
     (hydra-bookmarks/body))
-)
+  )
 
 ;; http://acidwords.com/posts/2017-10-19-closing-all-parentheses-at-once.html
 (defun close-all-parentheses ()
@@ -1135,14 +1135,14 @@ Version 2015-12-08"
   (let ((closing nil))
     (save-excursion
       (while (condition-case nil
-         (progn
-           (backward-up-list)
-           (let ((syntax (syntax-after (point))))
-             (case (car syntax)
-               ((4) (setq closing (cons (cdr syntax) closing)))
-               ((7 8) (setq closing (cons (char-after (point)) closing)))))
-           t)
-           ((scan-error) nil))))
+                 (progn
+                   (backward-up-list)
+                   (let ((syntax (syntax-after (point))))
+                     (case (car syntax)
+                       ((4) (setq closing (cons (cdr syntax) closing)))
+                       ((7 8) (setq closing (cons (char-after (point)) closing)))))
+                   t)
+               ((scan-error) nil))))
     (apply #'insert (nreverse closing))))
 
 
@@ -1220,7 +1220,7 @@ Version 2015-12-08"
 (add-to-list 'auto-mode-alist '("\\.model$" . yaml-mode))
 (add-hook 'yaml-mode-hook '(lambda ()
                              (define-key yaml-mode-map
-                               (kbd "RET") 'newline-and-indent)))
+                                         (kbd "RET") 'newline-and-indent)))
 
 (add-hook 'yaml-mode-hook (lambda () (setq-local require-final-newline t)))
 
@@ -1252,19 +1252,19 @@ ipdb.set_trace(); ## DEBUG ##"
   ;; point is a nested block
   (insert python-pdb-breakpoint-string)
   (back-to-indentation)
-)
+  )
 
 (defun python-remove-debug-breaks ()
-   "Removes all debug breakpoints"
-   (flush-lines "\#\# DEBUG \#\#")
-   (flush-lines "import ipdb")
-   (flush-lines "pp = pprint")
-   (flush-lines "ipdb.set"))
+  "Removes all debug breakpoints"
+  (flush-lines "\#\# DEBUG \#\#")
+  (flush-lines "import ipdb")
+  (flush-lines "pp = pprint")
+  (flush-lines "ipdb.set"))
 
 (defun ipdb ()
   (interactive)
   (save-excursion
-  (python-insert-string python-pdb-breakpoint-string)))
+    (python-insert-string python-pdb-breakpoint-string)))
 
 (defun ripdb()
   (interactive)
@@ -1307,7 +1307,7 @@ ipdb.set_trace(); ## DEBUG ##"
   :quelpa (hydra-posframe
            :fetcher git
            :url "https://github.com/Ladicle/hydra-posframe.git")
-           ;; :repo "Ladicle/hydra-posframe")
+  ;; :repo "Ladicle/hydra-posframe")
   :hook (after-init . hydra-posframe-mode))
 
 (setq hydra-hint-display-type 'posframe)
@@ -1437,9 +1437,42 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (global-set-key (kbd "<f2>") 'hydra-text-commands/body)
 
+(defun marker-1 ()
+  (interactive)
+  (insert "# ###-1"))
+
+(defun marker-2 ()
+  (interactive)
+  (insert "# ###-2"))
+
+;; http://xahlee.info/emacs/emacs/emacs_region.html
+;; TODO:
+;;    markers should be inserted at positions obtained via avy-* commands
+;;    comment using buffer mode not just '#'
+;;    marker-1 and 2 should be generic
+;;    re-search-backward should switch to re-search-forward if backward fails
+(defun mark-between ()
+  (interactive)
+  (let (p1 p2)
+    (save-excursion
+      (re-search-backward "^#[[:space:]]###-1" nil t)
+      (forward-line)
+      (setq p1 (line-beginning-position))
+      (push-mark p1)
+      (re-search-forward "#[[:space:]]###-2$" nil t)
+      (previous-line)
+      (setq p2 (line-end-position))
+      (goto-char p2)
+      (setq mark-active t)
+      (copy-region-as-kill p1 p2)
+      (setq mark-active nil))
+    ))))
 
 (defhydra hydra-lines ()
   "Lines"
+  ("1" marker-1 "m-1" :color red)
+  ("2" marker-2 "m-2" :color red)
+  ("3" mark-between :color blue)
 
   ("c" avy-copy-line "avy-copy-line" :color blue)
   ("l" thing-copy-line "copy-l" :color blue)
@@ -1473,7 +1506,7 @@ ipdb.set_trace(); ## DEBUG ##"
   ("<return>" nil "quit" :color blue)
   ("<RETURN>" nil "quit" :color blue)
   ("<ESC>" nil "quit" :color blue)
-)
+  )
 
 (global-set-key (kbd "<f4>") 'hydra-lines/body)
 
@@ -1517,39 +1550,39 @@ ipdb.set_trace(); ## DEBUG ##"
 
 ;; https://www.reddit.com/r/emacs/comments/b1trp7/hydra_showcase_anyone/eiost6m?utm_source=share&utm_medium=web2x
 (defhydra hydra-symbol-overlay (:color pink :hint nil :timeout 5)
-      "
+  "
   _p_   ^^   _b_  back         _h_  highlight  _i_  isearch
 _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
   _n_   ^^   _w_  save         ^^              _r_  rename
 "
-      ("<"      symbol-overlay-jump-first)
-      (">"      symbol-overlay-jump-last)
-      ("p"      symbol-overlay-jump-prev)
-      ("n"      symbol-overlay-jump-next)
+  ("<"      symbol-overlay-jump-first)
+  (">"      symbol-overlay-jump-last)
+  ("p"      symbol-overlay-jump-prev)
+  ("n"      symbol-overlay-jump-next)
 
-      ("d"      symbol-overlay-jump-to-definition)
-      ("b"      symbol-overlay-echo-mark)
+  ("d"      symbol-overlay-jump-to-definition)
+  ("b"      symbol-overlay-echo-mark)
 
-      ("h" symbol-overlay-put :color blue)
-      ("R" symbol-overlay-remove-all :color blue)
+  ("h" symbol-overlay-put :color blue)
+  ("R" symbol-overlay-remove-all :color blue)
 
-      ("w" symbol-overlay-save-symbol :color blue)
-      ("t" symbol-overlay-toggle-in-scope)
+  ("w" symbol-overlay-save-symbol :color blue)
+  ("t" symbol-overlay-toggle-in-scope)
 
-      ("i" symbol-overlay-isearch-literally :color blue)
-      ("Q" symbol-overlay-query-replace :color blue)
-      ("r" symbol-overlay-rename  :color blue)
-      ("q" nil))
+  ("i" symbol-overlay-isearch-literally :color blue)
+  ("Q" symbol-overlay-query-replace :color blue)
+  ("r" symbol-overlay-rename  :color blue)
+  ("q" nil))
 
 ;; https://www.masteringemacs.org/article/searching-buffers-occur-mode
 (defun get-buffers-matching-mode (mode)
   "Returns a list of buffers where their major-mode is equal to MODE"
   (let ((buffer-mode-matches '()))
-   (dolist (buf (buffer-list))
-     (with-current-buffer buf
-       (if (eq mode major-mode)
-           (add-to-list 'buffer-mode-matches buf))))
-   buffer-mode-matches))
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (if (eq mode major-mode)
+            (add-to-list 'buffer-mode-matches buf))))
+    buffer-mode-matches))
 
 (defun multi-occur-in-this-mode ()
   "Show all lines matching REGEXP in buffers with this major mode."
@@ -1610,7 +1643,7 @@ _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
 
 (defun reattach-occur ()
   (if (get-buffer "*Occur*")
-    (switch-to-buffer-other-window "*Occur*")
+      (switch-to-buffer-other-window "*Occur*")
     (hydra-occur-dwim/body) ))
 
 ;; Used in conjunction with advice occur-mode-goto-occurrence this helps keep
@@ -1665,27 +1698,27 @@ _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
 
 
 (defhydra my/switch-to-buffer (:exit t
-                               :body-pre (setq my/last-buffers
-                               (my/name-of-buffers 5)))
-"
+                                     :body-pre (setq my/last-buffers
+                                                     (my/name-of-buffers 5)))
+  "
 Other buffers: %s(my/number-names my/last-buffers)
 "
-   ("<return>" (my/switch-to-buffer 0))
-   ("<RETURN>" (my/switch-to-buffer 0))
-   ("1" (my/switch-to-buffer 1))
-   ("2" (my/switch-to-buffer 2))
-   ("3" (my/switch-to-buffer 3))
-   ("4" (my/switch-to-buffer 4))
-   ("5" (my/switch-to-buffer 5))
-   ("i" (counsel-ibuffer) "iBuffer")
-   ("f" (counsel-find-file) "Find file")
-   ("r" (counsel-buffer-or-recentf) "counsel-recent-b-f")
-   ("b" (counsel-switch-buffer) "Swi-buffer")
-   ("B" (ibuffer) "I-buffer")
-   ("o" ace-window "o-window")
-   ("d" delete-other-windows "d-o-window")
-   ("q" nil)
-   )
+  ("<return>" (my/switch-to-buffer 0))
+  ("<RETURN>" (my/switch-to-buffer 0))
+  ("1" (my/switch-to-buffer 1))
+  ("2" (my/switch-to-buffer 2))
+  ("3" (my/switch-to-buffer 3))
+  ("4" (my/switch-to-buffer 4))
+  ("5" (my/switch-to-buffer 5))
+  ("i" (counsel-ibuffer) "iBuffer")
+  ("f" (counsel-find-file) "Find file")
+  ("r" (counsel-buffer-or-recentf) "counsel-recent-b-f")
+  ("b" (counsel-switch-buffer) "Swi-buffer")
+  ("B" (ibuffer) "I-buffer")
+  ("o" ace-window "o-window")
+  ("d" delete-other-windows "d-o-window")
+  ("q" nil)
+  )
 
 (global-set-key (kbd "C-x b") 'my/switch-to-buffer/body)
 
@@ -1809,8 +1842,10 @@ Other buffers: %s(my/number-names my/last-buffers)
             ("N" bm-next "Next Bookmark")
             ("=" hydra-er/body "hydra-eR" :exit t)
             ;; ("E" elpy-black-fix-code "Black" :color red)
+            ("X" mark-between "mark-between" :color red)
             ("Q" query-replace "Q-replace" :exit t)
             ("Y" counsel-yank-pop "Yank-pop" :color red))
+
 
    "Q" (
         ("<return>" newline-and-indent "quit" :color red)
@@ -1828,27 +1863,27 @@ Other buffers: %s(my/number-names my/last-buffers)
         ("<backspace>" delete-backward-char "quit" :color blue))
 
    )
-   )
+  )
 
 ;; http://whattheemacsd.com/key-bindings.el-02.html
 ;; Move more quickly
 (defun down-n-lines ()
-                  (interactive)
-                  (ignore-errors (next-line 10)))
+  (interactive)
+  (ignore-errors (next-line 10)))
 
 (defun up-n-lines ()
-                  (interactive)
-                  (ignore-errors (previous-line 10)))
+  (interactive)
+  (ignore-errors (previous-line 10)))
 
 ;; (global-set-key (kbd "C-S-f")
-                ;; (lambda ()
-                  ;; (interactive)
-                  ;; (ignore-errors (forward-char 10))))
+;; (lambda ()
+;; (interactive)
+;; (ignore-errors (forward-char 10))))
 ;;
 ;; (global-set-key (kbd "C-S-b")
-                ;; (lambda ()
-                  ;; (interactive)
-                  ;; (ignore-errors (backward-char 10))))
+;; (lambda ()
+;; (interactive)
+;; (ignore-errors (backward-char 10))))
 ;;
 
 (defun py-indent-right-and-next-line()
@@ -1915,40 +1950,40 @@ Other buffers: %s(my/number-names my/last-buffers)
 (global-origami-mode 1)
 
 (defun origami-parser-imenu-flat (create)
-    "Origami parser producing folds for each imenu entry, without nesting."
-    (lambda (content)
-      (let ((orig-major-mode major-mode))
-        (with-temp-buffer
-          (insert content)
-          (funcall orig-major-mode)
-          (let* ((items
-                  (-as-> (imenu--make-index-alist t) items
-                         (-flatten items)
-                         (-filter 'listp items)))
-                 (positions
-                  (-as-> (-map #'cdr items) positions
-                         (-map-when 'markerp 'marker-position positions)
-                         (-filter 'natnump positions)
-                         (cons (point-min) positions)
-                         (-snoc positions (point-max))
-                         (-sort '< positions)
-                         (-uniq positions)))
-                 (ranges
-                  (-zip-pair positions (-map '1- (cdr positions))))
-                 (fold-nodes
-                  (--map
-                   (-let*
-                       (((range-beg . range-end) it)
-                        (line-beg
-                         (progn (goto-char range-beg)
-                                (line-beginning-position)))
-                        (offset
-                         (- (min (line-end-position) range-end) line-beg))
-                        (fold-node
-                         (funcall create line-beg range-end offset nil)))
-                     fold-node)
-                   ranges)))
-            fold-nodes)))))
+  "Origami parser producing folds for each imenu entry, without nesting."
+  (lambda (content)
+    (let ((orig-major-mode major-mode))
+      (with-temp-buffer
+        (insert content)
+        (funcall orig-major-mode)
+        (let* ((items
+                (-as-> (imenu--make-index-alist t) items
+                       (-flatten items)
+                       (-filter 'listp items)))
+               (positions
+                (-as-> (-map #'cdr items) positions
+                       (-map-when 'markerp 'marker-position positions)
+                       (-filter 'natnump positions)
+                       (cons (point-min) positions)
+                       (-snoc positions (point-max))
+                       (-sort '< positions)
+                       (-uniq positions)))
+               (ranges
+                (-zip-pair positions (-map '1- (cdr positions))))
+               (fold-nodes
+                (--map
+                 (-let*
+                     (((range-beg . range-end) it)
+                      (line-beg
+                       (progn (goto-char range-beg)
+                              (line-beginning-position)))
+                      (offset
+                       (- (min (line-end-position) range-end) line-beg))
+                      (fold-node
+                       (funcall create line-beg range-end offset nil)))
+                   fold-node)
+                 ranges)))
+          fold-nodes)))))
 
 (defhydra hydra-origami()
   "Origami"
@@ -1975,7 +2010,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 (defhydra hydra-macro (:hint nil :color pink
                              :pre
                              (when defining-kbd-macro
-                                 (kmacro-end-macro 1)))
+                               (kmacro-end-macro 1)))
   "
   ^Create-Cycle^   ^Basic^           ^Insert^        ^Save^         ^Edit^
 ╭─────────────────────────────────────────────────────────────────────────╯
