@@ -543,8 +543,10 @@ In that case, insert the number."
   ("q" nil :color blue)
   )
 
+
+(require 'pos-tip)
 ;; http://www.emacswiki.org/emacs-en/PosTip
-(defun describe-function (function)
+(defun sv-describe-function (function)
   "Display the full documentation of FUNCTION (a symbol) in tooltip."
   (interactive (list (function-called-at-point)))
   (if (null function)
@@ -1234,15 +1236,11 @@ Version 2015-12-08"
 
 (defun python-add-debug-highlight ()
   "Adds a highlighter for use by `python-pdb-breakpoint-string'"
-  (highlight-lines-matching-regexp "## DEBUG ##\\s-*$" 'hi-red-b))
 
-(add-hook 'python-mode-hook 'python-add-debug-highlight)
+  (add-hook 'python-mode-hook 'python-add-debug-highlight))
 
 (defvar python-pdb-breakpoint-string
-  ;;"from pudb import set_trace;set_trace() ## DEBUG ##"
-  "import ipdb,pprint;\
-pp=pprint.PrettyPrinter(width=2,indent=2).pprint;\
-ipdb.set_trace(); ## DEBUG ##"
+  pp=pprint.PrettyPrinter(width=2,indent=2).pprint;\
   "Python breakpoint string used by `python-insert-breakpoint'")
 
 (defun python-insert-breakpoint ()
@@ -1256,10 +1254,7 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (defun python-remove-debug-breaks ()
   "Removes all debug breakpoints"
-  (flush-lines "\#\# DEBUG \#\#")
-  (flush-lines "import ipdb")
-  (flush-lines "pp = pprint")
-  (flush-lines "ipdb.set"))
+  (flush-lines "\#\# DEBUG \#\#"))
 
 (defun ipdb ()
   (interactive)
@@ -1437,13 +1432,25 @@ ipdb.set_trace(); ## DEBUG ##"
 
 (global-set-key (kbd "<f2>") 'hydra-text-commands/body)
 
+(defvar m1 "# ###-1")
+(defvar m2 "# ###-2")
+(defvar rx1 "^#[[:space:]]###-1")
+(defvar rx2 "#[[:space:]]###-2$")
+
 (defun marker-1 ()
   (interactive)
-  (insert "# ###-1"))
+  (insert m1))
 
 (defun marker-2 ()
   (interactive)
-  (insert "# ###-2"))
+  (insert m2))
+
+(defun clear-markers ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (flush-lines rx1 )
+    (flush-lines rx2 )))
 
 ;; http://xahlee.info/emacs/emacs/emacs_region.html
 ;; TODO:
@@ -1455,18 +1462,18 @@ ipdb.set_trace(); ## DEBUG ##"
   (interactive)
   (let (p1 p2)
     (save-excursion
-      (re-search-backward "^#[[:space:]]###-1" nil t)
+      (re-search-backward rx1 nil t)
       (forward-line)
       (setq p1 (line-beginning-position))
       (push-mark p1)
-      (re-search-forward "#[[:space:]]###-2$" nil t)
+      (re-search-forward rx2 nil t)
       (previous-line)
       (setq p2 (line-end-position))
       (goto-char p2)
       (setq mark-active t)
       (copy-region-as-kill p1 p2)
-      (setq mark-active nil))
-    ))))
+      (setq mark-active nil)
+      )))
 
 (defhydra hydra-lines ()
   "Lines"
