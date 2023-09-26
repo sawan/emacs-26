@@ -4,6 +4,7 @@
 ;;;; package.el
 (require 'package)
 
+
 (setq package-user-dir "~/.emacs.d/elpa/")
 (setq package-list-archives ())
 (setq package-archives '(
