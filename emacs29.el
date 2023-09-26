@@ -1240,7 +1240,9 @@ Version 2015-12-08"
   (add-hook 'python-mode-hook 'python-add-debug-highlight))
 
 (defvar python-pdb-breakpoint-string
-  pp=pprint.PrettyPrinter(width=2,indent=2).pprint;\
+    "import ipdb,pprint;\
+pp=pprint.PrettyPrinter(width=2,indent=2).pprint;\
+ipdb.set_trace(); ## DEBUG ##"
   "Python breakpoint string used by `python-insert-breakpoint'")
 
 (defun python-insert-breakpoint ()
@@ -1439,10 +1441,12 @@ Version 2015-12-08"
 
 (defun marker-1 ()
   (interactive)
+  (newline)
   (insert m1))
 
 (defun marker-2 ()
   (interactive)
+  (newline)
   (insert m2))
 
 (defun clear-markers ()
@@ -2067,25 +2071,25 @@ Other buffers: %s(my/number-names my/last-buffers)
 (slime-setup '(slime-fancy))
 
 
-;; (require 'major-mode-hydra)
+(require 'major-mode-hydra)
 ;; (global-set-key (kbd "M-SPC") #'major-mode-hydra)
 
-;; (major-mode-hydra-define emacs-lisp-mode nil
-;;   ("Eval"
-;;    (("b" eval-buffer "buffer")
-;;     ("e" eval-defun "defun")
-;;     ("r" eval-region "region"))
-;;    "REPL"
-;;    (("I" ielm "ielm"))
-;;    "Test"
-;;    (("t" ert "prompt")
-;;     ("T" (ert t) "all")
-;;     ("F" (ert :failed) "failed"))
-;;    "Doc"
-;;    (("d" describe-thing-at-point "thing-at-pt")
-;;     ("f" describe-function "function")
-;;     ("v" describe-variable "variable")
-;;     ("i" info-lookup-symbol "info lookup"))))
+(major-mode-hydra-define emacs-lisp-mode nil
+  ("Eval"
+   (("b" eval-buffer "buffer")
+    ("e" eval-defun "defun")
+    ("r" eval-region "region"))
+   "REPL"
+   (("I" ielm "ielm"))
+   "Test"
+   (("t" ert "prompt")
+    ("T" (ert t) "all")
+    ("F" (ert :failed) "failed"))
+   "Doc"
+   (("d" describe-thing-at-point "thing-at-pt")
+    ("f" describe-function "function")
+    ("v" describe-variable "variable")
+    ("i" info-lookup-symbol "info lookup"))))
 
 ;; (defvar jp-window--title (with-faicon "windows" "Window Management" 1 -0.05))
 
