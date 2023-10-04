@@ -141,6 +141,8 @@ apps are not started from a shell."
 
 (no-easy-keys)
 
+(save-place-mode 1)
+
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
 
