@@ -124,6 +124,7 @@ apps are not started from a shell."
 (add-to-list 'load-path "~/.emacs.d/vendors/no-easy-keys.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/moccur-edit.el")
 (add-to-list 'load-path "~/.emacs.d/vendors/revbufs.el")
+(add-to-list 'load-path "~/.emacs.d/vendors/buffer-move.el")
 
 ;; (add-to-list 'load-path "~/.emacs.d/vendors/flex.el")
 
@@ -138,6 +139,7 @@ apps are not started from a shell."
 (require 'no-easy-keys)
 ;; (require 'flex)
 (require 'substitute)
+(require 'buffer-move)
 
 (no-easy-keys)
 
