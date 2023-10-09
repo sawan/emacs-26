@@ -128,7 +128,7 @@ apps are not started from a shell."
 
 ;; (add-to-list 'load-path "~/.emacs.d/vendors/flex.el")
 
-;; (require 'filetree)
+(require 'filetree)
 (require 'visual-regexp)
 (require 'revbufs)
 (require 'magit)
