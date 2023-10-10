@@ -1,2 +1,0 @@
-;;; Generated package description from timu-caribbean-theme.el  -*- no-byte-compile: t -*-
-(define-package "timu-caribbean-theme" "20221226.1556" "Color theme with cyan as a dominant color" '((emacs "27.1")) :stars '("") :commit "af60151fe35bd1c780b7c4a37032699989ee6162" :authors '(("Aimé Bertrand" . "aime.bertrand@macowners.club")) :maintainer '("Aimé Bertrand" . "aime.bertrand@macowners.club") :keywords '("faces" "themes") :url "https://gitlab.com/aimebertrand/timu-caribbean-theme")
