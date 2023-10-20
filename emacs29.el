@@ -82,9 +82,9 @@
      '(progn ,@body)))
 
 
-(setenv "SHELL" "/opt/homebrew/bin/bash")
-(setq explicit-shell-file-name "/opt/homebrew/bin/bash")
-(setq shell-file-name "/opt/homebrew/bin/bash")
+;;(setenv "SHELL" "/opt/homebrew/bin/bash")
+;;(setq explicit-shell-file-name "/opt/homebrew/bin/bash")
+;;(setq shell-file-name "/opt/homebrew/bin/bash")
 
 (require 'exec-path-from-shell)
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
