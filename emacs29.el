@@ -6,8 +6,8 @@
 (defun proxy-on ()
   (interactive)
   (setq url-proxy-services
-        '(("http"     . "localhost:3128")
-          ("https"     . "localhost:3128"))))
+        '(("http"     . "http://cba.proxy.prismaaccess.com:8080")
+          ("https"    . "http://cba.proxy.prismaaccess.com:8080"))))
 
 (defun proxy-off ()
   (interactive)
@@ -108,10 +108,11 @@ apps are not started from a shell."
          (shell-command-to-string
           "$SHELL --login -c 'echo -n $PATH'"
           )))
-    ;;(setenv "PATH" path-from-shell)
+    (setenv "PATH" path-from-shell)
+    (message "XXX: %s " path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 
-;;(set-exec-path-from-shell-PATH)
+(set-exec-path-from-shell-PATH)
 
 ;;;; init.el
 
@@ -146,6 +147,13 @@ apps are not started from a shell."
 (no-easy-keys)
 
 (save-place-mode 1)
+
+(defun global-disable-mode (mode-fn)
+  "Disable `MODE-FN' in ALL buffers."
+  (interactive "a")
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (funcall mode-fn -1))))
 
 ;; start native Emacs server ready for client connections                  .
 (add-hook 'after-init-hook 'server-start)
@@ -1455,6 +1463,17 @@ ipdb.set_trace(); ## DEBUG ##"
   (newline)
   (insert m2))
 
+(defun goto-marker-2 ()
+  (interactive)
+  (goto-char (point-min))
+  (search-forward m2))
+
+(defun goto-marker-1 ()
+  (interactive)
+  (goto-char (point-min))
+  (search-forward m1))
+
+
 (defun clear-markers ()
   (interactive)
   (save-excursion
@@ -1717,7 +1736,7 @@ _<_   _>_    _d_  definition   _R_  remove     _Q_  query-replace
 (defhydra my/switch-to-buffer (:exit t
                                      :body-pre (setq my/last-buffers
                                                      (my/name-of-buffers 5)))
-  "
+"
 Other buffers: %s(my/number-names my/last-buffers)
 "
   ("<return>" (my/switch-to-buffer 0))
