@@ -334,8 +334,11 @@ In that case, insert the number."
 (setq-default visible-bell t)
 
 ;; control how Emacs backup files are handled
+(setq emacs-auto-saves-dir "~/.emacs.d/saves/")
+
 (setq
- backup-directory-alist '(("." . "~/.emacs.d/saves"))
+ backup-directory-alist `((".*" . emacs-auto-saves-dir))
+ auto-save-file-name-transforms `((".*" ,emacs-auto-saves-dir t)))
  delete-old-versions t
  kept-new-versions 20
  kept-old-versions 10
