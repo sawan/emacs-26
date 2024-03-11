@@ -590,11 +590,22 @@ In that case, insert the number."
 ;; default behaviour, no case sensitivity
 ;; (advice-add 'query-replace :around #'with-case-fold-search)
 
+;; (advice-remove 'query-replace #'with-case-fold-search)
+
 ;; case sensitive
 (advice-add 'query-replace :around #'without-case-fold-search)
 
 ;; Restore default behaviour
 (advice-remove 'query-replace #'without-case-fold-search)
+
+
+;; https://www.reddit.com/r/emacs/comments/1afd05g/comment/kog1y3p/
+;; This seems to do the trick rather then all the advising above.
+(defun query-replace-case-sensitive ()
+  "Query replace with case sensitivity."
+  (interactive)
+  (let ((case-fold-search nil))
+    (call-interactively 'query-replace)))
 
 
 (defun count-string-matches (strn)
