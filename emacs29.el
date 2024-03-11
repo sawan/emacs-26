@@ -337,7 +337,7 @@ In that case, insert the number."
 (setq emacs-auto-saves-dir "~/.emacs.d/saves/")
 
 (setq
- backup-directory-alist `((".*" . emacs-auto-saves-dir))
+ backup-directory-alist `((".*" . ,emacs-auto-saves-dir))
  auto-save-file-name-transforms `((".*" ,emacs-auto-saves-dir t))
  delete-old-versions t
  kept-new-versions 20
