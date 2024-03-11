@@ -338,7 +338,7 @@ In that case, insert the number."
 
 (setq
  backup-directory-alist `((".*" . emacs-auto-saves-dir))
- auto-save-file-name-transforms `((".*" ,emacs-auto-saves-dir t)))
+ auto-save-file-name-transforms `((".*" ,emacs-auto-saves-dir t))
  delete-old-versions t
  kept-new-versions 20
  kept-old-versions 10
