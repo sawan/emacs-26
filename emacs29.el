@@ -334,8 +334,11 @@ In that case, insert the number."
 (setq-default visible-bell t)
 
 ;; control how Emacs backup files are handled
+(setq emacs-auto-saves-dir "~/.emacs.d/saves/")
+
 (setq
- backup-directory-alist '(("." . "~/.emacs.d/saves"))
+ backup-directory-alist `((".*" . ,emacs-auto-saves-dir))
+ auto-save-file-name-transforms `((".*" ,emacs-auto-saves-dir t))
  delete-old-versions t
  kept-new-versions 20
  kept-old-versions 10
@@ -587,11 +590,22 @@ In that case, insert the number."
 ;; default behaviour, no case sensitivity
 ;; (advice-add 'query-replace :around #'with-case-fold-search)
 
+;; (advice-remove 'query-replace #'with-case-fold-search)
+
 ;; case sensitive
 (advice-add 'query-replace :around #'without-case-fold-search)
 
 ;; Restore default behaviour
 (advice-remove 'query-replace #'without-case-fold-search)
+
+
+;; https://www.reddit.com/r/emacs/comments/1afd05g/comment/kog1y3p/
+;; This seems to do the trick rather then all the advising above.
+(defun query-replace-case-sensitive ()
+  "Query replace with case sensitivity."
+  (interactive)
+  (let ((case-fold-search nil))
+    (call-interactively 'query-replace)))
 
 
 (defun count-string-matches (strn)
@@ -1823,8 +1837,8 @@ Other buffers: %s(my/number-names my/last-buffers)
 
    "Avy" (
           ("'" avy-goto-char-in-line "goto-char-in-line" :blue)
-          ("C-c" avy-goto-char-2 "goto-char-2")
-          ("c" avy-goto-char "goto-char")
+          ("C-c" avy-goto-char "goto-char")
+          ("c" avy-goto-char-2 "goto-char-2")
           ("w" avy-goto-word-or-subword-1 "goto-word")
           ("6" avy-zap-to-char "zap-to-c")
           ("7" avy-zap-up-to-char "zap-up-to-c")
@@ -1837,7 +1851,7 @@ Other buffers: %s(my/number-names my/last-buffers)
                 ("j" backward-char)
                 ("l" forward-word)
                 ("h" backward-word)
-                ("D" my-kill-word-at-point)
+                ("D" kill-word)
                 ("d" hungry-delete-forward)
                 ("b" hungry-delete-backward)
                 ("B" backward-kill-word)
@@ -1980,6 +1994,7 @@ Other buffers: %s(my/number-names my/last-buffers)
 (global-set-key (kbd "C-M-S-w") #'ace-window)
 (global-set-key (kbd "C-M-S-k") #'kill-this-buffer)
 (global-set-key (kbd "C-M-S-h") #'hydra-highlight-symbol/body)
+(global-set-key (kbd "C-M-\"") #'hydra-move/avy-goto-char-in-line)
 (global-set-key (kbd "C-M-S-r") #'hydra-er/body)
 
 
@@ -2116,6 +2131,8 @@ Other buffers: %s(my/number-names my/last-buffers)
     ("v" describe-variable "variable")
     ("i" info-lookup-symbol "info lookup"))))
 
+
+
 ;; (defvar jp-window--title (with-faicon "windows" "Window Management" 1 -0.05))
 
 ;; (pretty-hydra-define jp-window (:foreign-keys warn :title jp-window--title :quit-key "q")
@@ -2148,6 +2165,9 @@ Other buffers: %s(my/number-names my/last-buffers)
 
 ;; (all-the-icons-ivy-setup)
 
+(defun insert-li ()
+  (interactive)
+  (insert "<li> </li>"))
 
 
 (custom-set-faces
